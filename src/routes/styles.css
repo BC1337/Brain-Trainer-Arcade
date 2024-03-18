@@ -1,0 +1,71 @@
+/* Reset styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Global styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #0f0f0f; /* Dark background color */
+  color: #ffffff; /* White text color */
+}
+
+/* Add some fun animations */
+@keyframes neonGlow {
+  0% {
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+  }
+  50% {
+      text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff;
+  }
+  100% {
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+  }
+}
+
+/* Style links */
+a {
+  color: #ffffff; /* White text color */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #ff7f50; /* Orange hover color */
+}
+
+/* Funky animation for text */
+.funky-text {
+  animation: neonGlow 2s infinite alternate; /* Apply neon glow animation */
+}
+
+/* Add some spacing */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Give headings a funky look */
+h1, h2, h3 {
+  font-family: 'Comic Sans MS', cursive; /* Fun font */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Add some fun to buttons */
+.button {
+  padding: 10px 20px;
+  background-color: #ff7f50; /* Orange button color */
+  color: #ffffff; /* White text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #ff6347; /* Darker orange on hover */
+}
