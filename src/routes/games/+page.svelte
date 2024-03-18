@@ -15,6 +15,11 @@
       gameDescription: 'Flex your mental muscles to go the distance in this game.',
       imageSrc: 'https://images.pexels.com/photos/577513/pexels-photo-577513.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
+    {
+      gameName: 'Simon Says',
+      gameDescription: 'Test your short term memory with this classic',
+      imageSrc: '/simon-says.jpg'
+    },
     // Add more game objects as needed
   ];
 </script>

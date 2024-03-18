@@ -4,40 +4,52 @@
     import Layout from "../../layouts/Layout.svelte";
     import Modal from '../../lib/components/Modal.svelte';
 
-    let words = [
-        "apple", "banana", "orange", "grape", "pineapple", "strawberry", "kiwi", "watermelon", "melon", "peach",
-        "plum", "apricot", "blueberry", "blackberry", "raspberry", "pear", "cherry", "mango", "pomegranate", "lemon",
-        "lime", "coconut", "fig", "avocado", "nectarine", "cranberry", "cantaloupe", "papaya", "guava", "dragonfruit",
-        "passionfruit", "kiwifruit", "tangerine", "lychee", "grapefruit", "starfruit", "persimmon", "boysenberry", "durian",
-        "mulberry", "apricot", "gooseberry", "jackfruit", "kumquat", "quince", "rhubarb", "soursop", "ugli fruit", "ackee",
-        "breadfruit", "cherimoya", "feijoa", "longan", "mangosteen", "rambutan", "salak", "saskatoonberry", "tamarillo",
-        "wolfberry", "aronia", "currant", "elderberry", "loquat", "barberry", "carambola", "sugar-apple", "custard-apple",
-        "plantain", "lychee", "persimmon"
+    // Define multiple arrays for different word sets
+    let wordSets = [
+        {
+            name: "Fruit",
+            words: ["apple", "banana", "orange", "grape", "pineapple", "strawberry", "kiwi", "watermelon", "melon", "peach",
+                    "plum", "apricot", "blueberry", "blackberry", "raspberry", "pear", "cherry", "mango", "pomegranate", "lemon",
+                    "lime", "coconut", "fig", "avocado", "nectarine", "cranberry", "cantaloupe", "papaya", "guava", "dragonfruit",
+                    "passionfruit", "kiwifruit", "tangerine", "lychee", "grapefruit", "starfruit", "persimmon", "boysenberry", "durian",
+                    "mulberry", "apricot", "gooseberry", "jackfruit", "kumquat", "quince", "rhubarb", "soursop", "ugli fruit", "ackee",
+                    "breadfruit", "cherimoya", "feijoa", "longan", "mangosteen", "rambutan", "salak", "saskatoonberry", "tamarillo",
+                    "wolfberry", "aronia", "currant", "elderberry", "loquat", "barberry", "carambola", "sugar-apple", "custard-apple",
+                    "plantain", "lychee", "persimmon"]
+        },
+        {
+            name: "Complicated",
+            words: ["abstruse", "convoluted", "enigmatic", "obfuscate", "perplexing", "serpentine", "intricate", "pulchritudinous", 
+                    "egregious", "crepuscular", "hierarchical", "pseudopseudohypoparathyroidism", "antidisestablishmentarianism", "sesquipedalian", 
+                    "antediluvian", "onomatopoeia", "perspicacious", "sesquipedalian", "ubiquitous", "antediluvian", "philosophy", "epistemology", 
+                    "metaphysics", "hermeneutics", "solipsism", "existentialism", "phenomenology", "nihilism", "pragmatism", "stoicism"]
+        },
+        // Add more word sets as needed
     ];
 
+    // Initialize variables
+    let currentWordSet = {};
     let lives = 3;
     let correctGuesses = 0;
     let randomWord = "";
     let wordStatus = {}; // Track the status of each word
     let wordColor = "white"; // Initial color of the word
     let previousColor = ""; // Store the previously used color
+    let showModal = false;
 
+    // Function to select a random word set
+    const selectRandomWordSet = () => {
+        currentWordSet = wordSets[Math.floor(Math.random() * wordSets.length)];
+    };
+
+    // Function to generate a random word from the selected word set
     const generateRandomWord = () => {
-        const reuseWordProbability = 0.25; // 25% chance of reusing a word
-        const reuseWord = Math.random() < reuseWordProbability;
-
-        if (reuseWord) {
-            const usedWords = Object.keys(wordStatus).filter(word => wordStatus[word] === "seen");
-            randomWord = usedWords[Math.floor(Math.random() * usedWords.length)];
-        } else {
-            do {
-                randomWord = words[Math.floor(Math.random() * words.length)];
-            } while (randomWord === undefined || randomWord === null);
-        }
+        randomWord = currentWordSet.words[Math.floor(Math.random() * currentWordSet.words.length)];
         // Change the color of the word
         wordColor = getRandomColor();
     };
 
+    // Function to handle click on "Seen" button
     const handleClickSeen = () => {
         if (wordStatus[randomWord] === "seen") {
             correctGuesses++;
@@ -52,8 +64,9 @@
         }
     };
 
+    // Function to handle click on "New" button
     const handleClickNew = () => {
-        if (wordStatus[randomWord] === "new") {
+        if (wordStatus[randomWord] !== "seen") {
             correctGuesses++;
         } else {
             lives--;
@@ -66,6 +79,7 @@
         }
     };
 
+    // Function to get a random color for the word
     const getRandomColor = () => {
         const colors = ["#ff0066", "#ff6600", "#cc33ff", "#33cc33", "#0099cc", "#ffcc00"];
         // Remove the previous color from the array if it exists
@@ -80,14 +94,14 @@
         return newColor;
     };
 
+    // Call the function to select a random word set on mount
     onMount(() => {
+        selectRandomWordSet();
         generateRandomWord();
-        words.forEach(word => {
+        currentWordSet.words.forEach(word => {
             wordStatus[word] = "new";
         });
     });
-
-    let showModal = false;
 </script>
 
 <Layout>
