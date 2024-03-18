@@ -73,11 +73,6 @@
     }
   }
 
-  .hidden-text {
-    color: #00ffff; /* Neon blue color */
-    font-size: 1.2rem;
-    animation: dropAndBounce 0.5s ease; /* Apply animation */
-  }
 </style>
 
 <div class="navbar">

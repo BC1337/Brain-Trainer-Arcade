@@ -19,20 +19,24 @@
     let correctGuesses = 0;
     let randomWord = "";
     let wordStatus = {}; // Track the status of each word
+    let wordColor = "white"; // Initial color of the word
+    let previousColor = ""; // Store the previously used color
 
     const generateRandomWord = () => {
-    const reuseWordProbability = 0.25; // 25% chance of reusing a word
-    const reuseWord = Math.random() < reuseWordProbability;
+        const reuseWordProbability = 0.25; // 25% chance of reusing a word
+        const reuseWord = Math.random() < reuseWordProbability;
 
-    if (reuseWord) {
-        const usedWords = Object.keys(wordStatus).filter(word => wordStatus[word] === "seen");
-        randomWord = usedWords[Math.floor(Math.random() * usedWords.length)];
-    } else {
-        do {
-            randomWord = words[Math.floor(Math.random() * words.length)];
-        } while (randomWord === undefined || randomWord === null);
-    }
-};
+        if (reuseWord) {
+            const usedWords = Object.keys(wordStatus).filter(word => wordStatus[word] === "seen");
+            randomWord = usedWords[Math.floor(Math.random() * usedWords.length)];
+        } else {
+            do {
+                randomWord = words[Math.floor(Math.random() * words.length)];
+            } while (randomWord === undefined || randomWord === null);
+        }
+        // Change the color of the word
+        wordColor = getRandomColor();
+    };
 
     const handleClickSeen = () => {
         if (wordStatus[randomWord] === "seen") {
@@ -62,6 +66,20 @@
         }
     };
 
+    const getRandomColor = () => {
+        const colors = ["#ff0066", "#ff6600", "#cc33ff", "#33cc33", "#0099cc", "#ffcc00"];
+        // Remove the previous color from the array if it exists
+        const index = colors.indexOf(previousColor);
+        if (index !== -1) {
+            colors.splice(index, 1);
+        }
+        // Select a random color from the modified array
+        const newColor = colors[Math.floor(Math.random() * colors.length)];
+        // Update the previous color for the next iteration
+        previousColor = newColor;
+        return newColor;
+    };
+
     onMount(() => {
         generateRandomWord();
         words.forEach(word => {
@@ -77,7 +95,8 @@
     <h1 style="color: white; text-align: center;">Memory Game</h1>
     <div class="memory-container">
         <div class="card">
-            <div class="random-word" style="color: white;">
+            <!-- Apply the color style directly to the random word -->
+            <div class="random-word" style="color: {wordColor}; text-shadow: 0 0 10px {wordColor};">
                 {randomWord}
             </div>
             <div class="button-container">
@@ -93,7 +112,7 @@
         </div>
     </div>
     {#if showModal}
-    <Modal correctGuesses={correctGuesses} onClose={() => showModal = false}/>
+        <Modal correctGuesses={correctGuesses} onClose={() => showModal = false}/>
     {/if}
 </Layout>
 
