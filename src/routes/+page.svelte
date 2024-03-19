@@ -4,8 +4,8 @@
 
     import { goto } from '$app/navigation';
 
-     // Function to handle button click event and navigate to /games
-     function startPlaying() {
+    // Function to handle button click event and navigate to /games
+    function startPlaying() {
         goto('/games');
     }
 </script>
@@ -17,22 +17,24 @@
         align-items: center;
         justify-content: center;
         height: 100vh;
-        background-color: #1f2532; /* Dark blue background */
-        color: #fff; /* White text color */
-        text-align: center;
+        padding: 0 20px; /* Add padding to the sides */
     }
 
     h1 {
         font-size: 3rem;
         margin-bottom: 1rem;
         font-family: 'Arial Black', sans-serif; /* Use a bold font */
-    
+        text-align: center;
+        animation: fadeInUp 1s ease; /* Apply fade in animation */
     }
 
     p {
         font-size: 1.2rem;
         margin-bottom: 2rem;
         line-height: 1.5;
+        text-align: center;
+        animation: fadeInUp 1s ease; /* Apply fade in animation */
+        animation-delay: 0.5s; /* Delay animation for 0.5s */
     }
 
     .highlight {
@@ -49,17 +51,32 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        animation: fadeInUp 1s ease; /* Apply fade in animation */
+        animation-delay: 1s; /* Delay animation for 1s */
     }
 
     .button:hover {
         background-color: #388e3c; /* Darker green on hover */
     }
+
+    /* Animation keyframes */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 
 <Layout>
     <div class="container">
-        <h1>Welcome to <span class="highlight">Brain Trainer</span> Arcade!</h1>
-        <p>Get ready to <span class="highlight">challenge your mind</span> and have a blast with our collection of <span class="highlight">brain-teasing</span> games! Whether you want to <span class="highlight">sharpen your memory</span>, <span class="highlight">boost your focus</span>, or just have some <span class="highlight">fun</span>, we've got you covered.</p>
+        <h1>Welcome to <span class="highlight">Brain Trainer Arcade!</span></h1>
+        <p>Get ready to <span class="highlight">challenge your mind</span> and have a blast with our collection of <span class="highlight">brain-teasing games</span>!</p>
+        <p>Whether you want to <span class="highlight">sharpen your memory</span>, <span class="highlight">boost your focus</span>, or just have some <span class="highlight">fun</span>, we've got you covered.</p>
         <p>Challenge yourself with a variety of games designed to keep your brain engaged and entertained. It's not just <span class="highlight">entertainment</span> – it's <span class="highlight">beneficial for your cognitive health</span> too!</p>
         <button class="button" on:click={startPlaying}>Start Playing</button>
     </div>
