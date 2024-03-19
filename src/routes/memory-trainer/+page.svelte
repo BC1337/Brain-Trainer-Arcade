@@ -3,29 +3,7 @@
     import { onMount } from 'svelte';
     import Layout from "../../layouts/Layout.svelte";
     import Modal from '../../lib/components/Modal.svelte';
-
-    // Define multiple arrays for different word sets
-    let wordSets = [
-        {
-            name: "Fruit",
-            words: ["apple", "banana", "orange", "grape", "pineapple", "strawberry", "kiwi", "watermelon", "melon", "peach",
-                    "plum", "apricot", "blueberry", "blackberry", "raspberry", "pear", "cherry", "mango", "pomegranate", "lemon",
-                    "lime", "coconut", "fig", "avocado", "nectarine", "cranberry", "cantaloupe", "papaya", "guava", "dragonfruit",
-                    "passionfruit", "kiwifruit", "tangerine", "lychee", "grapefruit", "starfruit", "persimmon", "boysenberry", "durian",
-                    "mulberry", "apricot", "gooseberry", "jackfruit", "kumquat", "quince", "rhubarb", "soursop", "ugli fruit", "ackee",
-                    "breadfruit", "cherimoya", "feijoa", "longan", "mangosteen", "rambutan", "salak", "saskatoonberry", "tamarillo",
-                    "wolfberry", "aronia", "currant", "elderberry", "loquat", "barberry", "carambola", "sugar-apple", "custard-apple",
-                    "plantain", "lychee", "persimmon"]
-        },
-        {
-            name: "Complicated",
-            words: ["abstruse", "convoluted", "enigmatic", "obfuscate", "perplexing", "serpentine", "intricate", "pulchritudinous", 
-                    "egregious", "crepuscular", "hierarchical", "pseudopseudohypoparathyroidism", "antidisestablishmentarianism", "sesquipedalian", 
-                    "antediluvian", "onomatopoeia", "perspicacious", "sesquipedalian", "ubiquitous", "antediluvian", "philosophy", "epistemology", 
-                    "metaphysics", "hermeneutics", "solipsism", "existentialism", "phenomenology", "nihilism", "pragmatism", "stoicism"]
-        },
-        // Add more word sets as needed
-    ];
+    import wordSets from './wordSets.js';
 
     // Initialize variables
     let currentWordSet = {};
