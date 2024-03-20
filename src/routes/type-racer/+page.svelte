@@ -1,5 +1,6 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
+  import Layout from '../../layouts/Layout.svelte';
 
     let letters = [];
     let currentIndex = 0;
@@ -78,7 +79,7 @@
         clearInterval(interval);
     });
 </script>
-
+<Layout>
 <div class="container">
     <h1>Test your typing skills!</h1>
     <div class="card">
@@ -113,7 +114,7 @@
         </div>
     </div>
 </div>
-
+</Layout>
 <style>
     .container {
         display: flex;
@@ -126,7 +127,7 @@
     .card {
         border: 1px solid #ccc;
         border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgba(57, 224, 239, 1.9);
         padding: 20px;
     }
 
@@ -153,7 +154,7 @@
     .letter-box {
         width: 40px;
         height: 40px;
-        background-color: #ccc;
+        background-color: #424242;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -170,7 +171,7 @@
     }
 
     .current {
-        background-color: lightblue; /* Light blue background for the current letter */
+        background-color: rgb(97, 178, 206); /* Light blue background for the current letter */
     }
 
     .timer-bar {

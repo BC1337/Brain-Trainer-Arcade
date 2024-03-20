@@ -83,105 +83,143 @@
 </script>
 
 <Layout>
-    <!-- Memory Game content -->
-    <h1 style="color: white; text-align: center;">Memory Game</h1>
-    <div class="memory-container">
-        <div class="card">
-            <!-- Apply the color style directly to the random word -->
-            <div class="random-word" style="color: {wordColor}; text-shadow: 0 0 10px {wordColor};">
-                {randomWord}
+    <div class="content-wrapper">
+        <!-- Description -->
+        <div class="description">
+            <p>How to play:</p>
+            <p>Remember the name of the word displayed and make the correct choices.</p>
+      
+        </div>
+    
+        <!-- Memory Game content -->
+        <div class="game-container">
+            <div class="memory-container">
+                <div class="card">
+                    <!-- Apply the color style directly to the random word -->
+                    <div class="random-word" style="color: {wordColor}; text-shadow: 0 0 10px {wordColor};">
+                        {randomWord}
+                    </div>
+                    <div class="button-container">
+                        <button on:click={handleClickSeen} class="seen">Seen</button>
+                        <button on:click={handleClickNew} class="new">New</button>
+                    </div>
+                    <div class="lives" style="color: white;">
+                        Lives: {lives}
+                    </div>
+                    <div class="correct-guesses" style="color: white;">
+                        Correct Guesses: {correctGuesses}
+                    </div>
+                </div>
             </div>
-            <div class="button-container">
-                <button on:click={handleClickSeen} class="seen">Seen</button>
-                <button on:click={handleClickNew} class="new">New</button>
-            </div>
-            <div class="lives" style="color: white;">
-                Lives: {lives}
-            </div>
-            <div class="correct-guesses" style="color: white;">
-                Correct Guesses: {correctGuesses}
-            </div>
+            {#if showModal}
+                <Modal correctGuesses={correctGuesses} onClose={() => showModal = false}/>
+            {/if}
         </div>
     </div>
-    {#if showModal}
-        <Modal correctGuesses={correctGuesses} onClose={() => showModal = false}/>
-    {/if}
 </Layout>
 
 <style>
-    .memory-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 80vh;
-    }
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px; /* Adjust the margin to move the content down */
+}
 
-    .card {
-        width: 450px;
-        height: 300px;
-        background-color: #333;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        position: relative;
-    }
+.description {
+    text-align: center;
+    max-width: 600px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: -100px; /* Add margin bottom to create space between description and game */
+}
 
-    .random-word {
-        font-size: 24px;
-        font-weight: bold;
-        margin-top: auto;
-        margin-bottom: 20px;
-        text-align: center;
-    }
+.description p:first-child {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
 
-    .button-container {
-        margin-top: auto;
-        display: flex;
-    }
+.description p:last-child {
+    font-size: 16px;
+}
 
-    button {
-        padding: 8px 16px;
-        margin: 5px;
-        border: 1px solid transparent;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px; /* Add margin bottom to create space between description and game */
+}
 
-    button.seen {
-        background-color: rgba(188, 22, 22, 0.7);
-        color: #fff;
-    }
+.memory-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
 
-    button.new {
-        background-color: rgba(3, 139, 3, 0.7);
-        color: #fff;
-    }
+.card {
+    width: 450px;
+    height: 300px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+}
 
-    button:hover {
-        border-color: #ccc;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    }
+.random-word {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: auto;
+    margin-bottom: 20px;
+    text-align: center;
+}
 
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+.button-container {
+    margin-top: auto;
+    display: flex;
+}
 
-    .lives {
-        margin-top: auto;
-        text-align: center;
-        font-size: 20px;
-        font-weight: bold;
-    }
+button {
+    padding: 8px 16px;
+    margin: 5px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-    .correct-guesses {
-        margin-top: auto;
-        text-align: center;
-        font-size: 20px;
-        font-weight: bold;
-    }
+button.seen {
+    background-color: rgba(188, 22, 22, 0.7);
+    color: #fff;
+}
+
+button.new {
+    background-color: rgba(3, 139, 3, 0.7);
+    color: #fff;
+}
+
+button:hover {
+    border-color: #ccc;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.lives {
+    margin-top: auto;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.correct-guesses {
+    margin-top: auto;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
 </style>

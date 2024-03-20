@@ -1,60 +1,48 @@
 <style>
-  /* Navbar styles */
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    padding: 1rem;
-    color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease;
-  }
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #222; /* Dark gray background */
+  padding: 1rem;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow effect */
+  transition: background-color 0.3s ease;
+}
 
-  .navbar:hover {
-    background-color: rgba(0, 0, 0, 0.7); /* Darker background on hover */
-  }
+.navbar:hover {
+  background-color: #333; /* Slightly darker background on hover */
+}
 
-  .nav-brand {
-    font-size: 1.8rem; /* Larger font size */
-    font-weight: bold;
-    text-decoration: none;
-    color: white;
-    display: flex;
-    align-items: center; /* Align the neon effect vertically */
-  }
+.nav-brand {
+  font-size: 1.8rem; /* Larger font size */
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center; /* Align the text and neon effect vertically */
+}
 
-  .neon-letter {
-    color: #00ffff; /* Neon blue color */
-    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; /* Neon glow effect */
-    transition: transform 0.3s ease; /* Smooth transition for transform property */
-  }
+.nav-items {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-  .nav-brand:hover .neon-letter {
-    transform: translateY(-10px); /* Move the neon letter up when hovered */
-  }
+.nav-item {
+  margin-left: 2rem; /* Increased spacing between items */
+}
 
-  .nav-items {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+.nav-link {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease;
+}
 
-  .nav-item {
-    margin-left: 2rem; /* Increased spacing between items */
-  }
-
-  .nav-link {
-    text-decoration: none;
-    color: white;
-    transition: color 0.3s ease;
-  }
-
-  .nav-link:hover {
-    color: #ff7f50; /* Change to your preferred hover color */
-  }
-
+.nav-link:hover {
+  color: #ff7f50; /* Change to your preferred hover color */
+}
   /* Animation for "C1337" */
   @keyframes dropAndBounce {
     0% {
