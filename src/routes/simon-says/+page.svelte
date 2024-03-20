@@ -1,7 +1,20 @@
 <script>
+  import { onMount } from 'svelte';
   import Layout from "../../layouts/Layout.svelte";
+
+  let AudioConstructor;
+
+  // Check if running in the browser environment
+  if (typeof window !== 'undefined') {
+    // Import the Audio constructor dynamically
+    AudioConstructor = window.Audio;
+  }
+
+  // Continue with the rest of your component code
   // Define the game board size
   const gridSize = 5;
+  const maxSoundIndex = 9; // Maximum sound index
+  let currentSoundIndex = 1; // Initial sound index
 
   // Initialize variables
   let sequence = [];
@@ -9,6 +22,26 @@
   let round = 0;
   let isActive = false;
   let showStartButton = true;
+
+  // Define sounds
+  let correctSounds = [];
+  let wrongSound;
+
+  // Check if running in the browser environment
+  if (typeof window !== 'undefined') {
+    // Initialize sounds if running in the browser
+    correctSounds = Array.from({ length: maxSoundIndex }, (_, i) => {
+      const audio = new AudioConstructor(`/GameSounds/game${i + 1}.mp3`);
+      audio.preload = 'auto'; // Preload audio files
+      return audio;
+    });
+    wrongSound = new AudioConstructor('/GameSounds/buzzer.mp3');
+    wrongSound.preload = 'auto'; // Preload the wrong sound file
+    // Set initial volume for the buzzer sound
+    wrongSound.volume = 0.5; // Adjust volume level here (0.5 means 50% volume)
+  }
+
+  // Rest of your component code...
 
   // Function to start the game
   const startGame = async () => {
@@ -30,6 +63,7 @@
   // Function to start the next round
   const nextRound = async () => {
     round++;
+    currentSoundIndex = 1; // Reset sound index to 1 for each new round
     if (round === 1) {
       // For the first round, generate only one box
       sequence = [generateRandomBoxIndex()];
@@ -53,19 +87,21 @@
   const animateBox = async (index) => {
     const box = document.querySelectorAll('.box')[index];
     box.style.backgroundColor = 'red';
-    await wait(500); // Wait for 0.5 seconds
+    await wait(530); // Wait for 0.5 seconds
     box.style.backgroundColor = '#ccc'; // Reset the color after a delay
   };
 
   // Function to handle box click
-  const handleBoxClick = (index) => {
-    if (!isActive) return;
-    userSequence.push(index);
-    animateBox(index); // Highlight the clicked box
-    if (userSequence.length === sequence.length) {
-      checkSequence(); // Check if the user's sequence matches the game's sequence
-    }
-  };
+  const handleBoxClick = async (index) => {
+  if (!isActive) return;
+  userSequence.push(index);
+  animateBox(index); // Highlight the clicked box
+  await wait(33); // Add a slight delay before playing the sound
+  playCorrectSound(); // Play correct sound
+  if (userSequence.length === sequence.length) {
+    checkSequence(); // Check if the user's sequence matches the game's sequence
+  }
+};
 
   // Function to handle keyboard events
   const handleKeyDown = (event, index) => {
@@ -90,8 +126,16 @@
   const endGame = () => {
     isActive = false;
     showStartButton = true;
+    wrongSound.play(); // Play wrong sound
     alert('Game Over! You reached round ' + round);
   };
+
+  // Function to play the correct sound
+  const playCorrectSound = () => {
+    correctSounds[currentSoundIndex - 1].play(); // Play correct sound based on current sound index
+    currentSoundIndex = (currentSoundIndex % maxSoundIndex) + 1; // Increment sound index and loop back to 1 if it exceeds maxSoundIndex
+  };
+
 </script>
 
 <Layout>
