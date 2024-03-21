@@ -28,11 +28,11 @@
       targets.push(target);
     };
   
-    // Function to handle target click
-    const handleTargetClick = () => {
-      targets.pop(); // Remove clicked target
-      generateTarget(); // Generate new target
-    };
+// Function to handle target click
+const handleTargetClick = (targetToRemove) => {
+  targets = targets.filter(target => target !== targetToRemove); // Remove clicked target
+  generateTarget(); // Generate new target
+};
   </script>
   
   <Layout>
@@ -44,8 +44,12 @@
       {:else}
         <div class="play-area" style="width: {playAreaWidth}px; height: {playAreaHeight}px;">
           {#each targets as target}
-            <div class="target" style="top: {target.y}px; left: {target.x}px;" on:click={handleTargetClick}></div>
-          {/each}
+          <button
+            class="target"
+            style="top: {target.y}px; left: {target.x}px;"
+            on:click={() => handleTargetClick(target)}
+          ></button>
+        {/each}
         </div>
       {/if}
     </div>
@@ -68,15 +72,16 @@
       width: calc(100% + 80px); /* Increase width by 80px (40px on each side) */
       height: calc(100% + 40px); /* Increase height by 40px */
     }
-  
     .target {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      background-color: red;
-      border-radius: 50%;
-      cursor: pointer;
-    }
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: red; /* Set background color to red */
+    border: none; /* Remove border */
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto; /* Ensure it's clickable */
+  }
   
     .start-game-modal {
       position: absolute;
@@ -95,8 +100,5 @@
       border-radius: 5px;
       transition: background-color 0.3s ease;
     }
-  
-    button:hover {
-      background-color: #388e3c;
-    }
+
   </style>
