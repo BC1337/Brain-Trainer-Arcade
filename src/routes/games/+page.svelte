@@ -20,6 +20,11 @@
       gameDescription: 'Test your short term memory with this classic',
       imageSrc: '/simon-says.jpg'
     },
+    {
+      gameName: 'Aim Trainer',
+      gameDescription: 'How about testing that hand eye coordination',
+      imageSrc: 'https://images.pexels.com/photos/416832/pexels-photo-416832.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+    },
     // Add more game objects as needed
   ];
 </script>
