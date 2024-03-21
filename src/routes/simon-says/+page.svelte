@@ -27,6 +27,9 @@
   let correctSounds = [];
   let wrongSound;
 
+  let isMuted = false; // Initialize mute state
+  let volumeLevel = 0.5; // Initial volume level
+
   // Check if running in the browser environment
   if (typeof window !== 'undefined') {
     // Initialize sounds if running in the browser
@@ -40,8 +43,6 @@
     // Set initial volume for the buzzer sound
     wrongSound.volume = 0.5; // Adjust volume level here (0.5 means 50% volume)
   }
-
-  // Rest of your component code...
 
   // Function to start the game
   const startGame = async () => {
@@ -136,10 +137,36 @@
     currentSoundIndex = (currentSoundIndex % maxSoundIndex) + 1; // Increment sound index and loop back to 1 if it exceeds maxSoundIndex
   };
 
+  // Function to toggle mute state
+  const toggleMute = () => {
+    isMuted = !isMuted;
+    correctSounds.forEach(sound => sound.muted = isMuted);
+    wrongSound.muted = isMuted;
+  };
+
+  // Function to handle volume change
+  const handleVolumeChange = (event) => {
+    volumeLevel = event.target.value;
+    correctSounds.forEach(sound => sound.volume = volumeLevel);
+    wrongSound.volume = volumeLevel;
+  };
+
 </script>
 
 <Layout>
   <div class="game-container">
+    <div class="game-controls">
+      <div class="volume-control">
+        <input type="range" min="0" max="1" step="0.01" value={volumeLevel} on:input={handleVolumeChange} />
+      </div>
+      <button class="mute-button" on:click={toggleMute}>
+        {#if isMuted}
+          🔇 <!-- Mute icon -->
+        {:else}
+          🔊 <!-- Speaker icon -->
+        {/if}
+      </button>
+    </div>
     <div class="game-board">
       {#each Array(gridSize * gridSize) as _, index}
         <div class="box" role="button" tabindex="0" on:click={() => handleBoxClick(index)} on:keydown={(e) => handleKeyDown(e, index)} aria-label="Box"></div>
@@ -155,11 +182,31 @@
 
 <style>
   .game-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
+  }
+
+  .game-controls {
+    position: absolute;
+    top: 150px; /* Drop down by 75px */
+    right:420px;
+    display: flex;
+    align-items: center;
+  }
+
+  .volume-control {
+    margin-right: 10px; /* Add spacing between volume control and mute button */
+  }
+
+  .mute-button {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
   }
 
   .game-board {
@@ -200,3 +247,5 @@
     background-color: #388e3c;
   }
 </style>
+
+
