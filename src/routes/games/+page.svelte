@@ -25,6 +25,11 @@
       gameDescription: 'How about testing that hand eye coordination',
       imageSrc: 'https://images.pexels.com/photos/416832/pexels-photo-416832.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
+    {
+      gameName: 'Reaction Timer',
+      gameDescription: 'Wait for the light to turn from red to green and see how fast you click!',
+      imageSrc: 'https://images.pexels.com/photos/1727004/pexels-photo-1727004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+    },
     // Add more game objects as needed
   ];
 </script>
