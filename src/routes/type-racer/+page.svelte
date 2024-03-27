@@ -1,6 +1,6 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
-  import Layout from '../../layouts/Layout.svelte';
+    import Layout from '../../layouts/Layout.svelte';
 
     let letters = [];
     let currentIndex = 0;
@@ -42,26 +42,26 @@
     }
 
     function handleKeyDown(event) {
-    if (!gameActive) return; // Ignore key events if the game is not active
-    const pressedKey = event.key.toUpperCase();
-    const validKeys = [...letters.map(String), ...letters.map(String).map(c => c.toLowerCase())];
-    if (validKeys.includes(pressedKey)) {
-        if (pressedKey === validKeys[currentIndex]) {
-            currentIndex++;
-            if (currentIndex === letters.length) {
+        if (!gameActive) return; // Ignore key events if the game is not active
+        const pressedKey = event.key.toUpperCase();
+        const validKeys = [...letters.map(String), ...letters.map(String).map(c => c.toLowerCase())];
+        if (validKeys.includes(pressedKey)) {
+            if (pressedKey === validKeys[currentIndex]) {
+                currentIndex++;
+                if (currentIndex === letters.length) {
+                    clearInterval(interval);
+                    // Handle game won
+                    alert("Congratulations! You've won!");
+                    gameActive = false;
+                }
+            } else {
+                // Handle incorrect input
                 clearInterval(interval);
-                // Handle game won
-                alert("Congratulations! You've won!");
                 gameActive = false;
+                alert("Game over! You typed the wrong character.");
             }
-        } else {
-            // Handle incorrect input
-            clearInterval(interval);
-            gameActive = false;
-            alert("Game over! You typed the wrong character.");
         }
     }
-}
 
     onMount(() => {
         // Only attach the keydown event listener in the browser
@@ -79,15 +79,24 @@
         clearInterval(interval);
     });
 </script>
+
+<head>
+    <title>Type Racer - Test Your Typing Speed!</title>
+    <meta name="description" content="Challenge your typing skills with Type Racer! Compete against others in real-time typing races. Improve your typing speed and accuracy as you race against the clock.">
+    <meta name="keywords" content="type racer, typing game, typing speed test, typing competition, keyboard game, typing challenge, online game, typing skills, typing practice">
+    <meta name="BC1337" content="BC">
+    <!-- Add more meta tags as needed -->
+</head>
+
 <Layout>
-<div class="container">
+<div class="container" role="main">
     <h1>Test your typing skills!</h1>
     <div class="card">
         <div class="type-racer">
             <div class="instructions">
                 <p>Instructions: Type the letters or numbers as fast as you can!</p>
             </div>
-            <div class="game-area">
+            <div class="game-area" aria-live="assertive" aria-label="Type the following characters:">
                 {#each letters as letter, index}
                 <div
                     class="letter-box"

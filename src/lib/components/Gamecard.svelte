@@ -13,24 +13,25 @@
   }
 </script>
 
-<div class="grid-container">
-{#each games as game}
-  <div class="card-container">
-    <div class="image-container">
-      <img src={game.imageSrc} alt="games image">
-    </div>
-    <div class="description">
-      <div class="game-title">
-        <p>{game.gameName}</p>
+<div class="grid-container" role="list">
+  {#each games as game}
+    <div class="card-container" role="listitem" aria-label={game.gameName}>
+      <div class="image-container">
+        <img src={game.imageSrc} alt="Game Image" role="presentation">
       </div>
-      <div class="card-description">
-        <p>{game.gameDescription}</p>
+      <div class="description">
+        <div class="game-title">
+          <h2>{game.gameName}</h2>
+        </div>
+        <div class="card-description">
+          <p>{game.gameDescription}</p>
+        </div>
       </div>
+      <button on:click={() => handleClick(game)} class="card-button" aria-label={`Play ${game.gameName} Game`}>Play Game</button>
     </div>
-    <button on:click={() => handleClick(game)} class="card-button">Play Game</button>
-  </div>
-{/each}
+  {/each}
 </div>
+
 <style>
 .grid-container {
   display: grid;

@@ -1,7 +1,5 @@
 <script>
     import Layout from "../layouts/Layout.svelte";
-    import '../routes/styles.css'
-
     import { goto } from '$app/navigation';
 
     // Function to handle button click event and navigate to /games
@@ -11,52 +9,73 @@
 </script>
 
 <style>
+    /* CSS Reset */
+     h1, p, button {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        box-sizing: border-box;
+    }
+
+    /* Container Styles */
     .container {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100vh;
-        padding: 0 20px; /* Add padding to the sides */
+        min-height: 100vh;
+        padding: 0 20px;
     }
 
+    /* Adjust the position only for smaller screens */
+    @media screen and (max-width: 600px) {
+        .container {
+            margin-top: 50px;
+        }
+    }
+
+    /* Header Styles */
     h1 {
         font-size: 3rem;
         margin-bottom: 1rem;
-        font-family: 'Arial Black', sans-serif; /* Use a bold font */
+        font-weight: bold;
+        color: #888; /* Dark color for better contrast */
         text-align: center;
-        animation: fadeInUp 1s ease; /* Apply fade in animation */
+        animation: fadeInUp 1s ease;
     }
 
+    /* Paragraph Styles */
     p {
         font-size: 1.2rem;
         margin-bottom: 2rem;
         line-height: 1.5;
         text-align: center;
-        animation: fadeInUp 1s ease; /* Apply fade in animation */
-        animation-delay: 0.5s; /* Delay animation for 0.5s */
+        animation: fadeInUp 1s ease;
+        animation-delay: 0.5s;
+        color: #888; /* Medium color for better contrast */
     }
 
+    /* Highlighted Text Styles */
     .highlight {
-        font-weight: bold; /* Make the text bold */
-        color: #f0a500; /* Match the color of the heading */
+        color: #f0a500; /* Highlight color */
     }
 
+    /* Button Styles */
     .button {
-        background-color: #4caf50; /* Green button */
-        color: #fff; /* White text color */
+        background-color: #4caf50;
+        color: #fff;
         padding: 1rem 2rem;
         font-size: 1.2rem;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        animation: fadeInUp 1s ease; /* Apply fade in animation */
-        animation-delay: 1s; /* Delay animation for 1s */
+        animation: fadeInUp 1s ease;
+        animation-delay: 1s;
     }
 
     .button:hover {
-        background-color: #388e3c; /* Darker green on hover */
+        background-color: #388e3c;
     }
 
     /* Animation keyframes */
@@ -71,6 +90,17 @@
         }
     }
 </style>
+
+<head>
+    <title>Brain Trainer - Improve Cognitive Function</title>
+    <meta name="description" content="Train your brain with a variety of challenging exercises! Improve memory, attention, and problem-solving skills. Sharpen your mind with fun and engaging puzzles and games.">
+    <meta name="keywords" content="brain trainer, cognitive training, memory improvement, attention exercises, problem-solving games, mental agility, brain games, puzzle games, memory games">
+    <meta name="BC1337" content="BC">
+    <!-- Add more meta tags as needed -->
+
+    <!-- Content Security Policy (CSP) Headers -->
+    <!-- Example: <meta http-equiv="Content-Security-Policy" content="default-src 'self'"> -->
+</head>
 
 <Layout>
     <div class="container">

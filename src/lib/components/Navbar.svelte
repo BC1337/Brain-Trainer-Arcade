@@ -43,24 +43,7 @@
 .nav-link:hover {
   color: #ff7f50; /* Change to your preferred hover color */
 }
-  /* Animation for "C1337" */
-  @keyframes dropAndBounce {
-    0% {
-      opacity: 0;
-      transform: translateY(-50px);
-    }
-    50% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    75% {
-      transform: translateY(-10px);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
-
+ 
 </style>
 
 <div class="navbar">

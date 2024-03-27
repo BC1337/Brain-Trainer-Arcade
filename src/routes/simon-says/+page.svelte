@@ -28,7 +28,7 @@
   let wrongSound;
 
   let isMuted = false; // Initialize mute state
-  let volumeLevel = 0.5; // Initial volume level
+  let volumeLevel = 0.75; // Initial volume level
 
   // Check if running in the browser environment
   if (typeof window !== 'undefined') {
@@ -153,13 +153,21 @@
 
 </script>
 
+<head>
+  <title>Sequential Memory Game!</title>
+  <meta name="description" content="Play the classic Simon Says clone online. Test your memory and reflexes by repeating a sequence of colors and sounds. Can you beat your high score?">
+  <meta name="keywords" content="Simon Says, memory game, memory test, colors game, audio game, reflex game, sequence game, pattern game, online game, brain game">
+  <meta name="BC1337" content="BC">
+  <!-- Add more meta tags as needed -->
+</head>
+
 <Layout>
-  <div class="game-container">
-    <div class="game-controls">
-      <div class="volume-control">
-        <input type="range" min="0" max="1" step="0.01" value={volumeLevel} on:input={handleVolumeChange} />
+  <div class="game-container" role="application">
+    <div class="game-controls" aria-label="Game Controls">
+      <div class="volume-control" aria-label="Volume Control">
+        <input type="range" min="0" max="1" step="0.01" value={volumeLevel} on:input={handleVolumeChange} aria-label="Volume Slider" />
       </div>
-      <button class="mute-button" on:click={toggleMute}>
+      <button class="mute-button" on:click={toggleMute} aria-label="{isMuted ? 'Unmute' : 'Mute'}">
         {#if isMuted}
           🔇 <!-- Mute icon -->
         {:else}
@@ -167,18 +175,19 @@
         {/if}
       </button>
     </div>
-    <div class="game-board">
+    <div class="game-board" role="grid" aria-label="Game Board">
       {#each Array(gridSize * gridSize) as _, index}
-        <div class="box" role="button" tabindex="0" on:click={() => handleBoxClick(index)} on:keydown={(e) => handleKeyDown(e, index)} aria-label="Box"></div>
+        <div class="box" role="button" tabindex="0" on:click={() => handleBoxClick(index)} on:keydown={(e) => handleKeyDown(e, index)} aria-label="Clickable Box"></div>
       {/each}
     </div>
     {#if showStartButton}
       <div class="button-container">
-        <button on:click={startGame}>Start Game</button>
+        <button on:click={startGame} aria-label="Start Game">Start Game</button>
       </div>
     {/if}
   </div>
 </Layout>
+
 
 <style>
   .game-container {

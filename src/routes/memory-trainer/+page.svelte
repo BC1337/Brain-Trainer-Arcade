@@ -82,39 +82,41 @@
     });
 </script>
 
-<Layout>
-    <div class="content-wrapper">
+<head>
+    <title>Verbal Memory Trainer - Improve Your Recall Skills!</title>
+    <meta name="description" content="Enhance your verbal memory with this online trainer. Exercise your ability to recall words, phrases, and sentences. Challenge yourself with various levels of difficulty and track your progress over time.">
+    <meta name="keywords" content="verbal memory trainer, memory improvement, memory game, recall game, memory exercise, word recall, phrase recall, sentence recall, cognitive training, brain game">
+    <meta name="BC1337" content="BC">
+    <!-- Add more meta tags as needed -->
+  </head>
+  
+
+  <Layout>
+    <div class="content-wrapper" role="main">
         <!-- Description -->
-        <div class="description">
-            <p>How to play:</p>
+        <section class="description">
+            <h2>How to Play</h2>
             <p>Remember the name of the word displayed and make the correct choices.</p>
-      
-        </div>
-    
+        </section>
+
         <!-- Memory Game content -->
-        <div class="game-container">
+        <section class="game-container">
             <div class="memory-container">
                 <div class="card">
                     <!-- Apply the color style directly to the random word -->
-                    <div class="random-word" style="color: {wordColor}; text-shadow: 0 0 10px {wordColor};">
-                        {randomWord}
-                    </div>
+                    <h3 class="random-word" style="color: {wordColor}; text-shadow: 0 0 10px {wordColor};">{randomWord}</h3>
                     <div class="button-container">
                         <button on:click={handleClickSeen} class="seen">Seen</button>
                         <button on:click={handleClickNew} class="new">New</button>
                     </div>
-                    <div class="lives" style="color: white;">
-                        Lives: {lives}
-                    </div>
-                    <div class="correct-guesses" style="color: white;">
-                        Correct Guesses: {correctGuesses}
-                    </div>
+                    <p class="lives">Lives: {lives}</p>
+                    <p class="correct-guesses">Correct Guesses: {correctGuesses}</p>
                 </div>
             </div>
             {#if showModal}
                 <Modal correctGuesses={correctGuesses} onClose={() => showModal = false}/>
             {/if}
-        </div>
+        </section>
     </div>
 </Layout>
 

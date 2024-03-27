@@ -134,8 +134,17 @@ const calculateStats = () => {
 
 </script>
 
+<head>
+  <title>Aim Trainer - Improve Your Shooting Accuracy!</title>
+  <meta name="description" content="Sharpen your aiming skills with this online aim trainer game. Practice your precision and speed by hitting targets as they appear on the screen. Challenge yourself and see how your accuracy improves over time!">
+  <meta name="keywords" content="aim trainer, shooting game, accuracy game, precision game, reflex game, target practice, online game, aim practice, shooting accuracy">
+  <meta name="author" content="Your Name">
+  <!-- Add more meta tags as needed -->
+</head>
+
+
 <Layout>
-  <div class="wrapper">
+  <div class="wrapper" role="main" aria-label="Aim Trainer Game">
     {#if !gameStarted}
       <div class="game-controls-container {gameEnded ? 'game-controls-hidden' : 'game-controls-visible'}">
         <h2>Game Controls</h2>
@@ -262,5 +271,9 @@ const calculateStats = () => {
 
   .game-controls-container p {
     margin-bottom: 10px;
+  }
+
+  :focus {
+    outline: 2px solid #007bff; /* Example focus style */
   }
 </style>

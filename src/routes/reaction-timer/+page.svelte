@@ -55,41 +55,54 @@
     });
 </script>
 
-<Layout>
-    <div class="center-container">
-        <div class="game-container">
-            <div class="game-title">
-                <h1>Reaction Trainer</h1>
-            </div>
-            <div class="game-description">
-                <p>Click start, wait for the red box to turn green and don't click too early!</p>
-            </div>
-            <div class="play-area-container">
-                {#if gameState === 'preGame'}
-                    <div class="start-game-modal">
-                        <button on:click={startGame}>Start Game</button>
-                    </div>
-                {/if}
-                <canvas class="play-area" style="background-color: {playAreaColor}" on:click={handleClick}></canvas>
-                {#if showEarlyClickAlert}
-                    <div class="early-click-alert">
-                        <p>You clicked too early! Wait for the green color.</p>
-                    </div>
-                {/if}
-            </div>
-            <div class="timer-stats">
-                <div class="stats-container">
-                    <div class="high-scores white">
-                        <h2>High Scores:</h2>
-                        {#each highScores as score, index}
-                            <p>{index + 1}. {score} milliseconds</p>
-                        {/each}
+<head>
+    <title>Reaction Timer!</title>
+    <meta name="description" content="Test your reaction time with this online game. Click the button as quickly as possible when the countdown reaches zero. Challenge your friends and see who has the fastest reflexes!">
+    <meta name="keywords" content="reaction timer, reaction game, reflex game, online game, timer game, reflex test, reaction speed, challenge game">
+    <meta name="BC1337" content="BC">
+    <!-- Add more meta tags as needed -->
+  </head>  
+
+  <Layout>
+    <main aria-labelledby="game-title">
+        <div class="center-container">
+            <section class="game-container">
+                <div class="game-title" id="game-title">
+                    <h1>Reaction Trainer</h1>
+                </div>
+                <div class="game-description">
+                    <p>Click start, wait for the red box to turn green and don't click too early!</p>
+                </div>
+                <div class="play-area-container">
+                    {#if gameState === 'preGame'}
+                        <div class="start-game-modal">
+                            <button on:click={startGame}>Start Game</button>
+                        </div>
+                    {/if}
+                    <canvas class="play-area" style="background-color: {playAreaColor}" on:click={handleClick}></canvas>
+                    {#if showEarlyClickAlert}
+                        <div class="early-click-alert" aria-live="assertive">
+                            <p>You clicked too early! Wait for the green color.</p>
+                        </div>
+                    {/if}
+                </div>
+                <div class="timer-stats">
+                    <div class="stats-container">
+                        <div class="high-scores white" aria-labelledby="high-scores-title">
+                            <h2 id="high-scores-title">High Scores:</h2>
+                            <ol>
+                                {#each highScores as score, index}
+                                    <li>{index + 1}. {score} milliseconds</li>
+                                {/each}
+                            </ol>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
-    </div>
+    </main>
 </Layout>
+
 
 <style>
     .center-container {

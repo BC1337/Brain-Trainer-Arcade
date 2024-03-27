@@ -34,9 +34,20 @@
   ];
 </script>
 
+<head>
+  <title>Games Hub - Play Free Online Games!</title>
+  <meta name="description" content="Welcome to the Games Hub! Play a wide variety of free online games including puzzles, strategy games, action games, arcade classics, and more. Challenge your friends, test your skills, and have fun!">
+  <meta name="keywords" content="online games, free games, browser games, puzzle games, strategy games, action games, arcade games, multiplayer games, single player games, casual games, fun games">
+  <meta name="BC1337" content="BC">
+  <!-- Add more meta tags as needed -->
+</head>
+
+
 <Layout>
-  <h1>Enjoy some brain games and continue to level up!</h1>
-  <GameCard games={games} />
+  <main aria-label="Games Hub">
+    <h1>Enjoy some brain games and continue to level up!</h1>
+    <GameCard games={games} />
+</main>
 </Layout>
 
 <style>
