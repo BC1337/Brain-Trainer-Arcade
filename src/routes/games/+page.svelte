@@ -30,6 +30,11 @@
       gameDescription: 'Wait for the light to turn from red to green and see how fast you click!',
       imageSrc: 'https://images.pexels.com/photos/1727004/pexels-photo-1727004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
+    {
+      gameName: 'Chimp test',
+      gameDescription: 'Are you a monkeys uncle...? The results will speak for themselves.',
+      imageSrc: 'https://images.pexels.com/photos/1123771/pexels-photo-1123771.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+    },
     // Add more game objects as needed
   ];
 </script>
