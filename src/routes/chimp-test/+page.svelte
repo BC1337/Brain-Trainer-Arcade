@@ -1,7 +1,9 @@
 <script>
   import { onMount } from "svelte";
+  import { writable } from "svelte/store";
   import Layout from '../../layouts/Layout.svelte'
-  
+  import Toast from "../../lib/components/Toast.svelte";
+
   let canvasWidth = 600;
   let canvasHeight = 400;
   let ctx;
@@ -10,6 +12,9 @@
   let round = 1; // Track the current round
   let numBoxes = 4; // Initial number of boxes
   let hideNumbers = false; // Flag to hide numbers after the first box click in subsequent rounds
+
+  // Declare toastMessage writable store
+  const toastMessage = writable({ message: "", type: "" });
 
   function drawCanvas() {
     ctx.fillStyle = '#E0E0E0';
@@ -77,7 +82,7 @@
 
       if (currentBoxIndex === numBoxes) {
         // User completed the round successfully
-        alert('Congratulations! You completed round ' + round + ' successfully.');
+        showToast('Congratulations! You completed round ' + round + ' successfully.', 'success'); // Pass 'success' as a string
         round++; // Increment round
         numBoxes++; // Increase number of boxes for the next round
         generateBoxes(); // Start a new round
@@ -90,9 +95,18 @@
       }
     } else {
       // User clicked the wrong box, game over
-      alert('Game Over! You clicked the wrong box.');
+      showToast('Game Over! You clicked the wrong box.', 'error'); // Pass 'error' as a string
       startGame(); // Restart the game
     }
+  }
+
+    // Function to show toast notification
+  function showToast(message, type) {
+    console.log("Showing toast:", message, type);
+    toastMessage.set({ message, type });
+    setTimeout(() => {
+      toastMessage.set({ message: '', type: '' });
+    }, 1650);
   }
 
   function checkOverlap(x, y, size) {
@@ -133,5 +147,6 @@
     <h1>Memory Game</h1>
     <p>Click the boxes in sequential order</p>
     <canvas id="canvas" width={canvasWidth} height={canvasHeight} on:click={handleCanvasClick}></canvas>
+    <Toast message={$toastMessage.message} type={$toastMessage.type} />
   </div>
 </Layout>
