@@ -17,7 +17,7 @@
   {#each games as game}
     <div class="card-container" role="listitem" aria-label={game.gameName}>
       <div class="image-container">
-        <img src={game.imageSrc} alt="Game Image" role="presentation">
+        <img src={game.imageSrc} alt="" role="presentation">
       </div>
       <div class="description">
         <div class="game-title">

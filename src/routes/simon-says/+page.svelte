@@ -200,9 +200,7 @@
   }
 
   .game-controls {
-    position: absolute;
-    top: 150px; /* Drop down by 75px */
-    right:420px;
+    position: relative;
     display: flex;
     align-items: center;
   }

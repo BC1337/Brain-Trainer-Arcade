@@ -61,9 +61,9 @@
     <meta name="keywords" content="reaction timer, reaction game, reflex game, online game, timer game, reflex test, reaction speed, challenge game">
     <meta name="BC1337" content="BC">
     <!-- Add more meta tags as needed -->
-  </head>  
+</head>  
 
-  <Layout>
+<Layout>
     <main aria-labelledby="game-title">
         <div class="center-container">
             <section class="game-container">
@@ -122,7 +122,7 @@
     .game-title {
         margin-bottom: 20px;
         text-align: center;
-        color: #fff;
+        color: var(--text-color); /* Set the text color using a CSS variable */
     }
 
     .game-title h1 {
@@ -133,7 +133,7 @@
     .game-description {
         margin-bottom: 20px;
         text-align: center;
-        color: #fff;
+        color: var(--text-color); /* Set the text color using a CSS variable */
     }
 
     .start-game-modal {
@@ -187,7 +187,7 @@
     .high-scores h2 {
         font-size: 1.5em;
         margin-bottom: 10px;
-        color: #FFF;
+        color: var(--text-color); /* Set the text color using a CSS variable */
     }
 
     .high-scores p {
@@ -212,9 +212,5 @@
     .early-click-alert p {
         margin: 0;
         font-weight: bold;
-    }
-    
-    .white {
-        color: #fff;
     }
 </style>

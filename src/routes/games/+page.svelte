@@ -48,20 +48,27 @@
 
 <Layout>
   <main aria-label="Games Hub">
-      <h1><span class="highlight">Enjoy</span> some <span class="highlight">brain games</span> and continue to <span class="highlight">level up</span>!</h1>
+    <h1>
+        <span>Enjoy</span>
+        <span class="highlight">some</span>
+        <span>brain games</span>
+        <span class="highlight">and</span>
+        <span>continue to</span>
+        <span class="highlight">level up</span>
+        <span>!</span>
+    </h1>
       <GameCard games={games} />
   </main>
 </Layout>
 
 <style>
   h1 {
-      margin-top: 50px;
-      display: flex;
-      justify-content: center;
-  }
+        margin-top: 50px;
+        text-align: center; /* Center the text */
+    }
 
-  .highlight {
-      color: #f0a500; /* Orange color */
-      padding: 0 5px; /* Add spacing */
-  }
+    .highlight {
+        color: #f0a500; /* Orange color */
+        padding: 0 5px; /* Add spacing */
+    }
 </style>
