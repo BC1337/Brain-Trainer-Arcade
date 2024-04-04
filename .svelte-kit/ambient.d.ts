@@ -41,7 +41,9 @@ declare module '$env/static/private' {
 	export const OLDPWD: string;
 	export const TERM_PROGRAM_VERSION: string;
 	export const DESKTOP_SESSION: string;
+	export const NVM_BIN: string;
 	export const npm_package_json: string;
+	export const NVM_INC: string;
 	export const XDG_SEAT_PATH: string;
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
@@ -50,6 +52,7 @@ declare module '$env/static/private' {
 	export const DBUS_SESSION_BUS_ADDRESS: string;
 	export const COLORTERM: string;
 	export const COLOR: string;
+	export const NVM_DIR: string;
 	export const npm_config_metrics_registry: string;
 	export const MANDATORY_PATH: string;
 	export const QT_QPA_PLATFORMTHEME: string;
@@ -57,7 +60,6 @@ declare module '$env/static/private' {
 	export const WINDOWID: string;
 	export const _: string;
 	export const npm_config_prefix: string;
-	export const npm_config_npm_version: string;
 	export const XDG_SESSION_CLASS: string;
 	export const DEFAULTS_PATH: string;
 	export const CLUTTER_BACKEND: string;
@@ -101,6 +103,7 @@ declare module '$env/static/private' {
 	export const PWD: string;
 	export const npm_execpath: string;
 	export const XDG_CONFIG_DIRS: string;
+	export const NVM_CD_FLAGS: string;
 	export const XDG_DATA_DIRS: string;
 	export const npm_config_global_prefix: string;
 	export const npm_command: string;
@@ -154,7 +157,9 @@ declare module '$env/dynamic/private' {
 		OLDPWD: string;
 		TERM_PROGRAM_VERSION: string;
 		DESKTOP_SESSION: string;
+		NVM_BIN: string;
 		npm_package_json: string;
+		NVM_INC: string;
 		XDG_SEAT_PATH: string;
 		VSCODE_GIT_ASKPASS_MAIN: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
@@ -163,6 +168,7 @@ declare module '$env/dynamic/private' {
 		DBUS_SESSION_BUS_ADDRESS: string;
 		COLORTERM: string;
 		COLOR: string;
+		NVM_DIR: string;
 		npm_config_metrics_registry: string;
 		MANDATORY_PATH: string;
 		QT_QPA_PLATFORMTHEME: string;
@@ -170,7 +176,6 @@ declare module '$env/dynamic/private' {
 		WINDOWID: string;
 		_: string;
 		npm_config_prefix: string;
-		npm_config_npm_version: string;
 		XDG_SESSION_CLASS: string;
 		DEFAULTS_PATH: string;
 		CLUTTER_BACKEND: string;
@@ -214,6 +219,7 @@ declare module '$env/dynamic/private' {
 		PWD: string;
 		npm_execpath: string;
 		XDG_CONFIG_DIRS: string;
+		NVM_CD_FLAGS: string;
 		XDG_DATA_DIRS: string;
 		npm_config_global_prefix: string;
 		npm_command: string;

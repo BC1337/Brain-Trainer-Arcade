@@ -102,7 +102,6 @@
 
     // Function to show toast notification
   function showToast(message, type) {
-    console.log("Showing toast:", message, type);
     toastMessage.set({ message, type });
     setTimeout(() => {
       toastMessage.set({ message: '', type: '' });

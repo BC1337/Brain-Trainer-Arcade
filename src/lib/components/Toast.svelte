@@ -28,7 +28,7 @@
     background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
     opacity: 1;
     transition: opacity 0.3s ease-in-out;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 1); /* Add shadow for depth */
 }
 
 .toast p {
@@ -37,9 +37,11 @@
 
 .toast p.success {
     color: #4caf50; /* Green text color for success toast */
+    font-weight: bold;
 }
 
 .toast p.error {
-    color: #f44336; /* Red text color for error toast */
+    color: #e02d20; /* Red text color for error toast */
+    font-weight: bold;
 }
 </style>
