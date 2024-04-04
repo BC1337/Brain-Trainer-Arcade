@@ -24,8 +24,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fortawesome/free-solid-svg-icons": "^6.5.2",
 		"axios": "^1.6.7",
 		"bcrypt": "^5.1.1",
-		"mongodb": "^6.5.0"
+		"mongodb": "^6.5.0",
+		"svelte-fa": "^4.0.2"
 	}
 }
