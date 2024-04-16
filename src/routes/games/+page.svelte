@@ -71,4 +71,7 @@
         color: #f0a500; /* Orange color */
         padding: 0 5px; /* Add spacing */
     }
+    span{
+        color: grey;
+    }
 </style>

@@ -91,4 +91,7 @@
 .card-button:hover {
   background-color: #0056b3;
 }
+h2{
+  color: #f0a500;
+}
 </style>

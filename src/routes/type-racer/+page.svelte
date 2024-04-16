@@ -90,7 +90,7 @@
 
 <Layout>
 <div class="container" role="main">
-    <h1>Test your typing skills!</h1>
+    <h1 class="text-4xl pb-5">Test your typing skills!</h1>
     <div class="card">
         <div class="type-racer">
             <div class="instructions">
@@ -121,6 +121,7 @@
             </div>
             <div class="timer" style="margin-top: 10px;">Time: {Math.floor(timer / 1000)}s {(timer % 1000).toString().padStart(2, '0')}ms</div>
         </div>
+        
     </div>
 </div>
 </Layout>
@@ -148,9 +149,15 @@
         font-family: Arial, sans-serif;
     }
 
+    h1{
+        color: #f0a500;
+    }
+
     .instructions {
         margin-bottom: 20px;
+        color: #f0a500;
     }
+
 
     .game-area {
         display: flex;
@@ -199,6 +206,7 @@
 
     .timer {
         font-size: 20px;
+        color: #f0a500;
     }
 
     button {

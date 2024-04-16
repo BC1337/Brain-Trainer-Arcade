@@ -122,7 +122,7 @@
     .game-title {
         margin-bottom: 20px;
         text-align: center;
-        color: var(--text-color); /* Set the text color using a CSS variable */
+        color: #f0a500;
     }
 
     .game-title h1 {
@@ -133,7 +133,7 @@
     .game-description {
         margin-bottom: 20px;
         text-align: center;
-        color: var(--text-color); /* Set the text color using a CSS variable */
+        color: grey;
     }
 
     .start-game-modal {
@@ -187,7 +187,7 @@
     .high-scores h2 {
         font-size: 1.5em;
         margin-bottom: 10px;
-        color: var(--text-color); /* Set the text color using a CSS variable */
+        color: #f0a500;/* Set the text color using a CSS variable */
     }
 
     .high-scores p {

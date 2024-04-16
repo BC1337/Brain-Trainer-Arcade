@@ -143,7 +143,7 @@ const calculateStats = () => {
 </head>
 
 
-<Layout>
+<Layout showThemeToggle={false}>
   <div class="wrapper" role="main" aria-label="Aim Trainer Game">
     {#if !gameStarted}
       <div class="game-controls-container {gameEnded ? 'game-controls-hidden' : 'game-controls-visible'}">

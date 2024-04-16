@@ -139,11 +139,17 @@
     cursor: pointer;
     margin: 10% auto;
   }
+  h1{
+    color: #f0a500;
+  }
+  p{
+    color: #f0a500;
+  }
 </style>
 
-<Layout>
+<Layout showThemeToggle={true}>
   <div id="container">
-    <h1>Memory Game</h1>
+    <h1 class="text-3xl">Memory Game</h1>
     <p>Click the boxes in sequential order</p>
     <canvas id="canvas" width={canvasWidth} height={canvasHeight} on:click={handleCanvasClick}></canvas>
     <Toast message={$toastMessage.message} type={$toastMessage.type} />

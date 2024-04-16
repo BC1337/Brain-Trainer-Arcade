@@ -162,6 +162,7 @@
 </head>
 
 <Layout>
+  <h1 class="text-3xl">Simon Says</h1>
   <div class="game-container" role="application">
     <div class="game-controls" aria-label="Game Controls">
       <div class="volume-control" aria-label="Volume Control">
@@ -190,6 +191,12 @@
 
 
 <style>
+  h1{
+    color: #f0a500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .game-container {
     position: relative;
     display: flex;
@@ -243,15 +250,16 @@
     padding: 10px 20px;
     font-size: 16px;
     border: none;
-    background-color: #4caf50;
-    color: #fff;
+    background-color: #d8ead8;
+    color: #f0a500;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    margin-bottom: 10px;
   }
 
   button:hover {
-    background-color: #388e3c;
+    background-color: rgb(241, 226, 205)
   }
 </style>
 

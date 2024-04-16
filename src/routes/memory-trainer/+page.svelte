@@ -133,6 +133,7 @@
     max-width: 600px;
     padding: 10px;
     border-radius: 10px;
+    color: #f0a500;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     margin-bottom: -100px; /* Add margin bottom to create space between description and game */
 }
