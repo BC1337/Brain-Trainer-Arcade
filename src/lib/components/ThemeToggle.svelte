@@ -44,7 +44,7 @@
   }
 
   :global(body.dark-mode) {
-      background-color: #000000; /* Change background color for dark mode */
+      background-color: #b0adad; /* Change background color for dark mode */
       color: #ffffff; /* Change text color for dark mode */
   }
 </style>
