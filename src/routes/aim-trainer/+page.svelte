@@ -21,6 +21,7 @@
 
   onMount(() => {
     canvas = document.getElementById('play-area');
+
   });
 
   const startGame = () => {
@@ -35,10 +36,15 @@
     lastClickTime = null;
     startTimer();
     setTimeout(() => {
-      const ctx = canvas.getContext('2d');
-      generateTarget(ctx);
+        const ctx = canvas.getContext('2d');
+        generateTarget(ctx);
     }, 100);
-  };
+    
+    // Hide game controls when the game starts
+    const gameControlsContainer = document.querySelector('.game-controls-container');
+    gameControlsContainer.classList.remove('game-controls-visible');
+    gameControlsContainer.classList.add('game-controls-hidden');
+};
 
   const hideModal = () => {
     const modal = document.getElementById('game-modal');
@@ -104,6 +110,7 @@
     const gameControlsContainer = document.querySelector('.game-controls-container');
     gameControlsContainer.classList.remove('game-controls-hidden');
     gameControlsContainer.classList.add('game-controls-visible');
+    resetGame(); // Reset the game state
 };
 const calculateStats = () => {
     const totalClicksCount = successfulClicks + missedClicks;
@@ -131,6 +138,21 @@ const calculateStats = () => {
     gameControlsContainer.classList.add('game-controls-visible');
 };
 
+  // Function to reset game state
+  const resetGame = () => {
+    gameStarted = false;
+    gameEnded = false;
+    successfulClicks = 0;
+    missedClicks = 0;
+    totalClicks = 0;
+    clickTimes = [];
+    timer = roundLength; // Reset round length
+    lastClickTime = null;
+    const gameControlsContainer = document.querySelector('.game-controls-container');
+    gameControlsContainer.classList.remove('game-controls-hidden');
+    gameControlsContainer.classList.add('game-controls-visible');
+};
+
 
 </script>
 
@@ -145,16 +167,16 @@ const calculateStats = () => {
 
 <Layout showThemeToggle={false}>
   <div class="wrapper" role="main" aria-label="Aim Trainer Game">
+    <div class="game-controls-container" class:game-controls-visible={!gameEnded} class:game-controls-hidden={gameEnded}>
+      <h2>Game Controls</h2>
+      <label for="round-length">Round Length:</label>
+      <input type="range" id="round-length" min="5" max="30" bind:value={roundLength} />
+      <p>Round Length: {roundLength} seconds</p>
+      <label for="target-size">Target Size:</label>
+      <input type="range" id="target-size" min="10" max="50" bind:value={targetSize} />
+      <p>Target Size: {targetSize}px</p>
+    </div>
     {#if !gameStarted}
-      <div class="game-controls-container {gameEnded ? 'game-controls-hidden' : 'game-controls-visible'}">
-        <h2>Game Controls</h2>
-        <label for="round-length">Round Length:</label>
-        <input type="range" id="round-length" min="5" max="30" bind:value={roundLength} />
-        <p>Round Length: {roundLength} seconds</p>
-        <label for="target-size">Target Size:</label>
-        <input type="range" id="target-size" min="10" max="50" bind:value={targetSize} />
-        <p>Target Size: {targetSize}px</p>
-      </div>
       <div class="start-game-modal">
         <button on:click={startGame}>Start Game</button>
       </div>
@@ -163,10 +185,13 @@ const calculateStats = () => {
     {/if}
     <div id="game-modal" class="modal" style="display: none;"></div>
   </div>
+  
 </Layout>
 
 
 <style>
+
+
   .wrapper {
     display: flex;
     justify-content: center;
