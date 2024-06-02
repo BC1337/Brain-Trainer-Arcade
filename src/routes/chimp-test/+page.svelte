@@ -61,21 +61,22 @@
   }
 
   function handleCanvasClick(event) {
-    let rect = event.target.getBoundingClientRect();
-    let x = event.clientX - rect.left;
-    let y = event.clientY - rect.top;
+  let rect = event.target.getBoundingClientRect();
+  let x = event.clientX - rect.left;
+  let y = event.clientY - rect.top;
 
-    let clickedBox = boxes.find(box => {
-      return (
-        x >= box.x &&
-        x <= box.x + box.size &&
-        y >= box.y &&
-        y <= box.y + box.size &&
-        box.number === currentBoxIndex + 1
-      );
-    });
+  let clickedBox = boxes.find(box => {
+    return (
+      x >= box.x &&
+      x <= box.x + box.size &&
+      y >= box.y &&
+      y <= box.y + box.size
+    );
+  });
 
-    if (clickedBox) {
+  if (clickedBox) {
+    // Check if the clicked box is the correct one
+    if (clickedBox.number === currentBoxIndex + 1) {
       // User clicked the correct box
       clickedBox.clicked = true; // Mark the box as clicked
       currentBoxIndex++;
@@ -98,7 +99,11 @@
       showToast('Game Over! You clicked the wrong box.', 'error'); // Pass 'error' as a string
       startGame(); // Restart the game
     }
+  } else {
+    // User clicked on an empty area, do nothing
+    console.log('Clicked on empty area');
   }
+}
 
     // Function to show toast notification
   function showToast(message, type) {
