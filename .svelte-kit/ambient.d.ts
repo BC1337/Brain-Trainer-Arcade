@@ -35,10 +35,11 @@ declare module '$env/static/private' {
 	export const GIT_ASKPASS: string;
 	export const npm_node_execpath: string;
 	export const SHLVL: string;
+	export const LD_LIBRARY_PATH: string;
 	export const npm_config_noproxy: string;
 	export const HOME: string;
 	export const CHROME_DESKTOP: string;
-	export const OLDPWD: string;
+	export const APPDIR: string;
 	export const TERM_PROGRAM_VERSION: string;
 	export const DESKTOP_SESSION: string;
 	export const NVM_BIN: string;
@@ -57,7 +58,7 @@ declare module '$env/static/private' {
 	export const MANDATORY_PATH: string;
 	export const QT_QPA_PLATFORMTHEME: string;
 	export const LOGNAME: string;
-	export const WINDOWID: string;
+	export const OWD: string;
 	export const _: string;
 	export const npm_config_prefix: string;
 	export const XDG_SESSION_CLASS: string;
@@ -72,6 +73,7 @@ declare module '$env/static/private' {
 	export const PATH: string;
 	export const SESSION_MANAGER: string;
 	export const GDM_LANG: string;
+	export const APPIMAGE: string;
 	export const NODE: string;
 	export const npm_package_name: string;
 	export const XDG_SESSION_PATH: string;
@@ -88,9 +90,11 @@ declare module '$env/static/private' {
 	export const TERM_PROGRAM: string;
 	export const npm_lifecycle_script: string;
 	export const SSH_AUTH_SOCK: string;
+	export const GSETTINGS_SCHEMA_DIR: string;
 	export const XDG_GREETER_DATA_DIR: string;
 	export const ORIGINAL_XDG_CURRENT_DESKTOP: string;
 	export const SHELL: string;
+	export const ARGV0: string;
 	export const npm_package_version: string;
 	export const npm_lifecycle_event: string;
 	export const QT_ACCESSIBILITY: string;
@@ -108,7 +112,6 @@ declare module '$env/static/private' {
 	export const XDG_DATA_DIRS: string;
 	export const npm_config_global_prefix: string;
 	export const npm_command: string;
-	export const VTE_VERSION: string;
 	export const INIT_CWD: string;
 	export const EDITOR: string;
 	export const NODE_ENV: string;
@@ -152,10 +155,11 @@ declare module '$env/dynamic/private' {
 		GIT_ASKPASS: string;
 		npm_node_execpath: string;
 		SHLVL: string;
+		LD_LIBRARY_PATH: string;
 		npm_config_noproxy: string;
 		HOME: string;
 		CHROME_DESKTOP: string;
-		OLDPWD: string;
+		APPDIR: string;
 		TERM_PROGRAM_VERSION: string;
 		DESKTOP_SESSION: string;
 		NVM_BIN: string;
@@ -174,7 +178,7 @@ declare module '$env/dynamic/private' {
 		MANDATORY_PATH: string;
 		QT_QPA_PLATFORMTHEME: string;
 		LOGNAME: string;
-		WINDOWID: string;
+		OWD: string;
 		_: string;
 		npm_config_prefix: string;
 		XDG_SESSION_CLASS: string;
@@ -189,6 +193,7 @@ declare module '$env/dynamic/private' {
 		PATH: string;
 		SESSION_MANAGER: string;
 		GDM_LANG: string;
+		APPIMAGE: string;
 		NODE: string;
 		npm_package_name: string;
 		XDG_SESSION_PATH: string;
@@ -205,9 +210,11 @@ declare module '$env/dynamic/private' {
 		TERM_PROGRAM: string;
 		npm_lifecycle_script: string;
 		SSH_AUTH_SOCK: string;
+		GSETTINGS_SCHEMA_DIR: string;
 		XDG_GREETER_DATA_DIR: string;
 		ORIGINAL_XDG_CURRENT_DESKTOP: string;
 		SHELL: string;
+		ARGV0: string;
 		npm_package_version: string;
 		npm_lifecycle_event: string;
 		QT_ACCESSIBILITY: string;
@@ -225,7 +232,6 @@ declare module '$env/dynamic/private' {
 		XDG_DATA_DIRS: string;
 		npm_config_global_prefix: string;
 		npm_command: string;
-		VTE_VERSION: string;
 		INIT_CWD: string;
 		EDITOR: string;
 		NODE_ENV: string;

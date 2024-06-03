@@ -1,3 +1,4 @@
+<!-- this is the word guessing game, NOT SIMON SAYS this is an example of a bad name for a game lol-->
 <script>
     // Import necessary libraries and define variables
     import { onMount } from 'svelte';

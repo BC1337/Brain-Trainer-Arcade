@@ -177,9 +177,11 @@
       </button>
     </div>
     <div class="game-board" role="grid" aria-label="Game Board">
-      {#each Array(gridSize * gridSize) as _, index}
-        <div class="box" role="button" tabindex="0" on:click={() => handleBoxClick(index)} on:keydown={(e) => handleKeyDown(e, index)} aria-label="Clickable Box"></div>
-      {/each}
+      <div class="box-container">
+        {#each Array(gridSize * gridSize) as _, index}
+          <div class="box" role="button" tabindex="0" on:click={() => handleBoxClick(index)} on:keydown={(e) => handleKeyDown(e, index)} aria-label="Clickable Box"></div>
+        {/each}
+      </div>
     </div>
     {#if showStartButton}
       <div class="button-container">
@@ -189,31 +191,29 @@
   </div>
 </Layout>
 
-
 <style>
-  h1{
+  h1 {
     color: #f0a500;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    margin-top: 20px;
   }
+
   .game-container {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    padding: 20px;
   }
 
   .game-controls {
-    position: relative;
     display: flex;
     align-items: center;
+    margin-bottom: 20px;
   }
 
   .volume-control {
-    margin-right: 10px; /* Add spacing between volume control and mute button */
+    margin-right: 10px;
   }
 
   .mute-button {
@@ -224,11 +224,18 @@
   }
 
   .game-board {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .box-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 10px;
-    width: 400px;
-    height: 400px;
+    width: 100%;
   }
 
   .box {
@@ -236,6 +243,8 @@
     border: 1px solid #888;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 100%;
+    padding-top: 100%; /* Maintain aspect ratio (square) */
   }
 
   .box:hover {
@@ -259,8 +268,6 @@
   }
 
   button:hover {
-    background-color: rgb(241, 226, 205)
+    background-color: rgb(241, 226, 205);
   }
 </style>
-
-
