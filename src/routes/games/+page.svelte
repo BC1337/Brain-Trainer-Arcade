@@ -50,14 +50,16 @@
 <Layout>
   <main aria-label="Games Hub">
     <h1>
-        <span>Enjoy</span>
-        <span class="highlight">some</span>
-        <span>brain games</span>
-        <span class="highlight">and</span>
+        <span class="highlight">Enjoy</span>
+        <span>some</span>
+        <span>Brain</span>
+        <span class="highlight">Games</span>
+        <span>and</span>
         <span>continue to</span>
-        <span class="highlight">level up</span>
+        <span class="highlight">Level up</span>
         <span>!</span>
     </h1>
+    
       <GameCard games={games} />
   </main>
 </Layout>
