@@ -5,6 +5,11 @@
   // Array of game objects
   let games = [
       {
+          gameName: 'Chimp test',
+          gameDescription: 'Are you a monkey\'s uncle...? The results will speak for themselves.',
+          imageSrc: 'https://images.pexels.com/photos/1123771/pexels-photo-1123771.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+      },
+      {
           gameName: 'Type Racer',
           gameDescription: 'Put your typing skills to the test',
           imageSrc: 'https://images.pexels.com/photos/373072/pexels-photo-373072.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
@@ -29,11 +34,7 @@
           gameDescription: 'Wait for the light to turn from red to green and see how fast you click!',
           imageSrc: 'https://images.pexels.com/photos/1727004/pexels-photo-1727004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
       },
-      {
-          gameName: 'Chimp test',
-          gameDescription: 'Are you a monkey\'s uncle...? The results will speak for themselves.',
-          imageSrc: 'https://images.pexels.com/photos/1123771/pexels-photo-1123771.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-      },
+
       // Add more game objects as needed
   ];
 </script>
