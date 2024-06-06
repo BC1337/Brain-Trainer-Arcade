@@ -9,6 +9,11 @@
     let gameActive = false;
 
     function startGame() {
+        // Other game initialization code...
+        
+        // Show and focus on the input field to trigger the mobile keyboard
+        document.getElementById('input-field').focus();
+        
         letters = generateLetters();
         currentIndex = 0;
         timer = 5000; // Reset timer to 5 seconds
@@ -113,6 +118,7 @@
             </div>
             {#if !gameActive}
             <div class="input-area">
+                <input type="text" id="input-field" style="display: none;">
                 <button on:click={startGame}>Start</button>
             </div>
             {/if}

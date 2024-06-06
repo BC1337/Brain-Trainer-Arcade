@@ -11,7 +11,7 @@
 
 /* Global styles */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Arial', sans-serif !important;
   background-color: #0f0f0f; /* Dark background color */
   color: #ffffff; /* White text color */
 }
