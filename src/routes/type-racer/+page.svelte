@@ -118,7 +118,6 @@
 
 <Layout>
     <div class="container" role="main">
-        <h1 class="text-4xl pb-5">Test your typing skills!</h1>
         <div class="card">
             <div class="type-racer">
                 <div class="settings">
@@ -217,9 +216,6 @@
         font-family: Arial, sans-serif;
     }
     
-    h1 {
-        color: #f0a500;
-    }
     
     .settings {
         margin-bottom: 20px;
