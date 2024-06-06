@@ -162,63 +162,63 @@
 
 <style>
   .wrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #1a1a1a;
-    color: #fff;
-  }
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1a1a1a;
+  color: #fff;
+}
 
-  .play-area-wrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
+.play-area-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 
-  .play-area-controls {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-  }
+.play-area-controls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
 
-  .settings-container {
-    color: #fff;
-    border-radius: 5px;
-    padding: 20px;
-  }
+.settings-container {
+  color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+}
 
-  .settings-hidden {
-    display: none;
-  }
+.settings-hidden {
+  display: none;
+}
 
-  .play-area {
-    border: 2px solid white;
-    cursor: pointer;
-    max-width: 1000px;
-    min-width: 365px;
-    max-height: 75vh;
-    margin-top: 20px;
-  }
+.play-area {
+  border: 2px solid white;
+  cursor: pointer;
+  max-width: 1000px;
+  min-width: 365px;
+  max-height: 75vh;
+  margin-top: 20px;
+}
 
-  .start-game-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    background-color: #4caf50;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-  }
+.start-game-button, .apply-settings-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  background-color: #4caf50;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
 
-  .start-game-button:hover {
+.start-game-button:hover, .apply-settings-button:hover {
   background-color: #45a049;
 }
 
@@ -242,21 +242,17 @@
   display: block;
 }
 
-.apply-settings-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  background-color: #4caf50;
-  color: #fff;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
+.settings-popup label {
+  display: block;
+  margin-bottom: 10px;
 }
 
-.apply-settings-button:hover {
-  background-color: #45a049;
+.settings-popup input[type="range"] {
+  width: 100%;
 }
 
+.settings-popup .apply-settings-button {
+  width: 100%;
+}
 
 </style>
