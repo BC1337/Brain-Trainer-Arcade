@@ -29,8 +29,10 @@
     // Focus on the hidden input field to trigger the keyboard on mobile
     hiddenInput.focus();
     
-    // Remove the hidden input field from the DOM
-    hiddenInput.parentNode.removeChild(hiddenInput);
+    // Remove the hidden input field from the DOM after a short delay
+    setTimeout(() => {
+        hiddenInput.parentNode.removeChild(hiddenInput);
+    }, 100);
 
     if (gameMode === 'letters') {
         letters = generateLetters(numCharacters);
