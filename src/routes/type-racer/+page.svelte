@@ -28,6 +28,7 @@
             hiddenInput.style.height = '0';
             hiddenInput.style.width = '0';
             hiddenInput.style.zIndex = '-1';
+            hiddenInput.addEventListener('input', handleInput);
             document.body.appendChild(hiddenInput);
         }
         
@@ -104,6 +105,22 @@
         
         // Update hidden input value
         hiddenInput.value = validKeys[currentIndex] || '';
+    }
+
+    function handleInput(event) {
+        const input = event.target.value;
+        if (input === letters[currentIndex]) {
+            currentIndex++;
+            correctLetters++;
+            if (currentIndex === letters.length) {
+                endGame("Congratulations! You've won!");
+            }
+        } else {
+            endGame("Game over! You typed the wrong character.");
+        }
+        
+        // Clear input after processing
+        event.target.value = '';
     }
 
     function endGame(message) {
