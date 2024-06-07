@@ -16,43 +16,40 @@
     let caseSensitive = false;
     let correctLetters = 0;
     let totalTyped = 0;
-    let inputField;
+    let hiddenInput; // Reference to the hidden input field
 
     function startGame() {
-    // Create a hidden input field
-    const hiddenInput = document.createElement('input');
-    hiddenInput.type = 'text';
-    hiddenInput.style.position = 'absolute';
-    hiddenInput.style.opacity = '0';
-    document.body.appendChild(hiddenInput);
-    
-    // Focus on the hidden input field to trigger the keyboard on mobile
-    hiddenInput.focus();
-    
-    // Remove the hidden input field from the DOM after a short delay
-    setTimeout(() => {
-        hiddenInput.parentNode.removeChild(hiddenInput);
-    }, 100);
+        // Create and append the hidden input field
+        hiddenInput = document.createElement('input');
+        hiddenInput.type = 'text';
+        hiddenInput.style.position = 'absolute';
+        hiddenInput.style.opacity = '0';
+        hiddenInput.style.height = '0';
+        hiddenInput.style.width = '0';
+        hiddenInput.style.zIndex = '-1';
+        document.body.appendChild(hiddenInput);
+        
+        // Focus on the hidden input field to trigger the keyboard on mobile
+        hiddenInput.focus();
+        
+        if (gameMode === 'letters') {
+            letters = generateLetters(numCharacters);
+        }
 
-    if (gameMode === 'letters') {
-        letters = generateLetters(numCharacters);
+        currentIndex = 0;
+        timer = roundLength * 1000; // Convert round length to milliseconds
+        correctLetters = 0;
+        totalTyped = 0;
+        gameActive = true;
+        interval = setInterval(() => {
+            if (timer > 0) {
+                timer -= 10; // Decrease timer by 10 milliseconds
+            } else {
+                endGame("Time's up! Game over.");
+            }
+        }, 10); // Update every 10 milliseconds
     }
 
-    currentIndex = 0;
-    timer = roundLength * 1000; // Convert round length to milliseconds
-    correctLetters = 0;
-    totalTyped = 0;
-    gameActive = true;
-    interval = setInterval(() => {
-        if (timer > 0) {
-            timer -= 10; // Decrease timer by 10 milliseconds
-        } else {
-            clearInterval(interval);
-            gameActive = false;
-            alert("Time's up! Game over.");
-        }
-    }, 10); // Update every 10 milliseconds
-}
     function generateLetters(numCharacters) {
         const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const lowercaseAlphabet = 'abcdefghijklmnopqrstuvwxyz';
@@ -96,15 +93,20 @@
                 currentIndex++;
                 correctLetters++;
                 if (currentIndex === letters.length) {
-                    clearInterval(interval);
-                    alert("Congratulations! You've won!");
-                    gameActive = false;
+                    endGame("Congratulations! You've won!");
                 }
             } else {
-                clearInterval(interval);
-                gameActive = false;
-                alert("Game over! You typed the wrong character.");
+                endGame("Game over! You typed the wrong character.");
             }
+        }
+    }
+
+    function endGame(message) {
+        clearInterval(interval);
+        gameActive = false;
+        alert(message);
+        if (hiddenInput) {
+            hiddenInput.parentNode.removeChild(hiddenInput); // Remove hidden input field
         }
     }
 
@@ -119,6 +121,9 @@
             document.removeEventListener('keydown', handleKeyDown);
         }
         clearInterval(interval);
+        if (hiddenInput) {
+            hiddenInput.parentNode.removeChild(hiddenInput); // Clean up hidden input field
+        }
     });
 </script>
 
