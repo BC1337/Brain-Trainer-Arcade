@@ -174,6 +174,9 @@
                 <div class="instructions">
                     <p>Instructions: Type the {gameMode} as fast as you can!</p>
                 </div>
+                
+                <!-- Breakpoint 1: Move this part -->
+                <div>
                 {#if gameMode === 'letters'}
                     <div class="game-area" aria-live="assertive" aria-label="Type the following characters:">
                         {#each letters as letter, index}
@@ -196,6 +199,9 @@
                         <button on:click={startGame}>Start</button>
                     </div>
                 {/if}
+                </div>
+                
+                <!-- Breakpoint 2: Move this part -->
                 <div class="timer-bar" style="margin-top: 10px;">
                     <div class="timer-progress" style="width: {((roundLength * 1000 - timer) / (roundLength * 10)).toFixed(3)}%; background-color: {timer > roundLength * 500 ? 'green' : (timer > roundLength * 250 ? 'yellow' : 'red')}"></div>
                 </div>
