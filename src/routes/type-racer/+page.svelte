@@ -19,6 +19,7 @@
     let hiddenInput; // Reference to the hidden input field
 
     function startGame() {
+        // Create and append the hidden input field
         if (!hiddenInput) {
             hiddenInput = document.createElement('input');
             hiddenInput.type = 'text';
@@ -29,10 +30,10 @@
             hiddenInput.style.zIndex = '-1';
             document.body.appendChild(hiddenInput);
         }
-
+        
         // Focus on the hidden input field to trigger the keyboard on mobile
         hiddenInput.focus();
-
+        
         if (gameMode === 'letters') {
             letters = generateLetters(numCharacters);
         }
@@ -45,9 +46,6 @@
         interval = setInterval(() => {
             if (timer > 0) {
                 timer -= 10; // Decrease timer by 10 milliseconds
-                if (document.activeElement !== hiddenInput) {
-                    hiddenInput.focus(); // Re-focus the hidden input if it loses focus
-                }
             } else {
                 endGame("Time's up! Game over.");
             }
