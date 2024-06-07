@@ -16,30 +16,41 @@
     let caseSensitive = false;
     let correctLetters = 0;
     let totalTyped = 0;
+    let inputField;
 
     function startGame() {
-        document.getElementById('input-field').focus();
-        
-        if (gameMode === 'letters') {
-            letters = generateLetters(numCharacters);
-        }
+    // Create a hidden input field
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'text';
+    hiddenInput.style.position = 'absolute';
+    hiddenInput.style.opacity = '0';
+    document.body.appendChild(hiddenInput);
+    
+    // Focus on the hidden input field to trigger the keyboard on mobile
+    hiddenInput.focus();
+    
+    // Remove the hidden input field from the DOM
+    hiddenInput.parentNode.removeChild(hiddenInput);
 
-        currentIndex = 0;
-        timer = roundLength * 1000; // Convert round length to milliseconds
-        correctLetters = 0;
-        totalTyped = 0;
-        gameActive = true;
-        interval = setInterval(() => {
-            if (timer > 0) {
-                timer -= 10; // Decrease timer by 10 milliseconds
-            } else {
-                clearInterval(interval);
-                gameActive = false;
-                alert("Time's up! Game over.");
-            }
-        }, 10); // Update every 10 milliseconds
+    if (gameMode === 'letters') {
+        letters = generateLetters(numCharacters);
     }
 
+    currentIndex = 0;
+    timer = roundLength * 1000; // Convert round length to milliseconds
+    correctLetters = 0;
+    totalTyped = 0;
+    gameActive = true;
+    interval = setInterval(() => {
+        if (timer > 0) {
+            timer -= 10; // Decrease timer by 10 milliseconds
+        } else {
+            clearInterval(interval);
+            gameActive = false;
+            alert("Time's up! Game over.");
+        }
+    }, 10); // Update every 10 milliseconds
+}
     function generateLetters(numCharacters) {
         const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const lowercaseAlphabet = 'abcdefghijklmnopqrstuvwxyz';
@@ -173,7 +184,12 @@
                 {/if}
                 {#if !gameActive}
                     <div class="input-area">
-                        <input type="text" id="input-field" style="display: none;">
+                        <div
+                            id="input-field"
+                            contenteditable="true"
+                            style="border: none; outline: none; font-size: 20px; background: transparent;"
+                            bind:this={inputField}
+                        ></div>
                         <button on:click={startGame}>Start</button>
                     </div>
                 {/if}
@@ -184,7 +200,7 @@
                 <div class="stats" style="margin-top: 10px;">
                     <div>Correct Letters: {correctLetters}</div>
                     <div>Accuracy: {(totalTyped > 0 ? (correctLetters / totalTyped * 100).toFixed(2) : 0)}%</div>
-                    <div> Words Per Minute: {((correctLetters / 5) / (roundLength / 60)).toFixed(2)}</div>
+                    <div>Keys Per Minute: {(correctLetters / (roundLength / 60)).toFixed(2)}</div>
                 </div>
             </div>
         </div>
@@ -192,20 +208,24 @@
 </Layout>
 
 <style>
-    /* Styles go here */
     .container {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         height: 100vh;
+        margin: 0;
+        padding: 0;
     }
     
     .card {
+        width: 100%;
+        max-width: 600px;
         border: 1px solid #ccc;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(57, 224, 239, 1.9);
         padding: 20px;
+        margin: 0; /* Remove margin to ensure it's at the top */
     }
     
     .type-racer {
@@ -215,7 +235,6 @@
         padding: 20px;
         font-family: Arial, sans-serif;
     }
-    
     
     .settings {
         margin-bottom: 20px;

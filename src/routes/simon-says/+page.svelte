@@ -28,7 +28,7 @@
   let wrongSound;
 
   let isMuted = false; // Initialize mute state
-  let volumeLevel = 0.75; // Initial volume level
+  let volumeLevel = 0.05; // Initial volume level
 
   // Check if running in the browser environment
   if (typeof window !== 'undefined') {
@@ -36,12 +36,12 @@
     correctSounds = Array.from({ length: maxSoundIndex }, (_, i) => {
       const audio = new AudioConstructor(`/GameSounds/game${i + 1}.mp3`);
       audio.preload = 'auto'; // Preload audio files
+      audio.volume = volumeLevel; // Set initial volume
       return audio;
     });
     wrongSound = new AudioConstructor('/GameSounds/buzzer.mp3');
     wrongSound.preload = 'auto'; // Preload the wrong sound file
-    // Set initial volume for the buzzer sound
-    wrongSound.volume = 0.5; // Adjust volume level here (0.5 means 50% volume)
+    wrongSound.volume = volumeLevel; // Set initial volume
   }
 
   // Function to start the game
@@ -94,15 +94,15 @@
 
   // Function to handle box click
   const handleBoxClick = async (index) => {
-  if (!isActive) return;
-  userSequence.push(index);
-  animateBox(index); // Highlight the clicked box
-  await wait(33); // Add a slight delay before playing the sound
-  playCorrectSound(); // Play correct sound
-  if (userSequence.length === sequence.length) {
-    checkSequence(); // Check if the user's sequence matches the game's sequence
-  }
-};
+    if (!isActive) return;
+    userSequence.push(index);
+    animateBox(index); // Highlight the clicked box
+    await wait(33); // Add a slight delay before playing the sound
+    playCorrectSound(); // Play correct sound
+    if (userSequence.length === sequence.length) {
+      checkSequence(); // Check if the user's sequence matches the game's sequence
+    }
+  };
 
   // Function to handle keyboard events
   const handleKeyDown = (event, index) => {
