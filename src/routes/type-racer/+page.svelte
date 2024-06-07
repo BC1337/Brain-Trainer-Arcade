@@ -19,19 +19,20 @@
     let hiddenInput; // Reference to the hidden input field
 
     function startGame() {
-        // Create and append the hidden input field
-        hiddenInput = document.createElement('input');
-        hiddenInput.type = 'text';
-        hiddenInput.style.position = 'absolute';
-        hiddenInput.style.opacity = '0';
-        hiddenInput.style.height = '0';
-        hiddenInput.style.width = '0';
-        hiddenInput.style.zIndex = '-1';
-        document.body.appendChild(hiddenInput);
-        
+        if (!hiddenInput) {
+            hiddenInput = document.createElement('input');
+            hiddenInput.type = 'text';
+            hiddenInput.style.position = 'absolute';
+            hiddenInput.style.opacity = '0';
+            hiddenInput.style.height = '0';
+            hiddenInput.style.width = '0';
+            hiddenInput.style.zIndex = '-1';
+            document.body.appendChild(hiddenInput);
+        }
+
         // Focus on the hidden input field to trigger the keyboard on mobile
         hiddenInput.focus();
-        
+
         if (gameMode === 'letters') {
             letters = generateLetters(numCharacters);
         }
@@ -44,6 +45,9 @@
         interval = setInterval(() => {
             if (timer > 0) {
                 timer -= 10; // Decrease timer by 10 milliseconds
+                if (document.activeElement !== hiddenInput) {
+                    hiddenInput.focus(); // Re-focus the hidden input if it loses focus
+                }
             } else {
                 endGame("Time's up! Game over.");
             }
@@ -106,7 +110,7 @@
         gameActive = false;
         alert(message);
         if (hiddenInput) {
-            hiddenInput.parentNode.removeChild(hiddenInput); // Remove hidden input field
+            hiddenInput.blur(); // Remove focus from the hidden input field
         }
     }
 
