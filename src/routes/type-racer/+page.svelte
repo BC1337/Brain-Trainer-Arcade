@@ -13,7 +13,7 @@
     let includeLetters = true;
     let includeNumbers = true;
     let includeSymbols = false;
-    let caseSensitive = false;
+    let caseSensitive = true; // By default, case sensitivity is enabled
     let correctLetters = 0;
     let totalTyped = 0;
     let hiddenInput; // Reference to the hidden input field
@@ -109,14 +109,26 @@
 
     function handleInput(event) {
         const input = event.target.value;
-        if (input === letters[currentIndex]) {
-            currentIndex++;
-            correctLetters++;
-            if (currentIndex === letters.length) {
-                endGame("Congratulations! You've won!");
+        if (!caseSensitive) {
+            if (input.toUpperCase() === letters[currentIndex]) {
+                currentIndex++;
+                correctLetters++;
+                if (currentIndex === letters.length) {
+                    endGame("Congratulations! You've won!");
+                }
+            } else {
+                endGame("Game over! You typed the wrong character.");
             }
         } else {
-            endGame("Game over! You typed the wrong character.");
+            if (input === letters[currentIndex]) {
+                currentIndex++;
+                correctLetters++;
+                if (currentIndex === letters.length) {
+                    endGame("Congratulations! You've won!");
+                }
+            } else {
+                endGame("Game over! You typed the wrong character.");
+            }
         }
         
         // Clear input after processing
@@ -135,18 +147,25 @@
     onMount(() => {
         if (typeof window !== 'undefined') {
             document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('touchstart', handleTouchStart); // Detect touch events
         }
     });
 
     onDestroy(() => {
         if (typeof window !== 'undefined') {
             document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('touchstart', handleTouchStart); // Remove touch event listener
         }
         clearInterval(interval);
         if (hiddenInput) {
             hiddenInput.parentNode.removeChild(hiddenInput); // Clean up hidden input field
         }
     });
+
+    function handleTouchStart(event) {
+        // Disable case sensitivity on touch devices
+        caseSensitive = false;
+    }
 </script>
 
 <head>
