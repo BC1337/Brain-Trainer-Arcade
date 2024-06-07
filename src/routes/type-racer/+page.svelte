@@ -28,7 +28,7 @@
             hiddenInput.style.height = '0';
             hiddenInput.style.width = '0';
             hiddenInput.style.zIndex = '-1';
-            hiddenInput.addEventListener('input', handleInput);
+            hiddenInput.addEventListener('keypress', handleKeyPress);
             document.body.appendChild(hiddenInput);
         }
         
@@ -78,10 +78,10 @@
         return generatedLetters;
     }
 
-    function handleKeyDown(event) {
+    function handleKeyPress(event) {
         if (!gameActive) return; // Ignore key events if the game is not active
 
-        let pressedKey = event.key;
+        let pressedKey = String.fromCharCode(event.charCode);
         if (!caseSensitive) {
             pressedKey = pressedKey.toUpperCase();
         }
@@ -107,34 +107,6 @@
         hiddenInput.value = validKeys[currentIndex] || '';
     }
 
-    function handleInput(event) {
-        const input = event.target.value;
-        if (!caseSensitive) {
-            if (input.toUpperCase() === letters[currentIndex]) {
-                currentIndex++;
-                correctLetters++;
-                if (currentIndex === letters.length) {
-                    endGame("Congratulations! You've won!");
-                }
-            } else {
-                endGame("Game over! You typed the wrong character.");
-            }
-        } else {
-            if (input === letters[currentIndex]) {
-                currentIndex++;
-                correctLetters++;
-                if (currentIndex === letters.length) {
-                    endGame("Congratulations! You've won!");
-                }
-            } else {
-                endGame("Game over! You typed the wrong character.");
-            }
-        }
-        
-        // Clear input after processing
-        event.target.value = '';
-    }
-
     function endGame(message) {
         clearInterval(interval);
         gameActive = false;
@@ -147,25 +119,18 @@
     onMount(() => {
         if (typeof window !== 'undefined') {
             document.addEventListener('keydown', handleKeyDown);
-            document.addEventListener('touchstart', handleTouchStart); // Detect touch events
         }
     });
 
     onDestroy(() => {
         if (typeof window !== 'undefined') {
             document.removeEventListener('keydown', handleKeyDown);
-            document.removeEventListener('touchstart', handleTouchStart); // Remove touch event listener
         }
         clearInterval(interval);
         if (hiddenInput) {
             hiddenInput.parentNode.removeChild(hiddenInput); // Clean up hidden input field
         }
     });
-
-    function handleTouchStart(event) {
-        // Disable case sensitivity on touch devices
-        caseSensitive = false;
-    }
 </script>
 
 <head>
