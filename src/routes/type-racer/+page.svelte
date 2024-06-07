@@ -193,12 +193,6 @@
                 {/if}
                 {#if !gameActive}
                     <div class="input-area">
-                        <div
-                            id="input-field"
-                            contenteditable="true"
-                            style="border: none; outline: none; font-size: 20px; background: transparent;"
-                            bind:this={inputField}
-                        ></div>
                         <button on:click={startGame}>Start</button>
                     </div>
                 {/if}
@@ -207,145 +201,145 @@
                 </div>
                 <div class="timer" style="margin-top: 10px;">Time: {Math.floor(timer / 1000)}s {(timer % 1000).toString().padStart(3, '0')}ms</div>
                 <div class="stats" style="margin-top: 10px;">
-                    <div>Correct Letters: {correctLetters}</div>
-                    <div>Accuracy: {(totalTyped > 0 ? (correctLetters / totalTyped * 100).toFixed(2) : 0)}%</div>
-                    <div>Keys Per Minute: {(correctLetters / (roundLength / 60)).toFixed(2)}</div>
+                <div>Correct Letters: {correctLetters}</div>
+                <div>Accuracy: {(totalTyped > 0 ? (correctLetters / totalTyped * 100).toFixed(2) : 0)}%</div>
+                <div>Keys Per Minute: {(correctLetters / (roundLength / 60)).toFixed(2)}</div>
                 </div>
-            </div>
-        </div>
-    </div>
-</Layout>
-
-<style>
-    .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-    }
-    
-    .card {
-        width: 100%;
-        max-width: 600px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(57, 224, 239, 1.9);
-        padding: 20px;
-        margin: 0; /* Remove margin to ensure it's at the top */
-    }
-    
-    .type-racer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        font-family: Arial, sans-serif;
-    }
-    
-    .settings {
-        margin-bottom: 20px;
-        color: #f0a500;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        background-color: #333;
-        padding: 15px;
-        border-radius: 5px;
-    }
-    
-    .settings label {
-        margin-bottom: 5px;
-    }
-    
-    .settings input[type="number"], .settings input[type="checkbox"], .settings select {
-        margin-bottom: 10px;
-    }
-    
-    .settings input[type="number"] {
-        background-color: #666;
-        color: white;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        padding: 5px;
-    }
-    
-    .settings select {
-        background-color: #666;
-        color: white;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        padding: 5px;
-    }
-    
-    .instructions {
-        margin-bottom: 20px;
-        color: #f0a500;
-    }
-    
-    .game-area {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-    
-    .letter-box {
-        width: 40px;
-        height: 40px;
-        background-color: #424242;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 5px;
-        font-size: 20px;
-    }
-    
-    .correct {
-        background-color: lightgreen;
-    }
-    
-    .incorrect {
-        background-color: #ffcccc; /* Red background for incorrect letters */
-    }
-    
-    .current {
-        background-color: rgb(97, 178, 206); /* Light blue background for the current letter */
-    }
-    
-    .timer-bar {
-        width: 100%;
-        height: 20px;
-        background-color: #f2f2f2;
-        border-radius: 5px;
-        overflow: hidden;
-    }
-    
-    .timer-progress {
-        height: 100%;
-        transition: width 1s linear; /* Smooth transition animation */
-        border-radius: 5px;
-    }
-    
-    .timer {
-        font-size: 20px;
-        color: #f0a500;
-    }
-    
-    .stats {
-        color: #f0a500;
-    }
-    
-    button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-</style>
+                </div>
+                </div>
+                </div>
+                </Layout>
+                
+                <style>
+                    .container {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    
+                    .card {
+                        width: 100%;
+                        max-width: 600px;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                        box-shadow: 0 0 10px rgba(57, 224, 239, 1.9);
+                        padding: 20px;
+                        margin: 0; /* Remove margin to ensure it's at the top */
+                    }
+                    
+                    .type-racer {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 20px;
+                        font-family: Arial, sans-serif;
+                    }
+                    
+                    .settings {
+                        margin-bottom: 20px;
+                        color: #f0a500;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        background-color: #333;
+                        padding: 15px;
+                        border-radius: 5px;
+                    }
+                    
+                    .settings label {
+                        margin-bottom: 5px;
+                    }
+                    
+                    .settings input[type="number"], .settings input[type="checkbox"], .settings select {
+                        margin-bottom: 10px;
+                    }
+                    
+                    .settings input[type="number"] {
+                        background-color: #666;
+                        color: white;
+                        border: 1px solid #ccc;
+                        border-radius: 3px;
+                        padding: 5px;
+                    }
+                    
+                    .settings select {
+                        background-color: #666;
+                        color: white;
+                        border: 1px solid #ccc;
+                        border-radius: 3px;
+                        padding: 5px;
+                    }
+                    
+                    .instructions {
+                        margin-bottom: 20px;
+                        color: #f0a500;
+                    }
+                    
+                    .game-area {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        gap: 10px;
+                        margin-bottom: 20px;
+                    }
+                    
+                    .letter-box {
+                        width: 40px;
+                        height: 40px;
+                        background-color: #424242;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 5px;
+                        font-size: 20px;
+                    }
+                    
+                    .correct {
+                        background-color: lightgreen;
+                    }
+                    
+                    .incorrect {
+                        background-color: #ffcccc; /* Red background for incorrect letters */
+                    }
+                    
+                    .current {
+                        background-color: rgb(97, 178, 206); /* Light blue background for the current letter */
+                    }
+                    
+                    .timer-bar {
+                        width: 100%;
+                        height: 20px;
+                        background-color: #f2f2f2;
+                        border-radius: 5px;
+                        overflow: hidden;
+                    }
+                    
+                    .timer-progress {
+                        height: 100%;
+                        transition: width 1s linear; /* Smooth transition animation */
+                        border-radius: 5px;
+                    }
+                    
+                    .timer {
+                        font-size: 20px;
+                        color: #f0a500;
+                    }
+                    
+                    .stats {
+                        color: #f0a500;
+                    }
+                    
+                    button {
+                        padding: 10px 20px;
+                        font-size: 16px;
+                        background-color: #007bff;
+                        color: #fff;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    }
+                </style>
