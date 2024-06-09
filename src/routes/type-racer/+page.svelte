@@ -113,73 +113,75 @@
 </head>
 
 <Layout>
-    <div class="container" role="main">
-        <div class="card">
-            <div class="type-racer">
-                <div class="settings">
-                    <label for="game-mode">Game Mode:</label>
-                    <select id="game-mode" bind:value={gameMode}>
-                        <option value="letters">Letters</option>
-                    </select>
-                    
-                    {#if gameMode === 'letters'}
-                        <label for="num-characters">Number of Characters:</label>
-                        <input type="number" id="num-characters" bind:value={numCharacters} min="1" max="30">
-                    
-                        <label>
-                            <input type="checkbox" bind:checked={includeLetters}>
-                            Include Letters
-                        </label>
+    <div class="wrapper">
+        <div class="container" role="main">
+            <div class="card">
+                <div class="type-racer">
+                    <div class="settings">
+                        <label for="game-mode">Game Mode:</label>
+                        <select id="game-mode" bind:value={gameMode}>
+                            <option value="letters">Letters</option>
+                        </select>
                         
-                        <label>
-                            <input type="checkbox" bind:checked={includeNumbers}>
-                            Include Numbers
-                        </label>
+                        {#if gameMode === 'letters'}
+                            <label for="num-characters">Number of Characters:</label>
+                            <input type="number" id="num-characters" bind:value={numCharacters} min="1" max="30">
+                        
+                            <label>
+                                <input type="checkbox" bind:checked={includeLetters}>
+                                Include Letters
+                            </label>
+                            
+                            <label>
+                                <input type="checkbox" bind:checked={includeNumbers}>
+                                Include Numbers
+                            </label>
 
-                        <label>
-                            <input type="checkbox" bind:checked={includeSymbols}>
-                            Include Symbols
-                        </label>
-                        
-                        <label>
-                            <input type="checkbox" bind:checked={caseSensitive}>
-                            Case Sensitive
-                        </label>
+                            <label>
+                                <input type="checkbox" bind:checked={includeSymbols}>
+                                Include Symbols
+                            </label>
+                            
+                            <label>
+                                <input type="checkbox" bind:checked={caseSensitive}>
+                                Case Sensitive
+                            </label>
+                        {/if}
+                    </div>
+                    <div class="instructions">
+                        <p>Instructions: Type the {gameMode} as fast as you can!</p>
+                    </div>
+                    {#if gameMode === 'letters'}
+                        <div class="game-area" aria-live="assertive" aria-label="Type the following characters:">
+                            {#each letters as letter, index}
+                                <div
+                                    class="letter-box"
+                                    class:correct={index < currentIndex}
+                                    class:current={index === currentIndex}
+                                    class:incorrect={
+                                        index === currentIndex &&
+                                        letters[currentIndex] !== undefined &&
+                                        gameActive
+                                    }>
+                                    {letter}
+                                </div>
+                            {/each}
+                        </div>
                     {/if}
-                </div>
-                <div class="instructions">
-                    <p>Instructions: Type the {gameMode} as fast as you can!</p>
-                </div>
-                {#if gameMode === 'letters'}
-                    <div class="game-area" aria-live="assertive" aria-label="Type the following characters:">
-                        {#each letters as letter, index}
-                            <div
-                                class="letter-box"
-                                class:correct={index < currentIndex}
-                                class:current={index === currentIndex}
-                                class:incorrect={
-                                    index === currentIndex &&
-                                    letters[currentIndex] !== undefined &&
-                                    gameActive
-                                }>
-                                {letter}
-                            </div>
-                        {/each}
+                    {#if !gameActive}
+                        <div class="input-area">
+                            <button on:click={startGame}>Start</button>
+                        </div>
+                    {/if}
+                    <div class="timer-bar" style="margin-top: 10px;">
+                        <div class="timer-progress" style="width: {((roundLength * 1000 - timer) / (roundLength * 10)).toFixed(3)}%; background-color: {timer > roundLength * 500 ? 'green' : (timer > roundLength * 250 ? 'yellow' : 'red')}"></div>
                     </div>
-                {/if}
-                {#if !gameActive}
-                    <div class="input-area">
-                        <button on:click={startGame}>Start</button>
+                    <div class="timer" style="margin-top: 10px;">Time: {Math.floor(timer / 1000)}s {(timer % 1000).toString().padStart(3, '0')}ms</div>
+                    <div class="stats" style="margin-top: 10px;">
+                        <div>Correct Letters: {correctLetters}</div>
+                        <div>Accuracy: {(totalTyped > 0 ? (correctLetters / totalTyped * 100).toFixed(2) : 0)}%</div>
+                        <div>Keys Per Minute: {(correctLetters / (roundLength / 60)).toFixed(2)}</div>
                     </div>
-                {/if}
-                <div class="timer-bar" style="margin-top: 10px;">
-                    <div class="timer-progress" style="width: {((roundLength * 1000 - timer) / (roundLength * 10)).toFixed(3)}%; background-color: {timer > roundLength * 500 ? 'green' : (timer > roundLength * 250 ? 'yellow' : 'red')}"></div>
-                </div>
-                <div class="timer" style="margin-top: 10px;">Time: {Math.floor(timer / 1000)}s {(timer % 1000).toString().padStart(3, '0')}ms</div>
-                <div class="stats" style="margin-top: 10px;">
-                    <div>Correct Letters: {correctLetters}</div>
-                    <div>Accuracy: {(totalTyped > 0 ? (correctLetters / totalTyped * 100).toFixed(2) : 0)}%</div>
-                    <div>Keys Per Minute: {(correctLetters / (roundLength / 60)).toFixed(2)}</div>
                 </div>
             </div>
         </div>
@@ -187,27 +189,37 @@
 </Layout>
 
 <style>
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        box-sizing: border-box;
+        padding: 20px;
+    }
+
     .container {
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: flex-start; /* Align items at the top */
         align-items: center;
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-    }
-    
-    .card {
         width: 100%;
         max-width: 600px;
+        margin: 0;
+        padding: 0;
+        padding-top: 20px; /* Add some padding at the top */
+        box-sizing: border-box; /* Ensure padding is included in the height calculation */
+    }
+
+    .card {
+        width: 100%;
         border: 1px solid #ccc;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(57, 224, 239, 1.9);
         padding: 20px;
-        margin: 0; /* Remove margin to ensure it's at the top */
-        margin-top: 20px; /* Add margin-top for some spacing */
+        box-sizing: border-box; /* Ensure padding is included in the width calculation */
     }
-    
+
     .type-racer {
         display: flex;
         flex-direction: column;
@@ -215,7 +227,7 @@
         padding: 20px;
         font-family: Arial, sans-serif;
     }
-    
+
     .settings {
         margin-bottom: 20px;
         color: #f0a500;
@@ -226,15 +238,15 @@
         padding: 15px;
         border-radius: 5px;
     }
-    
+
     .settings label {
         margin-bottom: 5px;
     }
-    
+
     .settings input[type="number"], .settings input[type="checkbox"], .settings select {
         margin-bottom: 10px;
     }
-    
+
     .settings input[type="number"] {
         background-color: #666;
         color: white;
@@ -242,7 +254,7 @@
         border-radius: 3px;
         padding: 5px;
     }
-    
+
     .settings select {
         background-color: #666;
         color: white;
@@ -250,12 +262,12 @@
         border-radius: 3px;
         padding: 5px;
     }
-    
+
     .instructions {
         margin-bottom: 20px;
         color: #f0a500;
     }
-    
+
     .game-area {
         display: flex;
         flex-wrap: wrap;
@@ -263,7 +275,7 @@
         gap: 10px;
         margin-bottom: 20px;
     }
-    
+
     .letter-box {
         width: 40px;
         height: 40px;
@@ -274,19 +286,19 @@
         border-radius: 5px;
         font-size: 20px;
     }
-    
+
     .correct {
         background-color: lightgreen;
     }
-    
+
     .incorrect {
         background-color: #ffcccc; /* Red background for incorrect letters */
     }
-    
+
     .current {
         background-color: rgb(97, 178, 206); /* Light blue background for the current letter */
     }
-    
+
     .timer-bar {
         width: 100%;
         height: 20px;
@@ -294,22 +306,22 @@
         border-radius: 5px;
         overflow: hidden;
     }
-    
+
     .timer-progress {
         height: 100%;
         transition: width 1s linear; /* Smooth transition animation */
         border-radius: 5px;
     }
-    
+
     .timer {
         font-size: 20px;
         color: #f0a500;
     }
-    
+
     .stats {
         color: #f0a500;
     }
-    
+
     button {
         padding: 10px 20px;
         font-size: 16px;
