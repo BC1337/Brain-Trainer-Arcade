@@ -189,36 +189,34 @@
 </Layout>
 
 <style>
-    .wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        box-sizing: border-box;
-        padding: 20px;
-    }
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items at the top */
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 20px;
+}
 
-    .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start; /* Align items at the top */
-        align-items: center;
-        width: 100%;
-        max-width: 600px;
-        margin: 0;
-        padding: 0;
-        padding-top: 20px; /* Add some padding at the top */
-        box-sizing: border-box; /* Ensure padding is included in the height calculation */
-    }
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center horizontally */
+    width: 100%;
+    max-width: 600px;
+    margin-top: 0; /* Ensure it starts from the top */
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    .card {
-        width: 100%;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(57, 224, 239, 1.9);
-        padding: 20px;
-        box-sizing: border-box; /* Ensure padding is included in the width calculation */
-    }
+.card {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(57, 224, 239, 1.9);
+    padding: 20px;
+    box-sizing: border-box; /* Ensure padding is included in the width calculation */
+}
 
     .type-racer {
         display: flex;

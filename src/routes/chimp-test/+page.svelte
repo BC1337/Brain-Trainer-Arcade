@@ -165,6 +165,7 @@
   }
 
   h1 {
+    font-size: 22px;
     color: #f0a500;
   }
 
@@ -174,9 +175,8 @@
 </style>
 
 <Layout showThemeToggle={true}>
-  <div id="container">
-    <h1 class="text-3xl">Memory Game</h1>
-    <p>Click the boxes in sequential order</p>
+  <div id="container" style="margin-top: -3%;">
+    <h1>Click the boxes in sequential order</h1>
     <canvas id="canvas" on:click={handleCanvasClick}></canvas>
     <Toast message={$toastMessage.message} type={$toastMessage.type} />
   </div>
