@@ -36,7 +36,7 @@ a:hover {
 
 /* Give headings a funky look */
 h1, h2, h3 {
-  font-family: 'Comic Sans MS', cursive; /* Fun font */
+  font-family: 'Comic Sans MS';
   text-transform: uppercase;
   letter-spacing: 2px;
 }

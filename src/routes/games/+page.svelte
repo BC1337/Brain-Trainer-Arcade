@@ -59,7 +59,7 @@
         <span class="highlight">Level up</span>
         <span>!</span>
     </h1>
-    
+    <br>
       <GameCard games={games} />
   </main>
 </Layout>
