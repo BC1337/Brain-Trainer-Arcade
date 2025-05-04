@@ -48,7 +48,7 @@
         <h2>Sign Up</h2>
   
         <div class="input-group">
-          <label for="email">Email</label>
+          <label for="email">Username</label>
           <input
             type="email"
             id="email"

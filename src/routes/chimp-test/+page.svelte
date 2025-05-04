@@ -12,11 +12,10 @@
   let numBoxes = 4;
   let hideNumbers = false;
   let canvasWidth, canvasHeight;
-  const minWidth = 320; // Minimum width for iPhone SE
-  const minHeight = 568; // Minimum height for iPhone SE
-  const maxWidth = 1200; // Maximum width
+  const minWidth = 320;
+  const minHeight = 568;
+  const maxWidth = 1200;
 
-  // Declare toastMessage writable store
   const toastMessage = writable({ message: "", type: "" });
 
   function drawCanvas() {
@@ -41,10 +40,9 @@
   function generateBoxes() {
     boxes = [];
     for (let i = 1; i <= numBoxes; i++) {
-      let size = Math.min(canvasWidth, canvasHeight) / 10; // Adjust box size dynamically
+      let size = Math.min(canvasWidth, canvasHeight) / 10;
       let overlap = true;
       let x, y;
-      // Generate positions until no overlap is found
       while (overlap) {
         x = Math.random() * (canvasWidth - size);
         y = Math.random() * (canvasHeight - size);
@@ -68,14 +66,10 @@
     let x = event.clientX - rect.left;
     let y = event.clientY - rect.top;
 
-    let clickedBox = boxes.find(box => {
-      return (
-        x >= box.x &&
-        x <= box.x + box.size &&
-        y >= box.y &&
-        y <= box.y + box.size
-      );
-    });
+    let clickedBox = boxes.find(box => (
+      x >= box.x && x <= box.x + box.size &&
+      y >= box.y && y <= box.y + box.size
+    ));
 
     if (clickedBox) {
       if (clickedBox.number === currentBoxIndex + 1) {
@@ -153,31 +147,45 @@
   });
 </script>
 
+<Layout showThemeToggle={true}>
+  <div id="container">
+    <h1>Click the boxes in sequential order</h1>
+    <div class="game-container">
+      <canvas id="canvas" on:click={handleCanvasClick}></canvas>
+    </div>
+    <Toast message={$toastMessage.message} type={$toastMessage.type} />
+  </div>
+</Layout>
+
 <style>
+  /* Center the game window properly */
   #container {
     text-align: center;
+    padding-top: 80px; /* Pushes everything down nicely from the nav */
+  }
+
+  .game-container {
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+    margin-top: 30px; /* Adjust the space between the title and canvas */
   }
 
   #canvas {
     border: 2px solid #000;
     cursor: pointer;
-    margin: 5% auto;
+    margin-top: 24px;
+    max-width: 100%;
+    max-height: 100%;
   }
 
   h1 {
     font-size: 22px;
     color: #f0a500;
+    margin-bottom: 12px;
   }
 
   p {
     color: #f0a500;
   }
 </style>
-
-<Layout showThemeToggle={true}>
-  <div id="container" style="margin-top: -3%;">
-    <h1>Click the boxes in sequential order</h1>
-    <canvas id="canvas" on:click={handleCanvasClick}></canvas>
-    <Toast message={$toastMessage.message} type={$toastMessage.type} />
-  </div>
-</Layout>

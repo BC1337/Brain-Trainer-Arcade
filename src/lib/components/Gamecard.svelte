@@ -80,7 +80,7 @@
 .card-button {
   margin-top: 10px;
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #16a34a;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -89,7 +89,7 @@
 }
 
 .card-button:hover {
-  background-color: #0056b3;
+  background-color: #15803d;
 }
 h2{
   color: #f0a500;
