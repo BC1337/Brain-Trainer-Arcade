@@ -14,6 +14,13 @@ body {
   font-family: 'Arial', sans-serif !important;
   background-color: #0f0f0f; /* Dark background color */
   color: #ffffff; /* White text color */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
+}
+
+/* Dark mode styles */
+:global(body.dark-mode) {
+  background-color: #111; /* Dark background color */
+  color: #ffffff; /* White text color for dark mode */
 }
 
 /* Style links */

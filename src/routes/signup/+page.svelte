@@ -2,40 +2,90 @@
     import Layout from '../../layouts/Layout.svelte';
     import Toast from '../../lib/components/Toast.svelte';
     import { writable } from 'svelte/store';
+    import { onMount } from 'svelte';
   
-    let username = '';
+    let email = '';
     let password = '';
     let confirmPassword = '';
-  
-    let usernameValid = true;
+    let emailValid = true;
     let passwordValid = true;
-    let confirmValid = true;
+    let passwordsMatch = true;
   
     const toastMessage = writable({ message: '', type: '' });
   
-    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
+    // ✅ Fix: Detect and apply theme on mount (match login)
+    onMount(() => {
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme === 'dark' || !savedTheme;
+      document.body.classList.toggle('dark-mode', isDark);
+    });
   
     const validate = () => {
-      usernameValid = !!username;
-      passwordValid = passwordRegex.test(password);
-      confirmValid = password === confirmPassword && !!confirmPassword;
+      emailValid = !!email;
+      passwordValid = !!password;
+      passwordsMatch = password === confirmPassword;
     };
   
     const handleSubmit = () => {
       validate();
   
-      if (!usernameValid || !passwordValid || !confirmValid) {
-        toastMessage.set({ message: 'Please correct the highlighted fields.', type: 'error' });
+      if (!emailValid || !passwordValid || !passwordsMatch) {
+        toastMessage.set({ message: 'Please fill in all fields correctly.', type: 'error' });
         setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
         return;
       }
   
       toastMessage.set({ message: 'Signing up...', type: 'success' });
-      console.log('Form submitted:', { username, password });
+      console.log('Form submitted:', { email, password });
   
       setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
     };
   </script>
+  
+  <Layout showThemeToggle={true}>
+    <div class="signup-container">
+      <div class="signup-box">
+        <h2>Sign Up</h2>
+  
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            bind:value={email}
+            class:invalid={!emailValid}
+            placeholder="Enter your email"
+          />
+        </div>
+  
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            bind:value={password}
+            class:invalid={!passwordValid}
+            placeholder="Enter your password"
+          />
+        </div>
+  
+        <div class="input-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            bind:value={confirmPassword}
+            class:invalid={!passwordsMatch}
+            placeholder="Confirm your password"
+          />
+        </div>
+  
+        <button on:click={handleSubmit}>Sign Up</button>
+      </div>
+    </div>
+  
+    <Toast message={$toastMessage.message} type={$toastMessage.type} />
+  </Layout>
   
   <style>
     .signup-container {
@@ -43,19 +93,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #ffffff;
       padding: 6rem 1rem 1rem;
       transition: background-color 0.3s ease;
     }
   
     .signup-box {
-      background-color: #f0f0f0;
       color: #000;
       padding: 2rem;
       border-radius: 0.5rem;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       width: 100%;
       max-width: 28rem;
+      background-color: #f0f0f0;
     }
   
     .signup-box h2 {
@@ -111,92 +160,37 @@
       background-color: #15803d;
     }
   
-    .already-signed-up {
+    .error-text {
+      color: #dc2626;
+      font-size: 0.875rem;
       text-align: center;
-      margin-top: 1.5rem;
+      margin-bottom: 1rem;
     }
   
-    .already-signed-up a {
-      color: #f0a500;
-      text-decoration: none;
-    }
-  
-    .already-signed-up a:hover {
-      color: #ff6347;
-    }
-  
-    :global(body.dark-mode) .signup-container {
+    /* ✅ Dark Mode Styles */
+    body.dark-mode .signup-container {
       background-color: #111;
     }
   
-    :global(body.dark-mode) .signup-box {
+    body.dark-mode .signup-box {
       background-color: #222;
       color: #fff;
     }
   
-    :global(body.dark-mode) input {
+    body.dark-mode input {
       background-color: #333;
       color: #fff;
       border-color: #555;
     }
   
-    :global(body.dark-mode) input:focus {
-  border-color: #f0a500;
-  box-shadow: 0 0 0 2px rgba(240, 165, 0, 0.5); /* More visible focus ring */
-}
-
-:global(body.dark-mode) input.invalid {
-  border-color: #dc2626;
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.5); /* Brighter red error ring */
-}
+    body.dark-mode input:focus {
+      border-color: #f0a500;
+      box-shadow: 0 0 0 2px rgba(240, 165, 0, 0.5);
+    }
+  
+    body.dark-mode input.invalid {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.5);
+    }
   </style>
-  
-  <Layout showThemeToggle={true}>
-    <div class="signup-container">
-      <div class="signup-box">
-        <h2>Sign Up</h2>
-  
-        <div class="input-group">
-          <label for="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            bind:value={username}
-            class:invalid={!usernameValid}
-            placeholder="Enter your username"
-          />
-        </div>
-  
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            bind:value={password}
-            class:invalid={!passwordValid}
-            placeholder="Enter your password"
-          />
-        </div>
-  
-        <div class="input-group">
-          <label for="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            bind:value={confirmPassword}
-            class:invalid={!confirmValid}
-            placeholder="Confirm your password"
-          />
-        </div>
-  
-        <button on:click={handleSubmit}>Sign Up</button>
-  
-        <div class="already-signed-up">
-          <p>Already signed up? <a href="/login">Click here to sign in</a></p>
-        </div>
-      </div>
-    </div>
-  
-    <Toast message={$toastMessage.message} type={$toastMessage.type} />
-  </Layout>
   

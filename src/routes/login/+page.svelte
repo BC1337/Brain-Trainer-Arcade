@@ -2,6 +2,7 @@
   import Layout from '../../layouts/Layout.svelte';
   import Toast from '../../lib/components/Toast.svelte';
   import { writable } from 'svelte/store';
+  import { onMount } from 'svelte';
 
   let email = '';
   let password = '';
@@ -9,6 +10,13 @@
   let passwordValid = true;
 
   const toastMessage = writable({ message: '', type: '' });
+
+  // Detect and apply theme on mount
+  onMount(() => {
+    if (!localStorage.getItem('theme')) {
+      document.body.classList.add('dark-mode'); // Default to dark mode if not set
+    }
+  });
 
   const validate = () => {
     emailValid = !!email;
@@ -32,24 +40,24 @@
 </script>
 
 <style>
+  /* General styles */
   .login-container {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
     padding: 6rem 1rem 1rem;
     transition: background-color 0.3s ease;
   }
 
   .login-box {
-    background-color: #f0f0f0;
     color: #000;
     padding: 2rem;
     border-radius: 0.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     width: 100%;
     max-width: 28rem;
+    background-color: #f0f0f0;
   }
 
   .login-box h2 {
@@ -112,27 +120,28 @@
     margin-bottom: 1rem;
   }
 
-  :global(body.dark-mode) .login-container {
+  /* Dark Mode Styles */
+  body.dark-mode .login-container {
     background-color: #111;
   }
 
-  :global(body.dark-mode) .login-box {
+  body.dark-mode .login-box {
     background-color: #222;
     color: #fff;
   }
 
-  :global(body.dark-mode) input {
+  body.dark-mode input {
     background-color: #333;
     color: #fff;
     border-color: #555;
   }
 
-  :global(body.dark-mode) input:focus {
+  body.dark-mode input:focus {
     border-color: #f0a500;
     box-shadow: 0 0 0 2px rgba(240, 165, 0, 0.5);
   }
 
-  :global(body.dark-mode) input.invalid {
+  body.dark-mode input.invalid {
     border-color: #dc2626;
     box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.5);
   }
