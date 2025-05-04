@@ -2,46 +2,44 @@
 <script>
     export let message;
     export let type; // 'success' or 'error'
-</script>
+  </script>
   
-{#if message && message.trim() !== ''}
-<div class="toast-container">
-    <div class="toast {type}">
-        <p class:success={type === 'success'} class:error={type === 'error'}>{message}</p>
+  {#if message && message.trim() !== ''}
+    <div class="toast-container {type}">
+      <p>{message}</p>
     </div>
-</div>
-{/if}
+  {/if}
   
-<style>
-.toast-container {
-    position: absolute;
-    top: calc(50% - 50px); /* Center vertically */
-    left: calc(50% - 150px); /* Center horizontally */
-    width: 300px; /* Adjust the width of the toast container */
-}
-
-.toast {
-    padding: 20px;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 16px;
-    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
-    opacity: 1;
+  <style>
+  .toast-container {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+    max-width: 90%;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: white;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.85);
     transition: opacity 0.3s ease-in-out;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 1); /* Add shadow for depth */
-}
-
-.toast p {
+  }
+  
+  .toast-container.success {
+    background-color: #16a34a;
+  }
+  
+  .toast-container.error {
+    background-color: #dc2626;
+  }
+  
+  .toast-container p {
     margin: 0;
-}
-
-.toast p.success {
-    color: #4caf50; /* Green text color for success toast */
     font-weight: bold;
-}
-
-.toast p.error {
-    color: #e02d20; /* Red text color for error toast */
-    font-weight: bold;
-}
-</style>
+    text-align: center;
+  }
+  </style>
+  

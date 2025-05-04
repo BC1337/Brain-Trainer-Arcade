@@ -37,6 +37,8 @@
   onMount(() => {
     initialize();
   });
+
+  
 </script>
 
 <button class="theme-toggle" on:click={toggle}>

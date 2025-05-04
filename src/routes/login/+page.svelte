@@ -5,28 +5,33 @@
 
   let email = '';
   let password = '';
-  let errorMessage = '';
+  let emailValid = true;
+  let passwordValid = true;
 
   const toastMessage = writable({ message: '', type: '' });
 
-  const handleSubmit = () => {
-    if (!email || !password) {
-      errorMessage = 'Please fill in all fields.';
-      toastMessage.set({ message: errorMessage, type: 'error' });
-    } else {
-      errorMessage = '';
-      toastMessage.set({ message: 'Logging in...', type: 'success' });
-      console.log('Form submitted:', { email, password });
+  const validate = () => {
+    emailValid = !!email;
+    passwordValid = !!password;
+  };
 
-      setTimeout(() => {
-        toastMessage.set({ message: '', type: '' });
-      }, 1650);
+  const handleSubmit = () => {
+    validate();
+
+    if (!emailValid || !passwordValid) {
+      toastMessage.set({ message: 'Please fill in all fields.', type: 'error' });
+      setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
+      return;
     }
+
+    toastMessage.set({ message: 'Logging in...', type: 'success' });
+    console.log('Form submitted:', { email, password });
+
+    setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
   };
 </script>
 
 <style>
-  /* LIGHT MODE (default) */
   .login-container {
     min-height: 100vh;
     display: flex;
@@ -71,11 +76,17 @@
     background-color: #fff;
     color: #000;
     outline: none;
+    transition: border 0.3s ease;
   }
 
   input:focus {
     border-color: #f0a500;
     box-shadow: 0 0 0 2px rgba(240, 165, 0, 0.2);
+  }
+
+  input.invalid {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
   }
 
   button {
@@ -95,13 +106,12 @@
   }
 
   .error-text {
-    color: red;
+    color: #dc2626;
     font-size: 0.875rem;
     text-align: center;
     margin-bottom: 1rem;
   }
 
-  /* DARK MODE based on body.dark-mode */
   :global(body.dark-mode) .login-container {
     background-color: #111;
   }
@@ -119,6 +129,12 @@
 
   :global(body.dark-mode) input:focus {
     border-color: #f0a500;
+    box-shadow: 0 0 0 2px rgba(240, 165, 0, 0.5);
+  }
+
+  :global(body.dark-mode) input.invalid {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.5);
   }
 </style>
 
@@ -127,16 +143,13 @@
     <div class="login-box">
       <h2>Login</h2>
 
-      {#if errorMessage}
-        <div class="error-text">{errorMessage}</div>
-      {/if}
-
       <div class="input-group">
-        <label for="email">Email</label>
+        <label for="email">Username</label>
         <input
           type="email"
           id="email"
           bind:value={email}
+          class:invalid={!emailValid}
           placeholder="Enter your email"
         />
       </div>
@@ -147,6 +160,7 @@
           type="password"
           id="password"
           bind:value={password}
+          class:invalid={!passwordValid}
           placeholder="Enter your password"
         />
       </div>
