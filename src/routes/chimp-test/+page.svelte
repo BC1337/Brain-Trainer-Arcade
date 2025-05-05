@@ -128,17 +128,25 @@
   }
 
   onMount(() => {
-    if (typeof window !== 'undefined') {
-      canvas = document.getElementById('canvas');
-      ctx = canvas.getContext('2d');
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
+  if (typeof window !== 'undefined') {
+    canvas = document.getElementById('canvas');
+    ctx = canvas.getContext('2d');
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-      return () => {
-        window.removeEventListener('resize', resizeCanvas);
-      };
+    // Auto-scroll on small screens (less than ~6 inch width, ~430px)
+    if (window.innerWidth < 431) {
+      // Give canvas time to render
+      setTimeout(() => {
+        canvas.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
     }
-  });
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }
+});
 
   onDestroy(() => {
     if (typeof window !== 'undefined') {
