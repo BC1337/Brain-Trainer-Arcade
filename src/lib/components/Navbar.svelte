@@ -80,7 +80,7 @@
       <ThemeToggle />
     </div>
     <a href="/" class="nav-brand">
-      <p> Bain Trainer </p>
+      <p> Brain Trainer </p>
     </a>
   </div>
 
