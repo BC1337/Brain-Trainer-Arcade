@@ -4,19 +4,34 @@
   import Footer from "../lib/components/Footer.svelte";
 </script>
 
-<Navbar />
-<slot />
+<div class="page-wrapper">
+  <Navbar />
 
-<!-- Separator line between content and footer -->
-<div class="footer-separator"></div>
+  <main class="main-content">
+    <slot />
+  </main>
 
-<Footer />
+  <div class="footer-separator"></div>
+  <Footer />
+</div>
 
 <style>
+  .page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--background); /* Uses your theme variable */
+    color: var(--text); /* Also theme-aware */
+  }
+
+  .main-content {
+    flex: 1;
+  }
+
   .footer-separator {
     width: 100%;
     height: 2px;
-    background-color: #f0a500; /* your orange accent */
+    background-color: #f0a500;
     margin-top: 60px;
   }
 </style>
