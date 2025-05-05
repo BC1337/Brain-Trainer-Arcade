@@ -43,7 +43,7 @@
   }
 
   /* Add smooth transition for background color change */
-  body {
+  /* body {
     transition: background-color 0.3s ease, color 0.3s ease;
-  }
+  } */
 </style>

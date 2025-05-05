@@ -1,8 +1,6 @@
 import { json } from '@sveltejs/kit';
 import bcrypt from 'bcrypt';
-import { PrismaClient } from '$lib/server/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from '$lib/server/prisma/client';
 
 export async function POST({ request }) {
   const { email, username, password } = await request.json();
@@ -15,5 +13,8 @@ export async function POST({ request }) {
     data: { email, username, password: hashedPassword }
   });
 
-  return json({ message: 'User created', user: { id: user.id, email: user.email, username: user.username } });
+  return json({
+    message: 'User created',
+    user: { id: user.id, email: user.email, username: user.username }
+  });
 }
