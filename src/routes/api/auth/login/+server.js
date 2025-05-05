@@ -1,7 +1,8 @@
 import { json } from '@sveltejs/kit';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { prisma } from '$lib/server/prisma';
+import { prisma } from '$lib/server/prisma/client'; // ✅ CORRECT
+
 
 const JWT_SECRET = process.env.JWT_SECRET;
 

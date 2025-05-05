@@ -1,0 +1,263 @@
+{
+  ".svelte-kit/generated/server/internal.js": {
+    "file": "internal.js",
+    "name": "internal",
+    "src": ".svelte-kit/generated/server/internal.js",
+    "isEntry": true,
+    "imports": [
+      "_internal.js"
+    ]
+  },
+  "_Layout.js": {
+    "file": "chunks/Layout.js",
+    "name": "Layout",
+    "imports": [
+      "_ssr.js"
+    ],
+    "css": [
+      "_app/immutable/assets/Layout.BVL0dT-l.css"
+    ]
+  },
+  "_Toast.js": {
+    "file": "chunks/Toast.js",
+    "name": "Toast",
+    "imports": [
+      "_ssr.js"
+    ],
+    "css": [
+      "_app/immutable/assets/Toast.C5F9U5Kg.css"
+    ]
+  },
+  "_client.js": {
+    "file": "chunks/client.js",
+    "name": "client"
+  },
+  "_client2.js": {
+    "file": "chunks/client2.js",
+    "name": "client",
+    "imports": [
+      "_exports.js",
+      "_ssr2.js"
+    ]
+  },
+  "_exports.js": {
+    "file": "chunks/exports.js",
+    "name": "exports"
+  },
+  "_index.js": {
+    "file": "chunks/index.js",
+    "name": "index"
+  },
+  "_index2.js": {
+    "file": "chunks/index2.js",
+    "name": "index",
+    "imports": [
+      "_ssr.js"
+    ]
+  },
+  "_internal.js": {
+    "file": "chunks/internal.js",
+    "name": "internal",
+    "imports": [
+      "_ssr.js",
+      "_ssr2.js"
+    ]
+  },
+  "_ssr.js": {
+    "file": "chunks/ssr.js",
+    "name": "ssr"
+  },
+  "_ssr2.js": {
+    "file": "chunks/ssr2.js",
+    "name": "ssr"
+  },
+  "node_modules/@sveltejs/kit/src/runtime/components/svelte-4/error.svelte": {
+    "file": "entries/fallbacks/error.svelte.js",
+    "name": "entries/fallbacks/error.svelte",
+    "src": "node_modules/@sveltejs/kit/src/runtime/components/svelte-4/error.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_client2.js"
+    ]
+  },
+  "node_modules/@sveltejs/kit/src/runtime/components/svelte-4/layout.svelte": {
+    "file": "entries/fallbacks/layout.svelte.js",
+    "name": "entries/fallbacks/layout.svelte",
+    "src": "node_modules/@sveltejs/kit/src/runtime/components/svelte-4/layout.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js"
+    ]
+  },
+  "node_modules/@sveltejs/kit/src/runtime/server/index.js": {
+    "file": "index.js",
+    "name": "index",
+    "src": "node_modules/@sveltejs/kit/src/runtime/server/index.js",
+    "isEntry": true,
+    "imports": [
+      "_internal.js",
+      "_index.js",
+      "_exports.js",
+      "_index2.js"
+    ]
+  },
+  "src/routes/+page.svelte": {
+    "file": "entries/pages/_page.svelte.js",
+    "name": "entries/pages/_page.svelte",
+    "src": "src/routes/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Layout.js",
+      "_client2.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.PPMsYTjZ.css"
+    ]
+  },
+  "src/routes/aim-trainer/+page.svelte": {
+    "file": "entries/pages/aim-trainer/_page.svelte.js",
+    "name": "entries/pages/aim-trainer/_page.svelte",
+    "src": "src/routes/aim-trainer/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Layout.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.CUe_BesC.css"
+    ]
+  },
+  "src/routes/api/auth/login/+server.js": {
+    "file": "entries/endpoints/api/auth/login/_server.js",
+    "name": "entries/endpoints/api/auth/login/_server",
+    "src": "src/routes/api/auth/login/+server.js",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_client.js"
+    ]
+  },
+  "src/routes/api/auth/signup/+server.js": {
+    "file": "entries/endpoints/api/auth/signup/_server.js",
+    "name": "entries/endpoints/api/auth/signup/_server",
+    "src": "src/routes/api/auth/signup/+server.js",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_client.js"
+    ]
+  },
+  "src/routes/chimp-test/+page.svelte": {
+    "file": "entries/pages/chimp-test/_page.svelte.js",
+    "name": "entries/pages/chimp-test/_page.svelte",
+    "src": "src/routes/chimp-test/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_index2.js",
+      "_Layout.js",
+      "_Toast.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.BMf0yX2N.css"
+    ]
+  },
+  "src/routes/games/+page.svelte": {
+    "file": "entries/pages/games/_page.svelte.js",
+    "name": "entries/pages/games/_page.svelte",
+    "src": "src/routes/games/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Layout.js",
+      "_client2.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.Bn5demUW.css"
+    ]
+  },
+  "src/routes/login/+page.svelte": {
+    "file": "entries/pages/login/_page.svelte.js",
+    "name": "entries/pages/login/_page.svelte",
+    "src": "src/routes/login/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Layout.js",
+      "_Toast.js",
+      "_index2.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.DINfQOCk.css"
+    ]
+  },
+  "src/routes/memory-trainer/+page.svelte": {
+    "file": "entries/pages/memory-trainer/_page.svelte.js",
+    "name": "entries/pages/memory-trainer/_page.svelte",
+    "src": "src/routes/memory-trainer/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Layout.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.CnYoHwfr.css"
+    ]
+  },
+  "src/routes/reaction-timer/+page.svelte": {
+    "file": "entries/pages/reaction-timer/_page.svelte.js",
+    "name": "entries/pages/reaction-timer/_page.svelte",
+    "src": "src/routes/reaction-timer/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Layout.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.DceZ9lxQ.css"
+    ]
+  },
+  "src/routes/signup/+page.svelte": {
+    "file": "entries/pages/signup/_page.svelte.js",
+    "name": "entries/pages/signup/_page.svelte",
+    "src": "src/routes/signup/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Layout.js",
+      "_Toast.js",
+      "_index2.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.-cQcveA0.css"
+    ]
+  },
+  "src/routes/simon-says/+page.svelte": {
+    "file": "entries/pages/simon-says/_page.svelte.js",
+    "name": "entries/pages/simon-says/_page.svelte",
+    "src": "src/routes/simon-says/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Layout.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.kbYwNFmP.css"
+    ]
+  },
+  "src/routes/type-racer/+page.svelte": {
+    "file": "entries/pages/type-racer/_page.svelte.js",
+    "name": "entries/pages/type-racer/_page.svelte",
+    "src": "src/routes/type-racer/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Layout.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.DolesZbv.css"
+    ]
+  }
+}
