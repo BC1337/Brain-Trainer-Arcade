@@ -14,13 +14,21 @@ export async function POST({ request }) {
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [{ email }, { username: email }]
+      }
+    });
+
+    console.log('🔍 User found:', user); // 👈 ADD THIS
+    console.log('🔑 Password hash:', user?.passwordHash); // 👈 AND THIS
 
     if (!user) {
       return json({ error: 'Invalid email or password' }, { status: 401 });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.passwordHash);
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
 
     if (!passwordMatch) {
       return json({ error: 'Invalid email or password' }, { status: 401 });

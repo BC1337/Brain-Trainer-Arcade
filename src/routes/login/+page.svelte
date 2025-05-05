@@ -23,20 +23,44 @@
     passwordValid = !!password;
   };
 
-  const handleSubmit = () => {
-    validate();
+  const handleSubmit = async () => {
+  validate();
 
-    if (!emailValid || !passwordValid) {
-      toastMessage.set({ message: 'Please fill in all fields.', type: 'error' });
+  if (!emailValid || !passwordValid) {
+    toastMessage.set({ message: 'Please fill in all fields.', type: 'error' });
+    setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
+    return;
+  }
+
+  toastMessage.set({ message: 'Logging in...', type: 'success' });
+
+  try {
+    const res = await fetch('/api/auth/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email, password })
+});
+
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      toastMessage.set({ message: data.error || 'Login failed', type: 'error' });
       setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
       return;
     }
 
-    toastMessage.set({ message: 'Logging in...', type: 'success' });
-    console.log('Form submitted:', { email, password });
+    // Store token (optional: you can use localStorage or cookies)
+    localStorage.setItem('token', data.token);
 
+    // Redirect to dashboard
+    window.location.href = '/dashboard';
+  } catch (err) {
+    console.error('Login request error:', err);
+    toastMessage.set({ message: 'Something went wrong', type: 'error' });
     setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
-  };
+  }
+};
 </script>
 
 <style>
@@ -153,13 +177,13 @@
       <h2>Login</h2>
 
       <div class="input-group">
-        <label for="email">Username</label>
+        <label for="email">Email or Username</label>
         <input
           type="email"
           id="email"
           bind:value={email}
           class:invalid={!emailValid}
-          placeholder="Enter your email"
+          placeholder="Enter your alias"
         />
       </div>
 

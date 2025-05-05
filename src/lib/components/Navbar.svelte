@@ -33,8 +33,8 @@
     <li class="nav-item"><a href="/games" class="nav-link">Games</a></li>
 
     {#if token}
-      <li class="nav-item"><a href="/profile" class="nav-link">Profile</a></li>
-      <li class="nav-item"><a href="#" class="nav-link" on:click={logout}>Logout</a></li>
+      <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+      <li class="nav-item"><a href="/" class="nav-link" on:click={logout}>Logout</a></li>
     {:else}
       <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
       <li class="nav-item"><a href="/signup" class="nav-link">Sign Up</a></li>
