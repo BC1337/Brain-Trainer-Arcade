@@ -1,7 +1,7 @@
 // src/routes/api/user/highscore/+server.js
 import { json } from '@sveltejs/kit';
 import { verifyJWT } from '$lib/server/auth';
-import { prisma } from '$lib/server/prisma/client'; 
+import { prisma } from '$lib/server/prisma'; 
 
 export async function POST({ request }) {
   const authHeader = request.headers.get('authorization');

@@ -23,44 +23,44 @@
   };
 
   const handleSubmit = async () => {
-    validate();
+  validate();
 
-    if (!emailValid || !passwordValid) {
-      toastMessage.set({ message: 'Please fill in all fields.', type: 'error' });
+  if (!emailValid || !passwordValid) {
+    toastMessage.set({ message: 'Please fill in all fields.', type: 'error' });
+    setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
+    return;
+  }
+
+  toastMessage.set({ message: 'Logging in...', type: 'success' });
+
+  try {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      toastMessage.set({ message: data.error || 'Login failed', type: 'error' });
       setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
       return;
     }
 
-    toastMessage.set({ message: 'Logging in...', type: 'success' });
+    // ✅ Store token, username, and session user in localStorage
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('sessionUser', JSON.stringify(data.user));
+    localStorage.setItem('username', data.user.username);  // Store username
 
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        toastMessage.set({ message: data.error || 'Login failed', type: 'error' });
-        setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
-        return;
-      }
-
-      // ✅ Store token and username (fallback to email if username not sent)
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('sessionUser', JSON.stringify(data.user));
-
-
-      // ✅ Redirect to dashboard
-      window.location.href = '/dashboard';
-    } catch (err) {
-      console.error('Login request error:', err);
-      toastMessage.set({ message: 'Something went wrong', type: 'error' });
-      setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
-    }
-  };
+    // ✅ Redirect to dashboard
+    window.location.href = '/dashboard';
+  } catch (err) {
+    console.error('Login request error:', err);
+    toastMessage.set({ message: 'Something went wrong', type: 'error' });
+    setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
+  }
+};
 </script>
 
 <style>
@@ -144,7 +144,7 @@
   }
 
   /* Dark Mode Styles */
-  body.dark-mode .login-container {
+  /* body.dark-mode .login-container {
     background-color: #111;
   }
 
@@ -167,7 +167,7 @@
   body.dark-mode input.invalid {
     border-color: #dc2626;
     box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.5);
-  }
+  } */
 </style>
 
 <Layout showThemeToggle={true}>

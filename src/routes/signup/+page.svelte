@@ -32,47 +32,50 @@
 
   // Handle form submission
   const handleSubmit = async () => {
-    validate();
+  validate();
 
-    if (!emailValid || !passwordValid || !usernameValid || !passwordsMatch) {
-      toastMessage.set({ message: 'Please fill in all fields correctly.', type: 'error' });
-      setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
-      return;
-    }
-
-    toastMessage.set({ message: 'Signing up...', type: 'success' });
-
-    // Send the form data to the API
-    try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-  email,
-  password,
-  username
-}),
-
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        toastMessage.set({ message: result.message, type: 'success' });
-        // Optionally, redirect or auto-login user after successful signup
-        // Example: window.location.href = "/login";
-      } else {
-        toastMessage.set({ message: result.message, type: 'error' });
-      }
-
-    } catch (error) {
-      toastMessage.set({ message: 'An error occurred. Please try again.', type: 'error' });
-    }
-
+  if (!emailValid || !passwordValid || !usernameValid || !passwordsMatch) {
+    toastMessage.set({ message: 'Please fill in all fields correctly.', type: 'error' });
     setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
-  };
+    return;
+  }
+
+  toastMessage.set({ message: 'Signing up...', type: 'success' });
+
+  // Send the form data to the API
+  try {
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        username
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      toastMessage.set({ message: result.message, type: 'success' });
+
+      // Store the token and username in localStorage
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('username', result.user.username); // Store username
+
+      // Redirect to the dashboard
+      window.location.href = "/dashboard";
+    } else {
+      toastMessage.set({ message: result.message, type: 'error' });
+    }
+  } catch (error) {
+    toastMessage.set({ message: 'An error occurred. Please try again.', type: 'error' });
+  }
+
+  setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
+};
 </script>
 
 <Layout showThemeToggle={true}>

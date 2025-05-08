@@ -51,3 +51,34 @@ export async function POST({ request, params }) {
     return json({ error: 'Server error saving highscore' }, { status: 500 });
   }
 }
+
+export async function GET({ request, params }) {
+  const { game } = params;
+  const authHeader = request.headers.get('authorization');
+  const token = authHeader?.split(' ')[1];
+
+  if (!token) {
+    return json({ error: 'Missing token' }, { status: 401 });
+  }
+
+  const user = await verifyJWT(token);
+  if (!user) {
+    return json({ error: 'Invalid or expired token' }, { status: 401 });
+  }
+
+  try {
+    const userHighscore = await prisma.highscore.findUnique({
+      where: {
+        userId_game: {
+          userId: user.userId,
+          game
+        }
+      }
+    });
+
+    return json({ highscore: userHighscore || null });
+  } catch (err) {
+    console.error('❌ Failed to fetch user highscore:', err);
+    return json({ error: 'Server error fetching highscore' }, { status: 500 });
+  }
+}
