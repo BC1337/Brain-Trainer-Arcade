@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import bcrypt from 'bcrypt';
 // NEW (CORRECT)
-import { prisma } from '$lib/server/prisma/client';
+import { prisma } from '$lib/server/prisma';
 
 
 

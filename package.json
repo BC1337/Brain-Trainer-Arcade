@@ -3,10 +3,9 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "vite",
 		"build": "vite build",
 		"postinstall": "prisma generate",
-		"dev": "vite",
 		"preview": "vite preview",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
@@ -35,6 +34,7 @@
 		"axios": "^1.6.7",
 		"bcrypt": "^5.1.1",
 		"clsx": "^2.1.0",
+		"dotenv": "^16.5.0",
 		"jsonwebtoken": "^9.0.2",
 		"jwt-decode": "^4.0.0",
 		"svelte-fa": "^4.0.2",

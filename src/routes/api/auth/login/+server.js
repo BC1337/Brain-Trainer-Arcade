@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { prisma } from '$lib/server/prisma/client'; // ✅ CORRECT
+import { prisma } from '$lib/server/prisma';
 
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -21,13 +21,15 @@ export async function POST({ request }) {
     });
 
     console.log('🔍 User found:', user); // 👈 ADD THIS
-    console.log('🔑 Password hash:', user?.passwordHash); // 👈 AND THIS
+    console.log('🔑 Password hash:', user?.password); // correct field name
 
     if (!user) {
       return json({ error: 'Invalid email or password' }, { status: 401 });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
+
+
 
 
     if (!passwordMatch) {

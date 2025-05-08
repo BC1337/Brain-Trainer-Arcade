@@ -50,7 +50,8 @@
 
       // ✅ Store token and username (fallback to email if username not sent)
       localStorage.setItem('token', data.token);
-      localStorage.setItem('username', data.user?.username || data.user?.email || 'Player');
+      localStorage.setItem('sessionUser', JSON.stringify(data.user));
+
 
       // ✅ Redirect to dashboard
       window.location.href = '/dashboard';
