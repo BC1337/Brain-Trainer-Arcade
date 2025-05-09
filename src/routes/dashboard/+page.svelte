@@ -96,17 +96,29 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {#each games as game}
           <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow-md shadow-gray-400 dark:shadow-gray-700 border-t-2 border-orange-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-gray-500 dark:hover:shadow-gray-800">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div class="space-y-2">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{game.name}</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Track your progress and global ranking.</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                  {#if game.key === 'chimp'}
+                    Train memory and focus with sequences.
+                  {:else if game.key === 'aim'}
+                    Improve precision with target practice.
+                  {:else if game.key === 'reaction'}
+                    Test your speed and reaction time.
+                  {:else if game.key === 'memory'}
+                    Challenge your short-term memory skills.
+                  {:else if game.key === 'verbal'}
+                    Boost your verbal memory with word recall.
+                  {/if}
+                </p>
               </div>
-              <div class="flex flex-col sm:flex-row sm:items-center sm:gap-6 text-sm text-gray-800 dark:text-gray-300">
-                <div>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:gap-6 text-sm text-gray-800 dark:text-gray-300 mt-4 sm:mt-0">
+                <div class="mb-2 sm:mb-0">
                   <span class="font-medium text-orange-500">Your Score:</span>
                   <span class="ml-1">{userScores[game.key]?.rounds ?? '—'}</span>
                 </div>
-                <div>
+                <div class="mb-2 sm:mb-0">
                   <span class="font-medium text-orange-500">Global Best:</span>
                   <span class="ml-1">
                     {#if globalHighscores[game.key]}
@@ -123,8 +135,6 @@
         {/each}
       </div>
     </section>
-    
-    
     
     
     <!-- Stats Overview -->
