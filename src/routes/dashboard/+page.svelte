@@ -17,10 +17,10 @@
 
   onMount(async () => {
     const token = localStorage.getItem('token');
-    const storedUsername = localStorage.getItem('username');  // Get username from localStorage
+    const storedUsername = localStorage.getItem('username');
 
-    if (!token) goto('/login');  // Redirect to login if no token
-    if (storedUsername) username = storedUsername;  // Set username from localStorage
+    if (!token) goto('/login');
+    if (storedUsername) username = storedUsername;
 
     await Promise.all(games.map(async ({ key }) => {
       if (key === 'chimp') {
@@ -70,41 +70,85 @@
 </script>
 
 <Layout>
-  <div class="p-6 max-w-5xl mx-auto text-black dark:text-white">
-    <h1 class="text-4xl font-extrabold mb-8 text-orange-500">🎮 Welcome, {username}!</h1>
+  <div class="p-6 max-w-7xl mx-auto text-black dark:text-white space-y-12">
 
-    <!-- Game Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      {#each games as game}
-      <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-600">
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">{game.name}</h2>
+    <!-- Hero -->
+    <section class="bg-gradient-to-r from-orange-100 to-orange-200 dark:from-orange-800 dark:to-orange-900 px-6 py-8 rounded-2xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+          🎮 Welcome, <span class="text-orange-500">{username}</span>
+        </h1>
+        <p class="mt-1 text-gray-700 dark:text-gray-300 text-base">
+          Your brain training performance, all in one place.
+        </p>
+      </div>
+      <div class="flex flex-col items-start md:items-end text-sm text-gray-700 dark:text-gray-300 space-y-1 md:text-right">
+        <p><span class="font-medium text-gray-900 dark:text-white">🧠 Focus Game:</span> Chimp Test</p>
+        <p><span class="font-medium text-gray-900 dark:text-white">📅 Last Login:</span> May 9, 2025</p>
+        <p><span class="font-medium text-gray-900 dark:text-white">🔥 Streak:</span> 3 days</p>
+      </div>
+    </section>
 
-          <div class="text-lg space-y-1">
-            <p>
-              <span class="font-medium text-orange-500">Your Highscore:</span>
-              <span class="ml-2">{userScores[game.key]?.rounds ?? '—'}</span>
-            </p>
-            <p>
-              <span class="font-medium text-orange-500">Top Global:</span>
-              {#if globalHighscores[game.key]}
-                <span class="ml-2">{globalHighscores[game.key].rounds}</span>
-                <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">(by {globalHighscores[game.key].user?.username || 'Unknown'})</span>
-              {:else}
-                <span class="ml-2">—</span>
-              {/if}
-            </p>
+    <section class="bg-white dark:bg-gray-900 px-6 py-8 rounded-2xl shadow-lg">
+      <h2 class="text-2xl font-bold text-orange-500 mb-6">🕹️ Game Highlights</h2>
+    
+      <!-- Grid of Resizable Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {#each games as game}
+          <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow-md shadow-gray-400 dark:shadow-gray-700 border-t-2 border-orange-400 transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-gray-500 dark:hover:shadow-gray-800">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{game.name}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Track your progress and global ranking.</p>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:gap-6 text-sm text-gray-800 dark:text-gray-300">
+                <div>
+                  <span class="font-medium text-orange-500">Your Score:</span>
+                  <span class="ml-1">{userScores[game.key]?.rounds ?? '—'}</span>
+                </div>
+                <div>
+                  <span class="font-medium text-orange-500">Global Best:</span>
+                  <span class="ml-1">
+                    {#if globalHighscores[game.key]}
+                      {globalHighscores[game.key].rounds}
+                      <span class="text-gray-500 dark:text-gray-400">({globalHighscores[game.key].user?.username || 'Unknown'})</span>
+                    {:else}
+                      —
+                    {/if}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        {/each}
+      </div>
+    </section>
+    
+    
+    
+    
+    <!-- Stats Overview -->
+    <section class="bg-gradient-to-r from-orange-100 to-orange-200 dark:from-orange-800 dark:to-orange-900 px-6 py-8 rounded-2xl shadow-md">
+      <div class="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-xl p-6 shadow-md">
+        <h2 class="text-2xl font-bold text-orange-500 mb-6">📊 Stats Overview</h2>
+        <div class="space-y-6">
+          <div>
+            <p class="text-lg font-medium text-gray-800 dark:text-white mb-1">Total Games Played</p>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full">
+              <div class="bg-orange-500 h-3 rounded-full" style="width: 70%"></div>
+            </div>
+          </div>
+          <div>
+            <p class="text-lg font-medium text-gray-800 dark:text-white mb-1">Highscore Progress</p>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full">
+              <div class="bg-green-500 h-3 rounded-full" style="width: 55%"></div>
+            </div>
           </div>
         </div>
-      {/each}
-    </div>
-
-    <!-- Stats Overview -->
-    <div class="mt-12">
-      <h2 class="text-3xl font-bold mb-4 text-orange-500">📊 Stats Overview</h2>
-      <div class="bg-orange-100 dark:bg-orange-900 text-black dark:text-white px-6 py-4 rounded-xl shadow-sm">
-        <strong class="text-lg">📈 Coming Soon:</strong>
-        <p class="mt-1 text-base">Your gameplay stats and charts will appear here once you start earning scores!</p>
+        <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
+          Your gameplay stats and charts will appear here once you start earning scores!
+        </p>
       </div>
-    </div>
+    </section>
   </div>
 </Layout>
