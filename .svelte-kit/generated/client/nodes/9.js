@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/reaction-timer/+page.svelte";
+export { default as component } from "../../../../src/routes/memory-trainer/+page.svelte";
