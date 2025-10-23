@@ -9,50 +9,78 @@
   padding: 0;
 }
 
-/* Global styles */
+/* -------------------------------
+   Global Styles
+--------------------------------- */
+
+:root {
+  --text-light: rgba(255, 255, 255, 0.85);
+  --accent: #ff7f50;
+  --accent-hover: #ff6347;
+}
+
+/* ===========================================
+   LIGHT MODE (default)
+=========================================== */
 body {
   font-family: 'Arial', sans-serif !important;
-  background-color: #0f0f0f; /* Dark background color */
-  color: #ffffff; /* White text color */
-  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
+
+  /* Keep the working base color */
+  background-color: #0f0f0f;
+
+  /* Slight frosted highlight gradient */
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0) 50%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 60%);
+
+  color: var(--text-light);
+  transition: background-color 0.3s ease, color 0.3s ease, background-image 0.3s ease;
+  backdrop-filter: blur(4px);
 }
 
-/* Dark mode styles */
+/* ===========================================
+   DARK MODE
+=========================================== */
 :global(body.dark-mode) {
-  background-color: #111; /* Dark background color */
-  color: #ffffff; /* White text color for dark mode */
+  background-color: #111;
+  background-image: none;
+  color: #ffffff;
 }
 
-/* Style links */
+/* ===========================================
+   Common Elements
+=========================================== */
+
+/* Links */
 a {
-  color: #ffffff; /* White text color */
+  color: var(--text-light);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #ff7f50; /* Orange hover color */
+  color: var(--accent);
 }
 
-/* Add some spacing */
+/* Container spacing */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-/* Give headings a funky look */
+/* Headings */
 h1, h2, h3 {
   font-family: 'Comic Sans MS';
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
-/* Add some fun to buttons */
+/* Buttons */
 .button {
   padding: 10px 20px;
-  background-color: #ff7f50; /* Orange button color */
-  color: #ffffff; /* White text color */
+  background-color: var(--accent);
+  color: var(--text-light);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -60,5 +88,11 @@ h1, h2, h3 {
 }
 
 .button:hover {
-  background-color: #ff6347; /* Darker orange on hover */
+  background-color: var(--accent-hover);
+}
+
+/* Dark mode buttons stay readable */
+:global(body.dark-mode) .button {
+  background-color: var(--accent);
+  color: #fff;
 }
