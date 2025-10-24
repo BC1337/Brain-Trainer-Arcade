@@ -1,13 +1,17 @@
 <script>
   import Layout from "../../layouts/Layout.svelte";
   import GameCard from "../../lib/components/Gamecard.svelte";
-  
-  // Array of game objects
+
   let games = [
       {
           gameName: 'Chimp test',
           gameDescription: 'Are you a monkey\'s uncle...? The results will speak for themselves.',
           imageSrc: 'https://images.pexels.com/photos/1123771/pexels-photo-1123771.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+      },
+      {
+          gameName: 'Word-Game',
+          gameDescription: 'This is a completely orginal game that is totally not a wordle clone. Unless your a lawyer, then yes its a wordle clone',
+          imageSrc: 'https://cdn.pixabay.com/photo/2017/06/06/19/39/scrabble-2378253_960_720.jpg'
       },
       {
           gameName: 'Type Racer',
@@ -33,9 +37,7 @@
           gameName: 'Reaction Timer',
           gameDescription: 'Wait for the light to turn from red to green and see how fast you click!',
           imageSrc: 'https://images.pexels.com/photos/1727004/pexels-photo-1727004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-      },
-
-      // Add more game objects as needed
+      }
   ];
 </script>
 
@@ -44,7 +46,6 @@
   <meta name="description" content="Welcome to the Games Hub! Play a wide variety of free online games including puzzles, strategy games, action games, arcade classics, and more. Challenge your friends, test your skills, and have fun!">
   <meta name="keywords" content="online games, free games, browser games, puzzle games, strategy games, action games, arcade games, multiplayer games, single player games, casual games, fun games">
   <meta name="BC1337" content="BC">
-  <!-- Add more meta tags as needed -->
 </head>
 
 <Layout>
@@ -60,21 +61,20 @@
         <span>!</span>
     </h1>
     <br>
-      <GameCard games={games} />
+    <GameCard {games} />
   </main>
 </Layout>
 
 <style>
-  h1 {
-        margin-top: 50px;
-        text-align: center; /* Center the text */
-    }
-
-    .highlight {
-        color: #f0a500; /* Orange color */
-        padding: 0 5px; /* Add spacing */
-    }
-    span{
-        color: grey;
-    }
+h1 {
+  margin-top: 50px;
+  text-align: center;
+}
+.highlight {
+  color: #f0a500;
+  padding: 0 5px;
+}
+span {
+  color: grey;
+}
 </style>
