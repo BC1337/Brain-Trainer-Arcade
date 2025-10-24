@@ -1,114 +1,128 @@
-<svelte:head>
-	<title>How to play Sverdle</title>
-	<meta name="description" content="How to play Sverdle" />
-</svelte:head>
-
 <div class="text-column">
-	<h1>How to play Generic Word Game</h1>
+  <h1>How to play Generic Word Game</h1>
 
-	<p>
-		Generic Word Game is a clone of <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a>, the
-		word guessing game. To play, enter a five-letter English word. For example:
-	</p>
+  <p>
+    Generic Word Game is a clone of 
+    <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank">Wordle</a>, the
+    word guessing game. To play, enter a five-letter English word. For example:
+  </p>
 
-	<div class="example">
-		<span class="close">r</span>
-		<span class="missing">i</span>
-		<span class="close">t</span>
-		<span class="missing">z</span>
-		<span class="exact">y</span>
-	</div>
+  <div class="example">
+    <span class="close">r</span>
+    <span class="missing">i</span>
+    <span class="close">t</span>
+    <span class="missing">z</span>
+    <span class="exact">y</span>
+  </div>
 
-	<p>
-		The <span class="exact">y</span> is in the right place. <span class="close">r</span> and
-		<span class="close">t</span>
-		are the right letters, but in the wrong place. The other letters are wrong, and can be discarded.
-		Let's make another guess:
-	</p>
+  <p>
+    The <span class="exact">y</span> is in the right place. 
+    <span class="close">r</span> and <span class="close">t</span>
+    are the right letters, but in the wrong place. The other letters are wrong, and can be discarded.
+    Let's make another guess:
+  </p>
 
-	<div class="example">
-		<span class="exact">p</span>
-		<span class="exact">a</span>
-		<span class="exact">r</span>
-		<span class="exact">t</span>
-		<span class="exact">y</span>
-	</div>
+  <div class="example">
+    <span class="exact">p</span>
+    <span class="exact">a</span>
+    <span class="exact">r</span>
+    <span class="exact">t</span>
+    <span class="exact">y</span>
+  </div>
 
-	<p>This time we guessed right! You have <strong>six</strong> guesses to get the word.</p>
+  <p>This time we guessed right! You have <strong>six</strong> guesses to get the word.</p>
 
-
-	<!-- Play Now button -->
-	<a href="/word-game" class="play-button">Play Now</a>
+  <!-- BUTTON instead of a tag -->
+  <button class="play-button" on:click={() => window.location.href='/word-game'}>Play Now</button>
 </div>
 
 <style>
-	span {
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		font-size: 0.8em;
-		width: 2.4em;
-		height: 2.4em;
-		background-color: white;
-		box-sizing: border-box;
-		border-radius: 2px;
-		border-width: 2px;
-		color: rgba(0, 0, 0, 0.7);
-	}
+/* ---- Page container ---- */
+.text-column {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  font-family: system-ui, sans-serif;
+  color: #111;
+  background: #f7f7f7; /* off-white */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
 
-	.missing {
-		background: rgba(255, 255, 255, 0.5);
-		color: rgba(0, 0, 0, 0.5);
-	}
+/* Text styling */
+.text-column h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #222;
+}
+.text-column p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 1rem 0;
+  color: #222;
+}
+.text-column a {
+  color: #0a74da;
+  text-decoration: underline;
+}
 
-	.close {
-		border-style: solid;
-		border-color: var(--color-theme-2);
-	}
+/* Example boxes like game board */
+.example {
+  display: flex;
+  gap: 0.3rem;
+  margin: 1rem 0;
+  justify-content: flex-start;
+}
+.example span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 6px;
+  text-transform: uppercase;
+  background: #ededed; /* pre-submission light grey */
+  color: black;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+.example span.exact { background: #6aaa64; color: white; }
+.example span.close { background: #c9b458; color: white; }
+.example span.missing { background: #787c7e; color: white; opacity: 0.8; }
 
-	.exact {
-		background: var(--color-theme-2);
-		color: white;
-	}
+/* Inline spans inside paragraph */
+p span {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 0.9em;
+  font-weight: bold;
+}
 
-	.example {
-		display: flex;
-		justify-content: flex-start;
-		margin: 1rem 0;
-		gap: 0.2rem;
-	}
+/* ---- Play Now button ---- */
+.play-button {
+  display: block;
+  margin: 2rem auto 0;
+  padding: 0.8rem 1.6rem;
+  background-color: #6aaa64; /* green */
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
 
-	.example span {
-		font-size: 1.4rem;
-	}
-
-	p span {
-		position: relative;
-		border-width: 1px;
-		border-radius: 1px;
-		font-size: 0.4em;
-		transform: scale(2) translate(0, -10%);
-		margin: 0 1em;
-	}
-
-	/* Play button styling */
-	.play-button {
-		display: inline-flex;           /* center text horizontally and vertically */
-		justify-content: center;
-		align-items: center;
-		margin: 2rem auto 0;            /* top margin and centered horizontally */
-		padding: 0.8rem 1.6rem;         /* clickable size */
-		background-color: var(--color-theme-2);
-		color: white;
-		font-weight: bold;
-		border-radius: 6px;
-		text-decoration: none;
-		font-size: 1rem;
-		cursor: pointer;
-		transition: background-color 0.2s;
-	}
-
-	.play-button:hover {
-		background-color: #30577f; /* slightly darker on hover */
-	}
+  /* NO hover/active changes */
+  transition: none;
+}
+.play-button:hover,
+.play-button:active,
+.play-button:focus {
+  background-color: #6aaa64;
+  color: white;
+  transform: none;
+}
 </style>

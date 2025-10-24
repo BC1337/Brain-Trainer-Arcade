@@ -23,30 +23,33 @@
     return words[Math.floor(Math.random() * words.length)];
   }
 
-function detectTheme() {
-  isDarkMode = document.documentElement.classList.contains('dark');
-  applyThemeToRows();
-  updateCurrentRow();
-}
+  function detectTheme() {
+    const brightness = window.getComputedStyle(document.body).backgroundColor;
+    const rgbMatch = brightness.match(/\d+/g);
+    const brightnessValue = rgbMatch ? (parseInt(rgbMatch[0]) + parseInt(rgbMatch[1]) + parseInt(rgbMatch[2])) / 3 : 255;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    isDarkMode = brightnessValue < 128 || prefersDark;
 
+    applyThemeToRows();
+    updateCurrentRow();
+  }
 
-function startGame() {
-  targetWord = getRandomWord();
-  currentRow = 0;
-  currentGuess = '';
-  won = false;
-  showModal = false;
-  keyboardStatus = {};
-  rows = Array(maxRows).fill('').map(() =>
-    Array(wordLength).fill({
-      letter: '',
-      status: '',
-      theme: isDarkMode ? 'dark' : 'light',
-      typed: false
-    })
-  );
-}
-
+  function startGame() {
+    targetWord = getRandomWord();
+    currentRow = 0;
+    currentGuess = '';
+    won = false;
+    showModal = false;
+    keyboardStatus = {};
+    rows = Array(maxRows).fill('').map(() =>
+      Array(wordLength).fill({
+        letter: '',
+        status: '',
+        theme: isDarkMode ? 'dark' : 'light',
+        typed: false
+      })
+    );
+  }
 
   function evaluateGuess(guess) {
     const result = Array(wordLength).fill('missing');
@@ -70,6 +73,23 @@ function startGame() {
     });
 
     return result;
+  }
+
+  function updateCurrentRow() {
+    rows[currentRow] = currentGuess
+      .split('')
+      .map((l, i) => {
+        const oldCell = rows[currentRow]?.[i] || {};
+        return {
+          ...oldCell,
+          letter: l,
+          typed: true,
+          theme: isDarkMode ? 'dark' : 'light'
+        };
+      })
+      .concat(
+        Array(wordLength - currentGuess.length).fill({ letter: '', status: '', typed: false, theme: isDarkMode ? 'dark' : 'light' })
+      );
   }
 
   function update(event) {
@@ -111,53 +131,27 @@ function startGame() {
     }
   }
 
-function updateCurrentRow() {
-  rows[currentRow] = currentGuess
-    .split('')
-    .map((l, i) => {
-      const oldCell = rows[currentRow]?.[i] || {};
-      return {
-        ...oldCell,
-        letter: l,
-        typed: true,
+  function keydown(event) {
+    if (event.metaKey) return;
+    const key = event.key.toLowerCase();
+    if (key === ' ' || key === 'spacebar') { event.preventDefault(); return; }
+
+    const keyboardButton = document.querySelector(`.keyboard [data-key="${key}"]`);
+    if (keyboardButton) {
+      keyboardButton.click();
+      event.preventDefault();
+    }
+  }
+
+  function closeModal() { showModal = false; }
+
+  function applyThemeToRows() {
+    rows = rows.map(row =>
+      row.map(cell => ({
+        ...cell,
         theme: isDarkMode ? 'dark' : 'light'
-      };
-    })
-    .concat(
-      Array(wordLength - currentGuess.length).fill({ letter: '', status: '', typed: false, theme: isDarkMode ? 'dark' : 'light' })
+      }))
     );
-}
-
-function keydown(event) {
-  if (event.metaKey) return;
-
-  const key = event.key.toLowerCase();
-
-  // Prevent spacebar scrolling
-  if (key === ' ' || key === 'spacebar') {
-    event.preventDefault();
-    return;
-  }
-
-  // Only trigger clicks for your on-screen keyboard
-  const keyboardButton = document.querySelector(`.keyboard [data-key="${key}"]`);
-  if (keyboardButton) {
-    keyboardButton.click();
-    event.preventDefault(); // Stop bubbling to other buttons
-  }
-}
-
-function applyThemeToRows() {
-  rows = rows.map(row =>
-    row.map(cell => ({
-      ...cell,
-      theme: isDarkMode ? 'dark' : 'light'
-    }))
-  );
-}
-
-  function closeModal() {
-    showModal = false;
   }
 
   onMount(() => {
@@ -172,11 +166,6 @@ function applyThemeToRows() {
     };
   });
 </script>
-
-<svelte:head>
-  <title>Word Game - Brain Trainer Arcade</title>
-  <meta name="description" content="Play our Wordle-style game in Brain Trainer Arcade." />
-</svelte:head>
 
 <Layout>
   <div class="word-game-container">
@@ -200,15 +189,10 @@ function applyThemeToRows() {
     </div>
 
     <div class="keyboard">
-      {#each ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'] as row}
+      {#each ['qwertyuiop','asdfghjkl','zxcvbnm'] as row}
         <div class="row">
           {#each row.split('') as letter}
-            <button
-              type="button"
-              data-key={letter}
-              class={keyboardStatus[letter]}
-              on:click={update}
-            >
+            <button type="button" data-key={letter} class={keyboardStatus[letter]} on:click={update}>
               {letter.toUpperCase()}
             </button>
           {/each}
@@ -238,52 +222,72 @@ function applyThemeToRows() {
 
 <style>
 .word-game-container {
-  width: 100%;
-  max-width: 480px;
-  padding: 1rem;
-  margin: 0 auto;
-  color: inherit;
-  background: inherit;
+  max-width: 420px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.header {
+/* Header */
+.word-game-container .header {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-h1 { text-align: center; margin: 0; }
-
-a.how-to-play {
-  display: block;
-  text-align: center;
-  margin-bottom: 1rem;
-  color: var(--text-link, #0af);
+/* Refresh button */
+.word-game-container .refresh-btn {
+  background: #6aaa64;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+.word-game-container .refresh-btn:hover {
+  transform: rotate(20deg) scale(1.1);
+  box-shadow: 0 0 8px #6aaa64;
 }
 
-.grid {
+/* Heading */
+.word-game-container h1 {
+  text-align: center;
+  margin: 0;
+}
+
+/* How to play link */
+.word-game-container .how-to-play {
+  display: block;
+  text-align: center;
+  margin: 0.5rem 0 1rem;
+  color: var(--color-theme-1, #0af);
+}
+
+/* Grid for game letters */
+.word-game-container .grid {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 }
 
-.row {
+.word-game-container .row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.3rem;
 }
 
-/* Letter colors */
-.letter.light { color: black; }
-.letter.dark { color: white; }
-
-/* typed letters */
-.letter.typed.light { color: black; }
-.letter.typed.dark { color: #ddd; }
-
-.letter {
+/* Game letters */
+.word-game-container .letter {
   width: 60px;
   height: 60px;
   display: flex;
@@ -292,58 +296,118 @@ a.how-to-play {
   font-size: 1.8rem;
   font-weight: bold;
   border-radius: 10px;
-  background: rgba(255,255,255,0.15);
-  box-shadow: inset 0 2px 6px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.1);
+  color: black; /* letters always black */
   text-transform: uppercase;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   backdrop-filter: blur(6px);
+  background: #f5f5f5; /* pre-submission neutral off-white */
 }
 
-/* evaluated letters */
-.letter.exact { background: rgba(106,170,100,0.85); color:white; }
-.letter.close { background: rgba(201,180,88,0.85); color:white; }
-.letter.missing { background: rgba(120,124,126,0.85); color:white; opacity:0.8; }
+/* Typed letters BEFORE submission - slightly darker grey */
+.word-game-container .letter.typed {
+  background: #ededed;
+  text-shadow:
+    0 1px 1px rgba(0,0,0,0.4),
+    0 2px 2px rgba(0,0,0,0.2);
+}
 
-.keyboard {
+/* Status colors AFTER submission - KEEP ORIGINALS */
+.word-game-container .letter.exact {
+  background: rgba(106, 170, 100, 0.85);
+  color: white;
+}
+
+.word-game-container .letter.close {
+  background: rgba(201, 180, 88, 0.85);
+  color: white;
+}
+
+.word-game-container .letter.missing {
+  background: rgba(120, 124, 126, 0.85);
+  color: white;
+  opacity: 0.8;
+}
+
+/* Keyboard */
+.word-game-container .keyboard {
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
-.keyboard .row {
+
+.word-game-container .keyboard .row {
   display: flex;
   justify-content: center;
   gap: 0.2rem;
 }
-.keyboard button {
+
+/* Keyboard buttons default (light mode) */
+.word-game-container .keyboard button {
   width: 40px;
   height: 50px;
   border: none;
   border-radius: 6px;
+  background: #ccc;
+  color: #000;
   font-weight: bold;
   cursor: pointer;
   text-transform: uppercase;
   transition: all 0.2s ease;
-  background: var(--btn-light, #eee);
-  color: var(--btn-text-light, #111);
-}
-.keyboard button:hover { transform: scale(1.05); }
-
-.keyboard button.exact { background: #6aaa64; color:white; }
-.keyboard button.close { background: #c9b458; color:white; }
-.keyboard button.missing { background: #787c7e; color:white; opacity:0.8; }
-
-.keyboard .row.last-row { gap: 1rem; justify-content: center; }
-.keyboard button[data-key="enter"],
-.keyboard button[data-key="backspace"] {
-  width: 80px; background: #0a74da; color: white; font-size: 1rem; font-weight: bold;
-}
-.keyboard button[data-key="enter"]:hover,
-.keyboard button[data-key="backspace"]:hover {
-  background: #095bb5; transform: scale(1.05);
 }
 
-.modal-backdrop {
+.word-game-container .keyboard button:hover {
+  transform: scale(1.05);
+  background: #bbb;
+}
+
+/* Keyboard buttons dark mode */
+.word-game-container .keyboard button.dark {
+  background: #333;
+  color: white;
+}
+
+/* Status colors on keyboard */
+.word-game-container .keyboard button.exact {
+  background: #6aaa64;
+  color: white;
+}
+
+.word-game-container .keyboard button.close {
+  background: #c9b458;
+  color: white;
+}
+
+.word-game-container .keyboard button.missing {
+  background: #787c7e;
+  color: white;
+  opacity: 0.8;
+}
+
+/* Last row spacing */
+.word-game-container .keyboard .row.last-row {
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Enter and Back buttons */
+.word-game-container .keyboard button[data-key="enter"],
+.word-game-container .keyboard button[data-key="backspace"] {
+  width: 80px;
+  background: #0a74da;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.word-game-container .keyboard button[data-key="enter"]:hover,
+.word-game-container .keyboard button[data-key="backspace"]:hover {
+  background: #095bb5;
+  transform: scale(1.05);
+}
+
+/* Modal backdrop */
+.word-game-container .modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.6);
@@ -352,28 +416,44 @@ a.how-to-play {
   align-items: center;
   z-index: 50;
 }
-.modal {
-  background: inherit;
-  color: inherit;
+
+/* Modal content */
+.word-game-container .modal {
+  background: var(--color-bg-1, #111);
+  color: var(--color-text, white);
   padding: 2rem;
   border-radius: 12px;
   text-align: center;
   max-width: 300px;
 }
-.modal button {
+
+.word-game-container .modal button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
   border: none;
   border-radius: 6px;
   font-weight: bold;
-  background: var(--btn-bg, #6aaa64);
-  color: var(--btn-text, white);
+  background: #6aaa64;
+  color: white;
 }
 
+/* Responsive adjustments */
 @media screen and (max-width: 480px) {
-  .letter { width: 45px; height: 45px; font-size: 1.5rem; }
-  .keyboard button { width: 35px; height: 45px; font-size: 0.9rem; }
-  .keyboard button[data-key="enter"], .keyboard button[data-key="backspace"] { width: 70px; }
+  .word-game-container .letter {
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+  }
+  .word-game-container .keyboard button {
+    width: 35px;
+    height: 45px;
+    font-size: 0.9rem;
+  }
+  .word-game-container .keyboard button[data-key="enter"],
+  .word-game-container .keyboard button[data-key="backspace"] {
+    width: 70px;
+  }
 }
+
 </style>
