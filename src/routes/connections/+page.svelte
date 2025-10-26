@@ -3,14 +3,10 @@
   import { onMount } from 'svelte';
   import Layout from '../../layouts/Layout.svelte';
 
-  // -------------------------------------------------
-  // 1. Import the 300+ puzzle sets
-  // -------------------------------------------------
+  // Import the 300+ puzzle sets
   import { groupSets } from './wordSets.js';
 
-  // -------------------------------------------------
-  // 2. Reactive state
-  // -------------------------------------------------
+  // Reactive state
   let grid = [];
   let selected = [];
   let completed = [];
@@ -21,36 +17,26 @@
   let isShaking = false;
   let showOneAway = false;
 
-  let currentGroups = [];   // the 4 groups for the current puzzle
-  let oneAwayShown = false; // prevent toast spam
+  let currentGroups = [];
+  let oneAwayShown = false;
 
-  // -------------------------------------------------
-  // 3. Styling helpers
-  // -------------------------------------------------
+  // Styling helpers
   const categoryColors = {
-    yellow: '#FFD1DC', // Pastel pink
-    green: '#B5EAD7',  // Pastel mint
-    blue: '#C7CEEA',   // Pastel lavender
-    purple: '#E2C1F5'  // Pastel lilac
+    yellow: '#FFD1DC',
+    green: '#B5EAD7',
+    blue: '#C7CEEA',
+    purple: '#E2C1F5'
   };
 
-  // -------------------------------------------------
-  // 4. Lifecycle
-  // -------------------------------------------------
+  // Lifecycle
   onMount(() => {
     resetGame();
   });
 
-  // -------------------------------------------------
-  // 5. Core game logic
-  // -------------------------------------------------
+  // Core game logic
   function resetGame() {
-    // OPTIONAL: daily seed (uncomment for a true daily puzzle)
-    // const today = new Date().toISOString().slice(0,10).replace(/-/g,'');
-    // const seed = parseInt(today,10) % groupSets.length;
-
     const idx = Math.floor(Math.random() * groupSets.length);
-    currentGroups = groupSets[idx];               // <-- each entry is an array of 4 groups
+    currentGroups = groupSets[idx];
     grid = currentGroups.flatMap(g => g.words).sort(() => Math.random() - 0.5);
 
     selected = [];
@@ -86,10 +72,9 @@
     const match = currentGroups.find(g => [...g.words].sort().join(',') === sortedSel);
 
     if (match) {
-      // ---- CORRECT ----
       completed = [...completed, { ...match, words: [...selected] }];
       grid = grid.filter(w => !selected.includes(w));
-      shuffleGrid();               // auto-shuffle after a correct group
+      shuffleGrid();
       selected = [];
 
       if (completed.length === 4) {
@@ -97,7 +82,6 @@
         completed = completed.sort((a, b) => a.difficulty - b.difficulty);
       }
     } else {
-      // ---- WRONG ----
       let oneAway = false;
       for (const g of currentGroups) {
         const overlap = selected.filter(w => g.words.includes(w)).length;
@@ -106,7 +90,7 @@
 
       mistakes += 1;
       isShaking = true;
-      oneAwayShown = false; // reset for next mistake
+      oneAwayShown = false;
 
       setTimeout(() => {
         isShaking = false;
@@ -132,14 +116,11 @@
   }
 </script>
 
-<!-- =============================================== -->
-<!-- =================== MARKUP ==================== -->
-<!-- =============================================== -->
 <head>
   <title>Connections</title>
   <meta
     name="description"
-    content="Group words that share a common thread in this challenging puzzle game inspired by NYT Connections."
+    content="Group 16 words into 4 secret categories. You have 4 mistakes to get it right."
   />
   <meta
     name="keywords"
@@ -158,7 +139,7 @@
         You have <strong>{maxMistakes}</strong> attempts before the puzzle is revealed.
       </p>
 
-      <!-- Completed groups (top) -->
+      <!-- Completed groups -->
       <div class="completed-groups">
         {#each completed as group}
           <div
@@ -183,7 +164,7 @@
               <div
                 class="word-card {selected.includes(word) ? 'selected' : ''}"
                 on:click={() => selectWord(word)}
-                on:keydown={e => e.key === 'Enter' && selectWord(word)}
+                on:keydown={(e) => e.key === 'Enter' && selectWord(word)}
                 role="button"
                 tabindex="0"
                 aria-label="Select word {word}"
@@ -222,7 +203,7 @@
         </div>
       {/if}
 
-      <!-- Win / Game-Over modal -->
+      <!-- Win / Game Over Modal -->
       {#if won || gameOver}
         <div class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
           <div class="modal-content">
@@ -263,9 +244,6 @@
   </main>
 </Layout>
 
-<!-- =============================================== -->
-<!-- =================== STYLES ==================== -->
-<!-- =============================================== -->
 <style>
   :root {
     --background-color: var(--theme-background, #1a1a1a);
@@ -276,31 +254,115 @@
     --transition: all 0.3s ease;
   }
 
-  /* Layout */
-  .content-wrapper { display: grid; gap: 2rem; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-  .game-title { font-size: 2rem; font-weight: 600; text-align: center; }
-  .game-container { display: grid; gap: 1.5rem; justify-items: center; padding: 1.5rem; background: var(--card-background); border-radius: 16px; box-shadow: var(--shadow); }
-
-  .game-description { font-size: 1.2rem; color: var(--text-color); text-align: center; margin-bottom: 1rem; }
-
-  /* Completed groups */
-  .completed-groups { width: 100%; display: grid; gap: 1rem; }
-  .completed-group { padding: 1.5rem; border-radius: 8px; text-align: center; }
-  .completed-group h3 { margin: 0 0 .75rem; font-size: 1.4rem; text-transform: uppercase; }
-  .group-words { display: flex; justify-content: center; gap: .75rem; flex-wrap: wrap; }
-  .word-box { padding: .5rem 1rem; background: rgba(0,0,0,.2); border-radius: 4px; font-weight: bold; }
-
-  /* Grid */
-  .grid-container { position: relative; width: 100%; max-width: 600px; }
-  .grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
-  .word-card {
-    padding: 1.5rem; background: var(--background-color); border: 2px solid var(--text-color);
-    border-radius: 8px; text-align: center; font-size: 1.2rem; font-weight: bold;
-    color: var(--text-color); cursor: pointer; transition: var(--transition);
+  .content-wrapper {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 1.5rem auto;
+    padding: 0 0.5rem;
   }
+
+  .game-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .game-container {
+    display: grid;
+    gap: 1rem;
+    justify-items: center;
+    padding: 1rem;
+    background: var(--card-background);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .game-description {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 0.75rem;
+    word-break: break-word;
+    hyphens: auto;
+    line-height: 1.4;
+    padding: 0 0.5rem;
+  }
+
+  .completed-groups {
+    width: 100%;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .completed-group {
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .completed-group h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+
+  .group-words {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .word-box {
+    padding: 0.4rem 0.8rem;
+    background: rgba(0,0,0,.2);
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+
+  .grid-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .word-card {
+    padding: 1rem;
+    background: var(--background-color);
+    border: 2px solid var(--text-color);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .word-card:hover { transform: scale(1.05); }
   .word-card:focus { outline: 2px solid var(--accent-color); }
-  .selected { background: var(--accent-color); color: var(--card-background); border-color: var(--accent-color); }
+  .selected {
+    background: var(--accent-color);
+    color: var(--card-background);
+    border-color: var(--accent-color);
+  }
 
   .shake { animation: shake .5s; }
   @keyframes shake {
@@ -317,47 +379,199 @@
   }
 
   .toast {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    background: rgba(0,0,0,.85); color: #fff; padding: 1rem 1.5rem;
-    border-radius: 8px; font-size: 1.2rem; font-weight: bold; z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(0,0,0,.85);
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    z-index: 10;
   }
 
-  /* Buttons */
-  .action-buttons { display: flex; gap: 1rem; margin-top: 1rem; }
-  .mistakes { font-size: 1.2rem; color: var(--text-color); margin-top: 1rem; }
+  .action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .mistakes {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-top: 0.75rem;
+  }
 
   .btn {
-    padding: .75rem 1.5rem; font-size: 1rem; font-weight: 500;
-    border: none; border-radius: 8px; cursor: pointer; transition: var(--transition);
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 80px;
   }
-  .btn-shuffle, .btn-deselect { background: var(--text-color); color: var(--card-background); }
-  .btn-submit, .btn-restart { background: var(--accent-color); color: var(--card-background); }
-  .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow); }
-  .btn:disabled { opacity: .5; cursor: not-allowed; }
 
-  /* Modal */
-  .modal { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-  .modal-content { background: var(--card-background); border-radius: 12px; padding: 2rem; text-align: center; max-width: 600px; width: 90%; color: var(--text-color); box-shadow: var(--shadow); }
-  .modal-content h2 { font-size: 1.75rem; margin-bottom: 1.5rem; }
-  .modal-content p { font-size: 1.2rem; margin-bottom: 1.5rem; }
-  .modal-groups { display: grid; gap: 1.5rem; margin-bottom: 2rem; }
-  .modal-buttons { display: flex; gap: 1rem; justify-content: center; }
+  .btn-shuffle, .btn-deselect {
+    background: var(--text-color);
+    color: var(--card-background);
+  }
 
-  /* Responsive */
+  .btn-submit, .btn-restart {
+    background: var(--accent-color);
+    color: var(--card-background);
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .modal-content {
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    max-width: 90%;
+    width: 100%;
+    color: var(--text-color);
+    box-shadow: var(--shadow);
+    overflow-y: auto;
+    max-height: 90vh;
+  }
+
+  .modal-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal-content p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal-groups {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  /* Mobile Fixes */
   @media (max-width: 600px) {
-    .content-wrapper { margin: 1rem; }
-    .game-title { font-size: 1.5rem; }
-    .game-container { padding: 1rem; }
-    .game-description { font-size: 1rem; }
-    .grid { gap: .5rem; }
-    .word-card { padding: 1rem; font-size: 1rem; }
-    .completed-group { padding: 1rem; }
-    .completed-group h3 { font-size: 1.2rem; }
-    .action-buttons { flex-direction: column; }
-    .btn { padding: .5rem 1rem; font-size: .9rem; }
-    .modal-content { padding: 1.5rem; }
-    .modal-content h2 { font-size: 1.5rem; }
-    .modal-content p { font-size: 1rem; }
-    .toast { font-size: 1rem; padding: .75rem; }
+    .content-wrapper {
+      margin: 1rem 0.75rem;
+      padding: 0;
+    }
+
+    .game-title {
+      font-size: 1.5rem;
+    }
+
+    .game-container {
+      padding: 0.75rem;
+      border-radius: 12px;
+    }
+
+    .game-description {
+      font-size: 0.9rem;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+      padding: 0 0.25rem;
+    }
+
+    .grid {
+      gap: 0.5rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .word-card {
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      border-width: 1px;
+    }
+
+    .completed-group {
+      padding: 0.75rem;
+    }
+
+    .completed-group h3 {
+      font-size: 1rem;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .modal-content {
+      padding: 1rem;
+      max-width: 95%;
+    }
+
+    .modal-content h2 {
+      font-size: 1.4rem;
+    }
+
+    .modal-content p {
+      font-size: 0.95rem;
+    }
+
+    .toast {
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  /* Extra small screens */
+  @media (max-width: 400px) {
+    .game-description {
+      font-size: 0.85rem;
+      padding: 0;
+    }
+
+    .word-card {
+      font-size: 0.8rem;
+      padding: 0.5rem;
+    }
+
+    .grid {
+      gap: 0.3rem;
+    }
+
+    .btn {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+    }
   }
 </style>
