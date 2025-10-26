@@ -21,6 +21,14 @@
 	let message = '';
 	let inputElement; // Reference to hidden input for mobile
 
+	// ---------- NEW: Reactive stats ----------
+	// KPM – total keystrokes per minute
+	$: kpm = timer > 0 ? (totalTyped / (timer / 1000 / 60)).toFixed(1) : 0;
+
+	// WPM – words per minute (standard: 5 keystrokes ≈ 1 word)
+	$: wpm = timer > 0 ? (totalTyped / 5 / (timer / 1000 / 60)).toFixed(1) : 0;
+	// -----------------------------------------
+
 	// Longer, varied sample paragraphs (3–5 sentences each, 8 total)
 	const sampleParagraphs = [
 		'In the neon-lit sprawl of New Tokyo, cybernetic runners dart through crowded streets, their augmented limbs humming with electric precision. Holographic billboards flash cryptic messages, advertising neural implants that promise eternal connection to the Net. Beneath the surface, hackers weave through digital shadows, chasing secrets buried in encrypted code. The city never sleeps, pulsing with the rhythm of a thousand interconnected minds.',
@@ -44,17 +52,14 @@
 			userInput = '';
 		}
 
-		timer = 0; // Start count-up timer at 0
+		timer = 0;
 		gameActive = true;
 		message = '';
 		interval = setInterval(() => {
-			timer += 10; // Increment timer every 10ms
+			timer += 10; // 10 ms increments
 		}, 10);
 
-		// Auto-focus input on mobile
-		if (inputElement) {
-			inputElement.focus();
-		}
+		if (inputElement) inputElement.focus();
 	}
 
 	function resetGame() {
@@ -62,7 +67,7 @@
 		currentIndex = 0;
 		correctLetters = 0;
 		totalTyped = 0;
-		timer = 0; // Reset timer to 0
+		timer = 0;
 		gameActive = false;
 		message = '';
 		userInput = '';
@@ -121,9 +126,9 @@
 
 			if (gameMode === 'paragraphs' && userInput.length === paragraphText.length) {
 				if (userInput === paragraphText) {
-					endGame(`🏁 Well done! You completed the paragraph in ${(timer / 1000).toFixed(1)}s!`);
+					endGame(`Well done! You completed the paragraph in ${(timer / 1000).toFixed(1)}s!`);
 				} else {
-					endGame(`❌ You finished, but made mistakes in ${(timer / 1000).toFixed(1)}s.`);
+					endGame(`You finished, but made mistakes in ${(timer / 1000).toFixed(1)}s.`);
 				}
 			} else if (gameMode === 'letters') {
 				const pressedKey = caseSensitive ? lastChar : lastChar.toUpperCase();
@@ -132,14 +137,13 @@
 					correctLetters++;
 					currentIndex++;
 					if (currentIndex === letters.length) {
-						endGame(`🎉 Perfect! You typed them all in ${(timer / 1000).toFixed(1)}s!`);
+						endGame(`Perfect! You typed them all in ${(timer / 1000).toFixed(1)}s!`);
 					}
 				} else {
-					endGame(`❌ Wrong key! Game over in ${(timer / 1000).toFixed(1)}s.`);
+					endGame(`Wrong key! Game over in ${(timer / 1000).toFixed(1)}s.`);
 				}
 			}
 
-			// Clear input to allow continuous typing
 			event.target.value = '';
 		} else if (event.inputType === 'deleteContentBackward' && gameMode === 'paragraphs') {
 			if (userInput.length > 0) {
@@ -158,10 +162,10 @@
 			correctLetters++;
 			currentIndex++;
 			if (currentIndex === letters.length) {
-				endGame(`🎉 Perfect! You typed them all in ${(timer / 1000).toFixed(1)}s!`);
+				endGame(`Perfect! You typed them all in ${(timer / 1000).toFixed(1)}s!`);
 			}
 		} else {
-			endGame(`❌ Wrong key! Game over in ${(timer / 1000).toFixed(1)}s.`);
+			endGame(`Wrong key! Game over in ${(timer / 1000).toFixed(1)}s.`);
 		}
 	}
 
@@ -185,9 +189,9 @@
 
 			if (userInput.length === paragraphText.length) {
 				if (userInput === paragraphText) {
-					endGame(`🏁 Well done! You completed the paragraph in ${(timer / 1000).toFixed(1)}s!`);
+					endGame(`Well done! You completed the paragraph in ${(timer / 1000).toFixed(1)}s!`);
 				} else {
-					endGame(`❌ You finished, but made mistakes in ${(timer / 1000).toFixed(1)}s.`);
+					endGame(`You finished, but made mistakes in ${(timer / 1000).toFixed(1)}s.`);
 				}
 			}
 		}
@@ -197,27 +201,19 @@
 		clearInterval(interval);
 		gameActive = false;
 		message = msg;
-		if (inputElement) {
-			inputElement.blur(); // Remove focus when game ends
-		}
+		if (inputElement) inputElement.blur();
 	}
 
 	// Reset game when gameMode changes
-	$: if (gameMode) {
-		resetGame();
-	}
+	$: if (gameMode) resetGame();
 
 	onMount(() => {
 		const handler = (event) => {
-			// Prevent default browser scrolling for spacebar globally
-			if (event.key === ' ') {
-				event.preventDefault();
-			}
+			if (event.key === ' ') event.preventDefault();
 			if (!gameActive) return;
 			handleKeyPress(event);
 		};
 		document.addEventListener('keydown', handler);
-
 		return () => {
 			document.removeEventListener('keydown', handler);
 			clearInterval(interval);
@@ -228,7 +224,7 @@
 <Layout>
 	<div class="wrapper">
 		<div class="card">
-			<h1 class="title">⌨️ Type Racer</h1>
+			<h1 class="title">Type Racer</h1>
 
 			<!-- Hidden input for mobile keyboard -->
 			<input
@@ -237,7 +233,7 @@
 				class="mobile-input"
 				on:input={handleMobileInput}
 				on:keydown|preventDefault={(e) => {
-					if (e.key === 'Enter') e.preventDefault(); // Prevent form submission
+					if (e.key === 'Enter') e.preventDefault();
 				}}
 			/>
 
@@ -289,10 +285,13 @@
 				<button on:click={startGame} class="start-btn">Start</button>
 			{/if}
 
+			<!-- UPDATED STATS -->
 			<div class="stats">
-				<div>✅ Correct: {correctLetters}</div>
-				<div>🎯 Accuracy: {(totalTyped > 0 ? (correctLetters / totalTyped * 100).toFixed(2) : 0)}%</div>
-				<div>⏱️ Time: {(timer / 1000).toFixed(1)}s</div>
+				<div>Correct: {correctLetters}</div>
+				<div>Accuracy: {(totalTyped > 0 ? (correctLetters / totalTyped * 100).toFixed(2) : 0)}%</div>
+				<div>Time: {(timer / 1000).toFixed(1)}s</div>
+				<div>KPM: {kpm}</div>
+				<div>WPM: {wpm}</div>
 			</div>
 
 			{#if message}
@@ -303,13 +302,13 @@
 </Layout>
 
 <style>
+	/* (unchanged – same as your original) */
 	.wrapper {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		min-height: 100vh;
 		padding: 20px;
-		/* Inherit exact background from Layout.svelte's page-wrapper, which pulls from body */
 		background: inherit;
 		color: inherit;
 		transition: background 0.3s ease, color 0.3s ease;
@@ -532,80 +531,22 @@
 
 	/* Responsive adjustments */
 	@media (max-width: 600px) {
-		.card {
-			padding: 20px;
-			max-width: 95%;
-		}
-
-		.title {
-			font-size: 1.8rem;
-			letter-spacing: 2px;
-		}
-
-		.instructions {
-			font-size: 1rem;
-		}
-
-		.letter-box {
-			width: 40px;
-			height: 40px;
-			font-size: 1.2rem;
-			border-radius: 6px;
-		}
-
-		.paragraph-box {
-			font-size: 1rem;
-			line-height: 1.6;
-			max-height: 250px;
-			padding: 15px;
-		}
-
-		.start-btn {
-			padding: 10px 20px;
-			font-size: 1rem;
-			border-radius: 6px;
-		}
-
-		.settings {
-			padding: 15px;
-		}
-
-		input,
-		select {
-			padding: 6px 10px;
-			max-width: 160px;
-			font-size: 0.9rem;
-		}
-
-		.stats {
-			font-size: 0.9rem;
-			gap: 8px;
-		}
-
-		.end-message {
-			font-size: 1rem;
-		}
+		.card { padding: 20px; max-width: 95%; }
+		.title { font-size: 1.8rem; letter-spacing: 2px; }
+		.instructions { font-size: 1rem; }
+		.letter-box { width: 40px; height: 40px; font-size: 1.2rem; border-radius: 6px; }
+		.paragraph-box { font-size: 1rem; line-height: 1.6; max-height: 250px; padding: 15px; }
+		.start-btn { padding: 10px 20px; font-size: 1rem; border-radius: 6px; }
+		.settings { padding: 15px; }
+		input, select { padding: 6px 10px; max-width: 160px; font-size: 0.9rem; }
+		.stats { font-size: 0.9rem; gap: 8px; }
+		.end-message { font-size: 1rem; }
 	}
 
-	/* Extra small screens (e.g., very narrow phones) */
 	@media (max-width: 360px) {
-		.card {
-			padding: 15px;
-		}
-
-		.title {
-			font-size: 1.5rem;
-		}
-
-		.letter-box {
-			width: 35px;
-			height: 35px;
-			font-size: 1rem;
-		}
-
-		.paragraph-box {
-			font-size: 0.9rem;
-			max-height: 200px;
-		}
+		.card { padding: 15px; }
+		.title { font-size: 1.5rem; }
+		.letter-box { width: 35px; height: 35px; font-size: 1rem; }
+		.paragraph-box { font-size: 0.9rem; max-height: 200px; }
 	}
 </style>
