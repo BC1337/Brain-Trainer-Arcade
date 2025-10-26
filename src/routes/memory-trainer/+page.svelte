@@ -1,17 +1,17 @@
-<!-- VerbalMemoryTrainer.svelte -->
+<!-- src/lib/VerbalMemoryTrainer.svelte -->
 <script>
     import { onMount } from 'svelte';
-    import Layout from "../../layouts/Layout.svelte";
+    import Layout from '../../layouts/Layout.svelte';
     import Modal from '../../lib/components/Modal.svelte';
     import wordSets from './wordSets.js';
 
     let currentWordSet = {};
     let lives = 3;
     let correctGuesses = 0;
-    let randomWord = "";
+    let randomWord = '';
     let wordStatus = {};
-    let wordColor = "var(--primary-color)";
-    let previousColor = "";
+    let wordColor = 'var(--primary-color)';
+    let previousColor = '';
     let showModal = false;
 
     const selectRandomWordSet = () => {
@@ -24,7 +24,7 @@
     };
 
     const handleClickSeen = () => {
-        if (wordStatus[randomWord] === "seen") {
+        if (wordStatus[randomWord] === 'seen') {
             correctGuesses++;
         } else {
             lives--;
@@ -32,13 +32,13 @@
         if (lives === 0) {
             showModal = true;
         } else {
-            wordStatus[randomWord] = "seen";
+            wordStatus[randomWord] = 'seen';
             generateRandomWord();
         }
     };
 
     const handleClickNew = () => {
-        if (wordStatus[randomWord] !== "seen") {
+        if (wordStatus[randomWord] !== 'seen') {
             correctGuesses++;
         } else {
             lives--;
@@ -46,19 +46,19 @@
         if (lives === 0) {
             showModal = true;
         } else {
-            wordStatus[randomWord] = "seen";
+            wordStatus[randomWord] = 'seen';
             generateRandomWord();
         }
     };
 
     const getRandomColor = () => {
         const colors = [
-            "var(--accent-pink)",
-            "var(--accent-orange)",
-            "var(--accent-purple)",
-            "var(--accent-green)",
-            "var(--accent-blue)",
-            "var(--accent-yellow)"
+            'var(--accent-pink)',
+            'var(--accent-orange)',
+            'var(--accent-purple)',
+            'var(--accent-green)',
+            'var(--accent-blue)',
+            'var(--accent-yellow)',
         ];
         const index = colors.indexOf(previousColor);
         if (index !== -1) {
@@ -73,20 +73,21 @@
         selectRandomWordSet();
         generateRandomWord();
         currentWordSet.words.forEach(word => {
-            wordStatus[word] = "new";
+            wordStatus[word] = 'new';
         });
     });
 </script>
 
 <head>
     <title>Verbal Memory Trainer - Boost Your Recall</title>
-    <meta name="description" content="Sharpen your verbal memory with this engaging trainer. Test your recall with words and track your progress.">
-    <meta name="keywords" content="verbal memory, memory game, word recall, cognitive training, brain exercise">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sharpen your verbal memory with this engaging trainer. Test your recall with words and track your progress." />
+    <meta name="keywords" content="verbal memory, memory game, word recall, cognitive training, brain exercise" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
 <Layout>
-    <main class="content-wrapper">
+    <main class="content-wrapper" aria-labelledby="game-title">
+        <h1 class="game-title" id="game-title">Verbal Memory Trainer</h1>
         <section class="description" aria-labelledby="how-to-play">
             <h2 id="how-to-play">How to Play</h2>
             <p>Test your memory by identifying whether each word is new or previously seen.</p>
@@ -101,12 +102,16 @@
                             on:click={handleClickSeen}
                             class="btn btn-seen"
                             aria-label="Mark word as seen"
-                        >Seen</button>
+                        >
+                            Seen
+                        </button>
                         <button
                             on:click={handleClickNew}
                             class="btn btn-new"
                             aria-label="Mark word as new"
-                        >New</button>
+                        >
+                            New
+                        </button>
                     </div>
                     <div class="stats">
                         <p class="lives" aria-label="Remaining lives">Lives: {lives}</p>
@@ -115,7 +120,7 @@
                 </div>
             </div>
             {#if showModal}
-                <Modal correctGuesses={correctGuesses} onClose={() => showModal = false} />
+                <Modal correctGuesses={correctGuesses} onClose={() => (showModal = false)} />
             {/if}
         </section>
     </main>
@@ -126,7 +131,7 @@
         --background-color: var(--theme-background, #1a1a1a);
         --card-background: var(--theme-card, #2a2a2a);
         --text-color: var(--theme-text, #ffffff);
-        --primary-color: #f0a500;
+        --primary-color: #ff4d4d; /* Match AimTrainer's red accent */
         --accent-pink: #ff0066;
         --accent-orange: #ff6600;
         --accent-purple: #cc33ff;
@@ -140,9 +145,16 @@
     .content-wrapper {
         display: grid;
         gap: 2rem;
-        max-width: 800px;
+        max-width: 1000px; /* Match AimTrainer */
         margin: 2rem auto;
         padding: 0 1rem;
+    }
+
+    .game-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-color);
+        text-align: center;
     }
 
     .description {
@@ -174,7 +186,8 @@
 
     .memory-container {
         width: 100%;
-        max-width: 500px;
+        max-width: 600px; /* Cap for long words */
+        min-width: 300px;
     }
 
     .card {
@@ -186,6 +199,7 @@
         gap: 1.5rem;
         text-align: center;
         transition: var(--transition);
+        width: 100%;
     }
 
     .random-word {
@@ -193,11 +207,22 @@
         font-weight: 600;
         transition: opacity 0.5s ease;
         animation: fadeIn 0.5s ease-in;
+        word-break: break-word; /* Wrap long words */
+        overflow-wrap: anywhere; /* Ensure wrapping */
+        line-height: 1.2;
+        margin: 0 auto;
+        max-width: 100%; /* Prevent overflow */
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .button-container {
@@ -218,12 +243,12 @@
 
     .btn-seen {
         background: var(--accent-pink);
-        color: #fff;
+        color: var(--text-color);
     }
 
     .btn-new {
         background: var(--accent-green);
-        color: #fff;
+        color: var(--text-color);
     }
 
     .btn:hover {
@@ -244,7 +269,8 @@
         color: var(--text-color);
     }
 
-    .lives, .correct-guesses {
+    .lives,
+    .correct-guesses {
         margin: 0;
     }
 
@@ -253,16 +279,33 @@
             margin: 1rem;
         }
 
+        .game-title {
+            font-size: 1.5rem;
+        }
+
         .card {
             padding: 1.5rem;
+            max-width: 90vw; /* Adjust for mobile */
         }
 
         .random-word {
-            font-size: 1.5rem;
+            font-size: 1.5rem; /* Smaller font for long words on mobile */
         }
 
         .btn {
             padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .description {
+            padding: 1rem;
+        }
+
+        .description h2 {
+            font-size: 1.5rem;
+        }
+
+        .description p {
             font-size: 0.9rem;
         }
     }
