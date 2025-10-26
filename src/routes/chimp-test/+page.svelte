@@ -1,3 +1,4 @@
+<!-- src/routes/chimp-test/+page.svelte -->
 <script>
   import { onMount, onDestroy } from "svelte";
   import { writable } from "svelte/store";
@@ -17,7 +18,7 @@
 
   const showToast = (message, type) => {
     toastMessage.set({ message, type });
-    setTimeout(() => toastMessage.set({ message: '', type: '' }), 1650);
+    setTimeout(() => toastMessage.set({ message: '', type: '' }), 3000);
   };
 
   const toastError = (message) => {
@@ -26,40 +27,47 @@
   };
 
   async function saveHighscore(roundsCompleted) {
-    try {
-      const token = localStorage.getItem('token');
-      console.log('📦 Token being sent to backend:', token);
-      if (!token || isTokenExpired(token)) {
-        toastError('Session expired. Please log in again.');
-        localStorage.removeItem('token');
-        localStorage.removeItem('sessionUser');
-        return;
-      }
+    const token = localStorage.getItem('token');
+    const isLoggedIn = !!(token && !isTokenExpired(token));
 
-const response = await fetch('/api/user/highscore/chimp', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-  },
-  body: JSON.stringify({
-    score: roundsCompleted,   // or whatever you want to save
-    duration: 0,
-    timestamp: Date.now(),
-    rounds: roundsCompleted
-  }),
-});
+    if (!isLoggedIn) {
+      showToast(
+        `Congratulations! You made it to round ${roundsCompleted}. Please login to compete in the highscores.`,
+        'info'
+      );
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/user/highscore/chimp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          score: roundsCompleted,
+          duration: 0,
+          timestamp: Date.now(),
+          rounds: roundsCompleted
+        }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        toastError(data?.error || 'Failed to save highscore');
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('sessionUser');
+          toastError('Session expired. Please log in again.');
+        } else {
+          toastError(data?.error || 'Failed to save highscore');
+        }
       } else {
         showToast('Highscore saved!', 'success');
-        loadGlobalHighscores(); // refresh after saving
+        loadGlobalHighscores();
       }
     } catch (err) {
-      console.error('Error saving highscore:', err);
       toastError('An error occurred while saving your highscore');
     }
   }
@@ -68,11 +76,8 @@ const response = await fetch('/api/user/highscore/chimp', {
     try {
       const response = await fetch('/api/highscore/chimp');
       const data = await response.json();
-
       if (response.ok) {
         globalHighscores = data.highscores || [];
-      } else {
-        console.error('Failed to fetch global highscores:', data.error);
       }
     } catch (err) {
       console.error('Error loading global highscores:', err);
@@ -178,63 +183,59 @@ const response = await fetch('/api/user/highscore/chimp', {
 
   onMount(() => {
     if (typeof window !== 'undefined') {
-      if (canvas) {
-        ctx = canvas.getContext('2d');
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+      ctx = canvas.getContext('2d');
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
 
-        const token = localStorage.getItem('token');
-        if (!token || isTokenExpired(token)) {
-          toastError("Session expired. Please log in again.");
-          localStorage.removeItem('token');
-          localStorage.removeItem('sessionUser');
-          return;
-        }
-
-        if (window.innerWidth < 431) {
-          setTimeout(() => {
-            canvas.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 200);
-        }
+      const token = localStorage.getItem('token');
+      if (token && !isTokenExpired(token)) {
+        loadGlobalHighscores();
       }
 
-      loadGlobalHighscores();
+      if (window.innerWidth < 431) {
+        setTimeout(() => {
+          canvas.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 200);
+      }
     }
   });
 
-  // gate the window onDestroy testing an SSR error fix.
   onDestroy(() => {
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('resize', resizeCanvas);
-  }
-});
-
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', resizeCanvas);
+    }
+  });
 </script>
 
 <Layout showThemeToggle={true}>
   <div id="container">
     <h1>Click the boxes in sequential order</h1>
+
     <div class="game-container">
       <canvas bind:this={canvas} on:click={handleCanvasClick}></canvas>
     </div>
 
-    <Toast message={$toastMessage.message} type={$toastMessage.type} />
-
-
+    <!-- CENTERED TOAST -->
+    {#if $toastMessage.message}
+      <div class="center-toast {$toastMessage.type}">
+        {$toastMessage.message}
+      </div>
+    {/if}
   </div>
 </Layout>
 
 <style>
+  /* BUMPED UP EVEN MORE */
   #container {
     text-align: center;
-    padding-top: 80px;
+    padding-top: 20px; /* was 40px */
   }
 
   .game-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 30px;
+    margin-top: 8px; /* was 16px */
   }
 
   canvas {
@@ -251,4 +252,37 @@ const response = await fetch('/api/user/highscore/chimp', {
     margin-bottom: 12px;
   }
 
+  /* CENTERED TOAST */
+  .center-toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.92);
+    color: white;
+    padding: 18px 36px;
+    border-radius: 14px;
+    font-size: 1.35rem;
+    font-weight: bold;
+    z-index: 9999;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    min-width: 260px;
+    max-width: 90%;
+    line-height: 1.4;
+    pointer-events: none;
+  }
+
+  .center-toast.success { border: 3px solid #4caf50; }
+  .center-toast.error   { border: 3px solid #f44336; }
+  .center-toast.info    { border: 3px solid #2196f3; }
+
+  @media (max-width: 480px) {
+    #container { padding-top: 15px; }
+    .game-container { margin-top: 6px; }
+    .center-toast {
+      font-size: 1.15rem;
+      padding: 14px 24px;
+    }
+  }
 </style>
