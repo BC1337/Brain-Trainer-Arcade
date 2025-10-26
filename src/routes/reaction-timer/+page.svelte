@@ -1,216 +1,342 @@
 <!-- src/routes/ReactionTime.svelte -->
 <script>
-    import Layout from '../../layouts/Layout.svelte';
-    import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
+  import Layout from '../../layouts/Layout.svelte';
 
-    let gameState = 'preGame';
-    let playAreaColor = 'red';
-    let startTime;
-    let endTime;
-    let attempts = [];
-    let highScores = [];
-    let showEarlyClickAlert = false;
-    let timerId;
+  let gameState = 'preGame'; // preGame, inGame
+  let playAreaColor = 'red';
+  let startTime;
+  let endTime;
+  let attempts = [];
+  let highScores = [];
+  let showEarlyClickAlert = false;
+  let timerId;
+  let isStarting = false;
 
-    function startGame() {
-        gameState = 'inGame';
-        playAreaColor = 'red'; // Reset play area color
-        startTime = null;
-        endTime = null;
-        attempts = [];
-        showEarlyClickAlert = false; // Hide the alert
-        clearTimeout(timerId); // Clear any existing timer
-        timerId = setTimeout(() => {
-            playAreaColor = 'green';
-            startTime = Date.now(); // Start tracking response time
-            console.log('Game started. Start time:', startTime);
-        }, Math.random() * 5000 + 4000); // Random wait time between 4 to 9 seconds
+  // Load high scores from localStorage
+  onMount(() => {
+    if (typeof window !== 'undefined') {
+      const savedScores = localStorage.getItem('reactionHighScores');
+      if (savedScores) {
+        highScores = JSON.parse(savedScores).slice(0, 5);
+      }
     }
+    console.log('Component mounted, highScores:', highScores);
+  });
 
-    function handleClick() {
-        if (gameState === 'inGame' && playAreaColor === 'green') {
-            endTime = Date.now();
-            const responseTime = endTime - startTime;
-            attempts = [...attempts, responseTime]; // Update attempts array
-            highScores = [...highScores, responseTime]; // Update highScores array
-            attempts = attempts.slice(-5); // Keep only the last 5 attempts
-            highScores.sort((a, b) => a - b); // Sort the high scores in ascending order
-            highScores = highScores.slice(0, 5); // Keep only the top 5 high scores
-            gameState = 'preGame';
-            console.log('Clicked. Response time:', responseTime);
-        } else if (gameState === 'inGame' && playAreaColor === 'red') {
-            showEarlyClickAlert = true; // Show the alert if clicked too early
-            clearTimeout(timerId); // Reset the timer
-            timerId = setTimeout(() => {
-                playAreaColor = 'green'; // Restart the timer
-                startTime = Date.now();
-                console.log('Game started. Start time:', startTime);
-                showEarlyClickAlert = false; // Hide the alert
-            }, Math.random() * 5000 + 4000);
-        }
+  const saveHighScores = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('reactionHighScores', JSON.stringify(highScores));
     }
+  };
 
-    onMount(() => {
-        console.log('Component mounted');
-    });
+  const startGame = () => {
+    if (isStarting) return;
+    isStarting = true;
+    gameState = 'inGame';
+    playAreaColor = 'red';
+    startTime = null;
+    endTime = null;
+    showEarlyClickAlert = false;
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      playAreaColor = 'green';
+      startTime = Date.now();
+      console.log('Game started. Start time:', startTime);
+      isStarting = false;
+    }, Math.random() * 5000 + 4000); // 4-9s delay
+  };
+
+  const handleClick = () => {
+    if (gameState !== 'inGame') return;
+
+    if (playAreaColor === 'green') {
+      endTime = Date.now();
+      const responseTime = endTime - startTime;
+      attempts = [...attempts, responseTime].slice(-5); // Keep last 5 attempts
+      highScores = [...highScores, responseTime].sort((a, b) => a - b).slice(0, 5);
+      saveHighScores();
+      console.log('Clicked. Response time:', responseTime);
+      gameState = 'preGame';
+    } else {
+      showEarlyClickAlert = true;
+      clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        playAreaColor = 'green';
+        startTime = Date.now();
+        console.log('Game restarted after early click. Start time:', startTime);
+        showEarlyClickAlert = false;
+      }, Math.random() * 5000 + 4000);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' || event.key === 'Space') {
+      handleClick();
+    }
+  };
 </script>
 
 <head>
-    <title>Reaction Timer!</title>
-    <meta name="description" content="Test your reaction time with this online game. Click the button as quickly as possible when the countdown reaches zero. Challenge your friends and see who has the fastest reflexes!">
-    <meta name="keywords" content="reaction timer, reaction game, reflex game, online game, timer game, reflex test, reaction speed, challenge game">
-    <meta name="BC1337" content="BC">
-    <!-- Add more meta tags as needed -->
-</head>  
+  <title>Reaction Timer!</title>
+  <meta name="description" content="Test your reaction time with this online game. Click the button as quickly as possible when the color turns green. Challenge your friends and see who has the fastest reflexes!">
+  <meta name="keywords" content="reaction timer, reaction game, reflex game, online game, timer game, reflex test, reaction speed, challenge game">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 
 <Layout>
-    <main aria-labelledby="game-title">
-        <div class="center-container">
-            <section class="game-container">
-                <div class="game-title" id="game-title">
-                    <h1>Reaction Trainer</h1>
-                </div>
-                <div class="game-description">
-                    <p>Click start, wait for the red box to turn green and don't click too early!</p>
-                </div>
-                <div class="play-area-container">
-                    {#if gameState === 'preGame'}
-                        <div class="start-game-modal">
-                            <button on:click={startGame}>Start Game</button>
-                        </div>
-                    {/if}
-                    <canvas class="play-area" style="background-color: {playAreaColor}" on:click={handleClick}></canvas>
-                    {#if showEarlyClickAlert}
-                        <div class="early-click-alert" aria-live="assertive">
-                            <p>You clicked too early! Wait for the green color.</p>
-                        </div>
-                    {/if}
-                </div>
-                <div class="timer-stats">
-                    <div class="stats-container">
-                        <div class="high-scores white" aria-labelledby="high-scores-title">
-                            <h2 id="high-scores-title">High Scores:</h2>
-                            <ol>
-                                {#each highScores as score, index}
-                                    <li>{index + 1}. {score} milliseconds</li>
-                                {/each}
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </section>
+  <main class="content-wrapper" aria-labelledby="game-title">
+    <h1 class="game-title" id="game-title">Reaction Trainer</h1>
+    <section class="game-container" aria-label="Reaction timer game">
+      <p class="game-description">Click when the box turns green. Don’t click too early!</p>
+      <div class="play-area-container">
+        {#if gameState === 'preGame'}
+          <div class="start-game-modal">
+            <button class="btn btn-start" on:click={startGame} disabled={isStarting} aria-label="Start game">Start Game</button>
+          </div>
+        {/if}
+        <div
+          class="play-area"
+          class:active={playAreaColor === 'green'}
+          style="background-color: {playAreaColor}"
+          role="button"
+          tabindex="0"
+          on:click={handleClick}
+          on:keydown={handleKeyDown}
+          aria-label="Reaction play area"
+        ></div>
+        {#if showEarlyClickAlert}
+          <div class="early-click-alert" aria-live="assertive">
+            <p>You clicked too early! Wait for the green color.</p>
+          </div>
+        {/if}
+      </div>
+      <div class="timer-stats">
+        <div class="stats-container">
+          <div class="high-scores" aria-labelledby="high-scores-title">
+            <h2 id="high-scores-title">Top 5 High Scores</h2>
+            <ol>
+              {#each highScores as score, index}
+                <li>{index + 1}. {score} ms</li>
+              {/each}
+            </ol>
+          </div>
+          <div class="recent-attempts" aria-labelledby="recent-attempts-title">
+            <h2 id="recent-attempts-title">Recent Attempts</h2>
+            <ol>
+              {#each attempts as attempt, index}
+                <li>{index + 1}. {attempt} ms</li>
+              {/each}
+            </ol>
+          </div>
         </div>
-    </main>
+      </div>
+    </section>
+  </main>
 </Layout>
 
-
 <style>
-    .center-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: calc(100vh - 50px); /* Adjusted height */
-    }
+  :root {
+    --background-color: var(--theme-background, #1a1a1a);
+    --card-background: var(--theme-card, #2a2a2a);
+    --text-color: var(--theme-text, #ffffff);
+    --accent-color: #ff4d4d;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s ease;
+  }
 
-    .game-container {
-        position: relative;
-        display: flex; /* Make the game container flex */
-        align-items: center; /* Center the contents vertically */
-        flex-direction: column; /* Stack children vertically */
+  .content-wrapper {
+    display: grid;
+    gap: 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .game-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    text-align: center;
+  }
+
+  .game-container {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: center;
+    padding: 1.5rem;
+    background: var(--card-background);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .game-description {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .play-area-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+  }
+
+  .play-area {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .play-area.active {
+    box-shadow: 0 0 10px var(--accent-color);
+    animation: pulse 0.4s ease;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .play-area:focus-visible {
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+  }
+
+  .start-game-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .btn-start {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    background: var(--text-color);
+    color: var(--card-background);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .btn-start:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .btn-start:focus {
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+  }
+
+  .btn-start:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .early-click-alert {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--accent-color);
+    padding: 1rem;
+    border-radius: 8px;
+    color: var(--text-color);
+    box-shadow: var(--shadow);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .early-click-alert p {
+    margin: 0;
+  }
+
+  .timer-stats {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .stats-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+  }
+
+  .high-scores,
+  .recent-attempts {
+    flex: 1;
+    color: var(--text-color);
+  }
+
+  .high-scores h2,
+  .recent-attempts h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .high-scores ol,
+  .recent-attempts ol {
+    list-style: none;
+    padding: 0;
+    font-size: 1rem;
+  }
+
+  .high-scores li,
+  .recent-attempts li {
+    margin: 0.5rem 0;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  @media (max-width: 600px) {
+    .content-wrapper {
+      margin: 1rem;
     }
 
     .game-title {
-        margin-bottom: 20px;
-        text-align: center;
-        color: #f0a500;
+      font-size: 1.5rem;
     }
 
-    .game-title h1 {
-        margin: 0;
-        font-size: 2em;
-    }
-
-    .game-description {
-        margin-bottom: 20px;
-        text-align: center;
-        color: grey;
-    }
-
-    .start-game-modal {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: white;
-    }
-
-    .start-game-modal button {
-        padding: 15px 25px;
-        font-size: 1.5em;
-        background-color: #3f51b5;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .start-game-modal button:hover {
-        background-color: #303f9f;
+    .game-container {
+      padding: 1rem;
     }
 
     .play-area-container {
-        position: relative;
-    }
-
-    .play-area {
-        width: 300px;
-        height: 300px;
-        border: 2px solid #3f51b5;
-        cursor: pointer;
-    }
-
-    .timer-stats {
-        flex: 1; /* Take up remaining space */
-        padding: 10px;
+      width: 250px;
+      height: 250px;
     }
 
     .stats-container {
-        display: flex;
-        justify-content: space-between;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    .high-scores {
-        flex: 1;
+    .game-description {
+      font-size: 1rem;
     }
 
-    .high-scores h2 {
-        font-size: 1.5em;
-        margin-bottom: 10px;
-        color: #f0a500;/* Set the text color using a CSS variable */
+    .btn-start {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
     }
-
-    .high-scores p {
-        font-size: 1.2em;
-        margin: 5px 0;
-        color: #989191;
-    }
-
-    .early-click-alert {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #f44336;
-        padding: 20px;
-        border-radius: 10px;
-        font-size: 1.2em;
-        color: white;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .early-click-alert p {
-        margin: 0;
-        font-weight: bold;
-    }
+  }
 </style>

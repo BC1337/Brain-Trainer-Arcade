@@ -1,273 +1,406 @@
+<!-- SequentialMemoryGame.svelte -->
 <script>
   import { onMount } from 'svelte';
   import Layout from "../../layouts/Layout.svelte";
+  import Modal from '../../lib/components/Modal.svelte';
 
   let AudioConstructor;
-
-  // Check if running in the browser environment
   if (typeof window !== 'undefined') {
-    // Import the Audio constructor dynamically
     AudioConstructor = window.Audio;
   }
 
-  // Continue with the rest of your component code
-  // Define the game board size
   const gridSize = 5;
-  const maxSoundIndex = 9; // Maximum sound index
-  let currentSoundIndex = 1; // Initial sound index
-
-  // Initialize variables
+  const maxSoundIndex = 9;
+  let currentSoundIndex = 1;
   let sequence = [];
   let userSequence = [];
   let round = 0;
   let isActive = false;
   let showStartButton = true;
+  let isMuted = false;
+  let volumeLevel = 0.05;
+  let activeBoxIndex = null;
+  let showModal = false;
+  let isStarting = false;
 
-  // Define sounds
   let correctSounds = [];
   let wrongSound;
 
-  let isMuted = false; // Initialize mute state
-  let volumeLevel = 0.05; // Initial volume level
-
-  // Check if running in the browser environment
   if (typeof window !== 'undefined') {
-    // Initialize sounds if running in the browser
     correctSounds = Array.from({ length: maxSoundIndex }, (_, i) => {
       const audio = new AudioConstructor(`/GameSounds/game${i + 1}.mp3`);
-      audio.preload = 'auto'; // Preload audio files
-      audio.volume = volumeLevel; // Set initial volume
+      audio.preload = 'auto';
+      audio.volume = volumeLevel;
       return audio;
     });
     wrongSound = new AudioConstructor('/GameSounds/buzzer.mp3');
-    wrongSound.preload = 'auto'; // Preload the wrong sound file
-    wrongSound.volume = volumeLevel; // Set initial volume
+    wrongSound.preload = 'auto';
+    wrongSound.volume = volumeLevel;
   }
 
-  // Function to start the game
   const startGame = async () => {
+    if (isStarting) return;
+    isStarting = true;
+    stopAllSounds();
     isActive = true;
     round = 0;
     sequence = [];
     userSequence = [];
+    currentSoundIndex = 1;
     showStartButton = false;
+    showModal = false;
     await wait(1000);
     nextRound();
+    isStarting = false;
   };
 
-  // Custom wait function using setTimeout
   const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  // Function to generate a random box index
   const generateRandomBoxIndex = () => Math.floor(Math.random() * gridSize * gridSize);
 
-  // Function to start the next round
   const nextRound = async () => {
     round++;
-    currentSoundIndex = 1; // Reset sound index to 1 for each new round
-    if (round === 1) {
-      // For the first round, generate only one box
-      sequence = [generateRandomBoxIndex()];
-      // Animate the first box for the first round
-      await animateBox(sequence[0]);
-    } else {
-      // For subsequent rounds, replay the previous sequence and add a new box
-      for (const boxIndex of sequence) {
-        await animateBox(boxIndex);
-      }
-      // Add a new box for the current round
-      sequence.push(generateRandomBoxIndex());
-      // Animate the new box
-      await animateBox(sequence[sequence.length - 1]);
+    currentSoundIndex = 1;
+    sequence.push(generateRandomBoxIndex());
+    for (const boxIndex of sequence) {
+      await animateBox(boxIndex);
+      await wait(50);
     }
-    isActive = true; // Allow user input after the sequence is shown
-    userSequence = []; // Reset user sequence
+    currentSoundIndex = 1;
+    isActive = true;
+    userSequence = [];
   };
 
-  // Function to animate a box
   const animateBox = async (index) => {
-    const box = document.querySelectorAll('.box')[index];
-    box.style.backgroundColor = 'red';
-    await wait(530); // Wait for 0.5 seconds
-    box.style.backgroundColor = '#ccc'; // Reset the color after a delay
+    activeBoxIndex = index;
+    if (!isMuted) {
+      try {
+        const sound = correctSounds[currentSoundIndex - 1];
+        sound.currentTime = 0;
+        await sound.play();
+      } catch (error) {
+        console.error('Error playing sound:', error);
+      }
+    }
+    await wait(400);
+    activeBoxIndex = null;
+    currentSoundIndex = (currentSoundIndex % maxSoundIndex) + 1;
   };
 
-  // Function to handle box click
+  const stopAllSounds = () => {
+    correctSounds.forEach(sound => {
+      sound.pause();
+      sound.currentTime = 0;
+    });
+    wrongSound.pause();
+    wrongSound.currentTime = 0;
+  };
+
   const handleBoxClick = async (index) => {
     if (!isActive) return;
     userSequence.push(index);
-    animateBox(index); // Highlight the clicked box
-    await wait(33); // Add a slight delay before playing the sound
-    playCorrectSound(); // Play correct sound
+    await animateBox(index);
     if (userSequence.length === sequence.length) {
-      checkSequence(); // Check if the user's sequence matches the game's sequence
+      checkSequence();
     }
   };
 
-  // Function to handle keyboard events
   const handleKeyDown = (event, index) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' || event.key === ' ') {
       handleBoxClick(index);
     }
   };
 
-  // Function to check if the user's sequence matches the game's sequence
   const checkSequence = () => {
+    stopAllSounds();
     for (let i = 0; i < sequence.length; i++) {
       if (sequence[i] !== userSequence[i]) {
-        endGame(); // End the game if the user's sequence does not match
+        endGame();
         return;
       }
     }
-    // If the sequence matches, proceed to the next round
-    setTimeout(nextRound, 1500);
+    setTimeout(nextRound, 1000);
   };
 
-  // Function to end the game
   const endGame = () => {
+    console.log('Ending game, round:', round); // Debug log
+    stopAllSounds();
     isActive = false;
     showStartButton = true;
-    wrongSound.play(); // Play wrong sound
-    alert('Game Over! You reached round ' + round);
+    showModal = true;
+    if (!isMuted) {
+      try {
+        wrongSound.currentTime = 0;
+        wrongSound.play();
+      } catch (error) {
+        console.error('Error playing wrong sound:', error);
+      }
+    }
   };
 
-  // Function to play the correct sound
-  const playCorrectSound = () => {
-    correctSounds[currentSoundIndex - 1].play(); // Play correct sound based on current sound index
-    currentSoundIndex = (currentSoundIndex % maxSoundIndex) + 1; // Increment sound index and loop back to 1 if it exceeds maxSoundIndex
+  const closeModal = () => {
+    showModal = false;
+    stopAllSounds();
   };
 
-  // Function to toggle mute state
   const toggleMute = () => {
     isMuted = !isMuted;
     correctSounds.forEach(sound => sound.muted = isMuted);
     wrongSound.muted = isMuted;
   };
 
-  // Function to handle volume change
   const handleVolumeChange = (event) => {
     volumeLevel = event.target.value;
     correctSounds.forEach(sound => sound.volume = volumeLevel);
     wrongSound.volume = volumeLevel;
   };
-
 </script>
 
 <head>
-  <title>Sequential Memory Game!</title>
-  <meta name="description" content="Play the classic Simon Says clone online. Test your memory and reflexes by repeating a sequence of colors and sounds. Can you beat your high score?">
-  <meta name="keywords" content="Simon Says, memory game, memory test, colors game, audio game, reflex game, sequence game, pattern game, online game, brain game">
-  <meta name="BC1337" content="BC">
-  <!-- Add more meta tags as needed -->
+  <title>Sequential Memory Challenge</title>
+  <meta name="description" content="Test your memory and reflexes in this engaging sequence game. Repeat the pattern of lights and sounds to beat your high score!">
+  <meta name="keywords" content="memory game, sequence game, pattern game, brain training, reflex game, audio game, online game">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <Layout>
-  <h1 class="text-3xl">Simon Says</h1>
-  <div class="game-container" role="application">
-    <div class="game-controls" aria-label="Game Controls">
-      <div class="volume-control" aria-label="Volume Control">
-        <input type="range" min="0" max="1" step="0.01" value={volumeLevel} on:input={handleVolumeChange} aria-label="Volume Slider" />
+  <main class="content-wrapper">
+    <h1 class="game-title">Sequential Memory Challenge</h1>
+    <section class="game-container" aria-label="Sequential memory game">
+      <div class="game-controls" aria-label="Game controls">
+        <div class="volume-control">
+          <label for="volume-slider" class="sr-only">Volume control</label>
+          <input
+            id="volume-slider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volumeLevel}
+            on:input={handleVolumeChange}
+            aria-label="Adjust volume"
+          />
+        </div>
+        <button class="mute-button" on:click={toggleMute} aria-label={isMuted ? 'Unmute' : 'Mute'}>
+          {#if isMuted}
+            <span class="icon">🔇</span>
+          {:else}
+            <span class="icon">🔊</span>
+          {/if}
+        </button>
       </div>
-      <button class="mute-button" on:click={toggleMute} aria-label="{isMuted ? 'Unmute' : 'Mute'}">
-        {#if isMuted}
-          🔇 <!-- Mute icon -->
-        {:else}
-          🔊 <!-- Speaker icon -->
-        {/if}
-      </button>
-    </div>
-    <div class="game-board" role="grid" aria-label="Game Board">
-      <div class="box-container">
-        {#each Array(gridSize * gridSize) as _, index}
-          <div class="box" role="button" tabindex="0" on:click={() => handleBoxClick(index)} on:keydown={(e) => handleKeyDown(e, index)} aria-label="Clickable Box"></div>
-        {/each}
+      <p class="round-info" aria-live="polite">Round: {round}</p>
+      <div class="game-board" role="grid" aria-label="Game board">
+        <div class="box-container">
+          {#each Array(gridSize * gridSize) as _, index}
+            <div
+              class="box"
+              class:active={activeBoxIndex === index}
+              role="button"
+              tabindex="0"
+              on:click={() => handleBoxClick(index)}
+              on:keydown={(e) => handleKeyDown(e, index)}
+              aria-label={`Box ${index + 1}`}
+            ></div>
+          {/each}
+        </div>
       </div>
-    </div>
-    {#if showStartButton}
-      <div class="button-container">
-        <button on:click={startGame} aria-label="Start Game">Start Game</button>
-      </div>
-    {/if}
-  </div>
+      {#if showStartButton}
+        <div class="button-container">
+          <button class="btn btn-start" on:click={startGame} aria-label="Start game" disabled={isStarting}>Start Game</button>
+        </div>
+      {/if}
+      {#if showModal}
+        <Modal correctGuesses={round || 0} onClose={closeModal} onRestart={startGame} />
+      {/if}
+    </section>
+  </main>
 </Layout>
 
 <style>
-  h1 {
-    color: #f0a500;
+  :root {
+    --background-color: var(--theme-background, #1a1a1a);
+    --card-background: var(--theme-card, #2a2a2a);
+    --text-color: var(--theme-text, #ffffff);
+    --accent-color: #ff4d4d;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s ease;
+  }
+
+  .content-wrapper {
+    display: grid;
+    gap: 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .game-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-color);
     text-align: center;
-    margin-top: 20px;
   }
 
   .game-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    display: grid;
+    gap: 1.5rem;
+    justify-items: center;
+    padding: 1.5rem;
+    background: var(--card-background);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
   }
 
   .game-controls {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    gap: 1rem;
   }
 
   .volume-control {
-    margin-right: 10px;
+    width: 100px;
+  }
+
+  .volume-control input {
+    width: 100%;
+    accent-color: var(--text-color);
   }
 
   .mute-button {
-    background-color: transparent;
+    background: none;
     border: none;
-    font-size: 24px;
+    font-size: 1.5rem;
     cursor: pointer;
+    color: var(--text-color);
+    transition: var(--transition);
+  }
+
+  .mute-button:hover,
+  .mute-button:focus {
+    transform: scale(1.1);
+  }
+
+  .mute-button:focus {
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+  }
+
+  .round-info {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-color);
   }
 
   .game-board {
     width: 100%;
     max-width: 400px;
-    height: auto;
-    display: flex;
-    justify-content: center;
   }
 
   .box-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+    gap: 0.5rem;
     width: 100%;
   }
 
   .box {
-    background-color: #ccc;
-    border: 1px solid #888;
+    background: #4a4a4a;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s ease;
     width: 100%;
-    padding-top: 100%; /* Maintain aspect ratio (square) */
+    padding-top: 100%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   }
 
   .box:hover {
-    background-color: #ddd;
+    background: #5a5a5a;
+  }
+
+  .box:focus-visible {
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+  }
+
+  .box.active {
+    background: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
+    animation: pulse 0.4s ease;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
   }
 
   .button-container {
-    margin-top: 20px;
+    margin-top: 1rem;
   }
 
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
+  .btn-start {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
     border: none;
-    background-color: #d8ead8;
-    color: #f0a500;
+    border-radius: 8px;
+    background: var(--text-color);
+    color: var(--card-background);
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    margin-bottom: 10px;
+    transition: var(--transition);
   }
 
-  button:hover {
-    background-color: rgb(241, 226, 205);
+  .btn-start:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .btn-start:focus {
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+  }
+
+  .btn-start:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  @media (max-width: 600px) {
+    .content-wrapper {
+      margin: 1rem;
+    }
+
+    .game-title {
+      font-size: 1.5rem;
+    }
+
+    .game-container {
+      padding: 1rem;
+    }
+
+    .game-board {
+      max-width: 300px;
+    }
+
+    .box-container {
+      gap: 0.3rem;
+    }
+
+    .btn-start {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
   }
 </style>
