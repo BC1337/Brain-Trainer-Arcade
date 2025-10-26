@@ -20,13 +20,33 @@
   let currentGroups = [];
   let oneAwayShown = false;
 
-  // Styling helpers
+  // Pastel palette – soft yellow, mint, sky, lavender (NO PINK)
   const categoryColors = {
-    yellow: '#FFD1DC',
-    green: '#B5EAD7',
-    blue: '#C7CEEA',
-    purple: '#E2C1F5'
+    yellow: '#fdfd96', // soft lemon yellow
+    green:  '#a8e6cf', // mint
+    blue:   '#b0e0e6', // powder sky blue
+    purple: '#e6d6ff'  // lavender
   };
+
+  // STRIP COLOR PREFIX: "YELLOW: KINDS OF BOATS" → "KINDS OF BOATS"
+  function stripColor(title) {
+    return title.replace(/^(YELLOW|GREEN|BLUE|PURPLE): ?/i, '');
+  }
+
+  // REMOVE DUPLICATES + NORMALIZE (trim + uppercase)
+  function removeDuplicates(words) {
+    return [...new Set(words.map(w => w.trim().toUpperCase()))];
+  }
+
+  // Auto-pick black or white text based on background brightness
+  function textColorFor(bgHex) {
+    const rgb = parseInt(bgHex.slice(1), 16);
+    const r = (rgb >> 16) & 0xff;
+    const g = (rgb >> 8) & 0xff;
+    const b = rgb & 0xff;
+    const luma = 0.299 * r + 0.587 * g + 0.114 * b;
+    return luma > 186 ? '#000' : '#fff';
+  }
 
   // Lifecycle
   onMount(() => {
@@ -36,7 +56,11 @@
   // Core game logic
   function resetGame() {
     const idx = Math.floor(Math.random() * groupSets.length);
-    currentGroups = groupSets[idx];
+    currentGroups = groupSets[idx].map(group => ({
+      ...group,
+      words: removeDuplicates(group.words)
+    }));
+
     grid = currentGroups.flatMap(g => g.words).sort(() => Math.random() - 0.5);
 
     selected = [];
@@ -139,14 +163,18 @@
         You have <strong>{maxMistakes}</strong> attempts before the puzzle is revealed.
       </p>
 
-      <!-- Completed groups -->
+      <!-- Completed groups (live board) -->
       <div class="completed-groups">
         {#each completed as group}
           <div
             class="completed-group"
-            style="background-color:{categoryColors[group.color]};color:#000;"
+            style="
+              background-color: {categoryColors[group.color]};
+              color: {textColorFor(categoryColors[group.color])};
+              border: 1px solid rgba(0,0,0,.1);
+            "
           >
-            <h3>{group.title}</h3>
+            <h3>{stripColor(group.title)}</h3>
             <div class="group-words">
               {#each group.words.sort() as word}
                 <span class="word-box">{word}</span>
@@ -218,13 +246,18 @@
                 : "You've used all attempts. Here's the solution:"}
             </p>
 
+            <!-- MODAL GROUPS: Max-width, centered, no color name -->
             <div class="modal-groups">
               {#each completed as group}
                 <div
                   class="completed-group"
-                  style="background-color:{categoryColors[group.color]};color:#000;"
+                  style="
+                    background-color: {categoryColors[group.color]};
+                    color: {textColorFor(categoryColors[group.color])};
+                    border: 1px solid rgba(0,0,0,.1);
+                  "
                 >
-                  <h3>{group.title}</h3>
+                  <h3>{stripColor(group.title)}</h3>
                   <div class="group-words">
                     {#each group.words.sort() as word}
                       <span class="word-box">{word}</span>
@@ -293,8 +326,11 @@
     padding: 0 0.5rem;
   }
 
+  /* Completed groups – live board */
   .completed-groups {
     width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
     display: grid;
     gap: 0.75rem;
   }
@@ -320,7 +356,7 @@
 
   .word-box {
     padding: 0.4rem 0.8rem;
-    background: rgba(0,0,0,.2);
+    background: rgba(255, 255, 255, 0.35);
     border-radius: 4px;
     font-weight: bold;
     font-size: 0.9rem;
@@ -410,7 +446,7 @@
     padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
     font-weight: 500;
-    border: none;
+    border: none; /* FIXED: was "border Denote: none;" */
     border-radius: 8px;
     cursor: pointer;
     transition: var(--transition);
@@ -470,10 +506,16 @@
     margin-bottom: 1rem;
   }
 
+  /* MODAL GROUPS: Max-width, centered */
   .modal-groups {
     display: grid;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    max-width: 800px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
   }
 
   .modal-buttons {
@@ -484,94 +526,27 @@
 
   /* Mobile Fixes */
   @media (max-width: 600px) {
-    .content-wrapper {
-      margin: 1rem 0.75rem;
-      padding: 0;
-    }
-
-    .game-title {
-      font-size: 1.5rem;
-    }
-
-    .game-container {
-      padding: 0.75rem;
-      border-radius: 12px;
-    }
-
-    .game-description {
-      font-size: 0.9rem;
-      line-height: 1.3;
-      margin-bottom: 0.5rem;
-      padding: 0 0.25rem;
-    }
-
-    .grid {
-      gap: 0.5rem;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .word-card {
-      padding: 0.75rem;
-      font-size: 0.85rem;
-      border-width: 1px;
-    }
-
-    .completed-group {
-      padding: 0.75rem;
-    }
-
-    .completed-group h3 {
-      font-size: 1rem;
-    }
-
-    .action-buttons {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .btn {
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-    }
-
-    .modal-content {
-      padding: 1rem;
-      max-width: 95%;
-    }
-
-    .modal-content h2 {
-      font-size: 1.4rem;
-    }
-
-    .modal-content p {
-      font-size: 0.95rem;
-    }
-
-    .toast {
-      font-size: 0.9rem;
-      padding: 0.5rem 1rem;
-    }
+    .content-wrapper { margin: 1rem 0.75rem; padding: 0; }
+    .game-title { font-size: 1.5rem; }
+    .game-container { padding: 0.75rem; border-radius: 12px; }
+    .game-description { font-size: 0.9rem; line-height: 1.3; margin-bottom: 0.5rem; padding: 0 0.25rem; }
+    .grid { gap: 0.5rem; }
+    .word-card { padding: 0.75rem; font-size: 0.85rem; border-width: 1px; }
+    .completed-group { padding: 0.75rem; }
+    .completed-group h3 { font-size: 1rem; }
+    .action-buttons { flex-direction: column; gap: 0.5rem; }
+    .btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
+    .modal-content { padding: 1rem; max-width: 95%; }
+    .modal-content h2 { font-size: 1.4rem; }
+    .modal-content p { font-size: 0.95rem; }
+    .toast { font-size: 0.9rem; padding: 0.5rem 1rem; }
+    .modal-groups { padding: 0 0.5rem; }
   }
 
-  /* Extra small screens */
   @media (max-width: 400px) {
-    .game-description {
-      font-size: 0.85rem;
-      padding: 0;
-    }
-
-    .word-card {
-      font-size: 0.8rem;
-      padding: 0.5rem;
-    }
-
-    .grid {
-      gap: 0.3rem;
-    }
-
-    .btn {
-      font-size: 0.8rem;
-      padding: 0.4rem 0.8rem;
-    }
+    .game-description { font-size: 0.85rem; padding: 0; }
+    .word-card { font-size: 0.8rem; padding: 0.5rem; }
+    .grid { gap: 0.3rem; }
+    .btn { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
   }
 </style>
