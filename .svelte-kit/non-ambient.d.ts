@@ -27,7 +27,7 @@ export {};
 
 declare module "$app/types" {
 	export interface AppTypes {
-		RouteId(): "/" | "/aim-trainer" | "/api" | "/api/auth" | "/api/auth/login" | "/api/auth/signup" | "/api/highscore" | "/api/highscore/[game]" | "/api/user" | "/api/user/highscore" | "/api/user/highscore/[game]" | "/chimp-test" | "/dashboard" | "/games" | "/login" | "/memory-trainer" | "/reaction-timer" | "/signup" | "/simon-says" | "/type-racer" | "/word-game" | "/word-game/how-to-play";
+		RouteId(): "/" | "/aim-trainer" | "/api" | "/api/auth" | "/api/auth/login" | "/api/auth/signup" | "/api/highscore" | "/api/highscore/[game]" | "/api/user" | "/api/user/highscore" | "/api/user/highscore/[game]" | "/chimp-test" | "/connections" | "/dashboard" | "/games" | "/login" | "/memory-trainer" | "/reaction-timer" | "/signup" | "/simon-says" | "/type-racer" | "/word-game" | "/word-game/how-to-play";
 		RouteParams(): {
 			"/api/highscore/[game]": { game: string };
 			"/api/user/highscore/[game]": { game: string }
@@ -45,6 +45,7 @@ declare module "$app/types" {
 			"/api/user/highscore": { game?: string };
 			"/api/user/highscore/[game]": { game: string };
 			"/chimp-test": Record<string, never>;
+			"/connections": Record<string, never>;
 			"/dashboard": Record<string, never>;
 			"/games": Record<string, never>;
 			"/login": Record<string, never>;
@@ -56,7 +57,7 @@ declare module "$app/types" {
 			"/word-game": Record<string, never>;
 			"/word-game/how-to-play": Record<string, never>
 		};
-		Pathname(): "/" | "/aim-trainer" | "/aim-trainer/" | "/api" | "/api/" | "/api/auth" | "/api/auth/" | "/api/auth/login" | "/api/auth/login/" | "/api/auth/signup" | "/api/auth/signup/" | "/api/highscore" | "/api/highscore/" | `/api/highscore/${string}` & {} | `/api/highscore/${string}/` & {} | "/api/user" | "/api/user/" | "/api/user/highscore" | "/api/user/highscore/" | `/api/user/highscore/${string}` & {} | `/api/user/highscore/${string}/` & {} | "/chimp-test" | "/chimp-test/" | "/dashboard" | "/dashboard/" | "/games" | "/games/" | "/login" | "/login/" | "/memory-trainer" | "/memory-trainer/" | "/reaction-timer" | "/reaction-timer/" | "/signup" | "/signup/" | "/simon-says" | "/simon-says/" | "/type-racer" | "/type-racer/" | "/word-game" | "/word-game/" | "/word-game/how-to-play" | "/word-game/how-to-play/";
+		Pathname(): "/" | "/aim-trainer" | "/aim-trainer/" | "/api" | "/api/" | "/api/auth" | "/api/auth/" | "/api/auth/login" | "/api/auth/login/" | "/api/auth/signup" | "/api/auth/signup/" | "/api/highscore" | "/api/highscore/" | `/api/highscore/${string}` & {} | `/api/highscore/${string}/` & {} | "/api/user" | "/api/user/" | "/api/user/highscore" | "/api/user/highscore/" | `/api/user/highscore/${string}` & {} | `/api/user/highscore/${string}/` & {} | "/chimp-test" | "/chimp-test/" | "/connections" | "/connections/" | "/dashboard" | "/dashboard/" | "/games" | "/games/" | "/login" | "/login/" | "/memory-trainer" | "/memory-trainer/" | "/reaction-timer" | "/reaction-timer/" | "/signup" | "/signup/" | "/simon-says" | "/simon-says/" | "/type-racer" | "/type-racer/" | "/word-game" | "/word-game/" | "/word-game/how-to-play" | "/word-game/how-to-play/";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
 		Asset(): "/GameSounds/beep.mp3" | "/GameSounds/buzzer.mp3" | "/GameSounds/game1.mp3" | "/GameSounds/game2.mp3" | "/GameSounds/game3.mp3" | "/GameSounds/game4.mp3" | "/GameSounds/game5.mp3" | "/GameSounds/game6.mp3" | "/GameSounds/game7.mp3" | "/GameSounds/game8.mp3" | "/GameSounds/game9.mp3" | "/favicon.png" | "/simon-says.jpg" | string & {};
 	}
