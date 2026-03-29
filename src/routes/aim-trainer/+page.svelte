@@ -1,40 +1,35 @@
-<!-- src/routes/aim-trainer/+page.svelte -->
 <script>
   import { onMount, onDestroy } from 'svelte';
   import Layout from '../../layouts/Layout.svelte';
 
+  let canvas;
+  let ctx;
   let playAreaWidth;
   let playAreaHeight;
-  const minWidth = 300; // Adjusted for mobile
+  const minWidth = 300;
   const maxWidth = 800;
   const screenHeightPercentage = 0.65;
   const minHeight = 200;
 
   let gameStarted = false;
-  let firstGameStarted = false;
   let timer = 10;
   let successfulClicks = 0;
-  let missedClicks = 0;
   let totalClicks = 0;
   let accuracy = 0;
-  let gameEnded = false;
-  let targetX;
-  let targetY;
+  let targetX = 0;
+  let targetY = 0;
   let targetSize = 25;
   let roundLength = 10;
   let showStatsModal = false;
   let showSettingsModal = false;
-  let isStarting = false;
   let highScores = [];
   let timerInterval;
 
-  let canvas;
   const isBrowser = typeof window !== 'undefined';
 
-  // Load settings and high scores from localStorage
   onMount(() => {
     if (isBrowser) {
-      canvas = document.getElementById('play-area');
+      ctx = canvas.getContext('2d');
       const savedSettings = localStorage.getItem('aimTrainerSettings');
       if (savedSettings) {
         const { size, length } = JSON.parse(savedSettings);
@@ -57,509 +52,342 @@
     }
   });
 
-  const saveSettings = () => {
-    if (isBrowser) {
-      localStorage.setItem('aimTrainerSettings', JSON.stringify({ size: targetSize, length: roundLength }));
-    }
-  };
-
-  const saveHighScores = () => {
-    if (isBrowser) {
-      highScores = [...highScores, accuracy].sort((a, b) => b - a).slice(0, 5); // Sort descending for accuracy
-      localStorage.setItem('aimTrainerHighScores', JSON.stringify(highScores));
-    }
-  };
-
   const resizeCanvas = () => {
     playAreaWidth = Math.max(minWidth, Math.min(window.innerWidth * 0.9, maxWidth));
     playAreaHeight = Math.max(window.innerHeight * screenHeightPercentage, minHeight);
     if (canvas) {
       canvas.width = playAreaWidth;
       canvas.height = playAreaHeight;
-      if (gameStarted) {
-        const ctx = canvas.getContext('2d');
-        if (ctx) generateTarget(ctx);
-      }
+      if (gameStarted) drawTarget();
     }
+  };
+
+  const drawTarget = () => {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.arc(targetX, targetY, targetSize, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff4d4d'; // Using the CSS accent color
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = 'rgba(255, 77, 77, 0.5)';
+    ctx.fill();
+    ctx.closePath();
+  };
+
+  const generateNewTarget = () => {
+    // Math ensures the target center is at least targetSize away from any edge
+    targetX = Math.random() * (canvas.width - targetSize * 2) + targetSize;
+    targetY = Math.random() * (canvas.height - targetSize * 2) + targetSize;
+    drawTarget();
+  };
+
+  const handleInput = (e) => {
+    if (!gameStarted) return;
+
+    const rect = canvas.getBoundingClientRect();
+    let clickX, clickY;
+
+    if (e.type === 'touchstart') {
+      clickX = e.touches[0].clientX - rect.left;
+      clickY = e.touches[0].clientY - rect.top;
+    } else {
+      clickX = e.clientX - rect.left;
+      clickY = e.clientY - rect.top;
+    }
+
+    const dist = Math.sqrt((clickX - targetX) ** 2 + (clickY - targetY) ** 2);
+    totalClicks++;
+
+    if (dist <= targetSize) {
+      successfulClicks++;
+      generateNewTarget();
+    }
+    
+    accuracy = (successfulClicks / totalClicks) * 100;
   };
 
   const startGame = () => {
-    if (isStarting) return;
-    isStarting = true;
     gameStarted = true;
-    firstGameStarted = true;
-    gameEnded = false;
+    showStatsModal = false;
+    showSettingsModal = false;
     successfulClicks = 0;
-    missedClicks = 0;
     totalClicks = 0;
     accuracy = 0;
     timer = roundLength;
-    showStatsModal = false;
-    showSettingsModal = false;
-    startTimer();
-    setTimeout(() => {
-      const ctx = canvas.getContext('2d');
-      if (ctx) generateTarget(ctx);
-      isStarting = false;
-    }, 100);
-  };
-
-  const generateTarget = (ctx) => {
-    if (gameStarted && ctx) {
-      targetX = Math.random() * (playAreaWidth - targetSize * 2);
-      targetY = Math.random() * (playAreaHeight - targetSize * 2);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.beginPath();
-      ctx.arc(targetX, targetY, targetSize, 0, 2 * Math.PI);
-      ctx.fillStyle = 'red';
-      ctx.fill();
-      ctx.closePath();
-    }
-  };
-
-  const handleTargetClick = (event) => {
-    if (gameStarted && canvas) {
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      const { offsetX, offsetY } = event;
-      const distance = Math.sqrt((offsetX - targetX) ** 2 + (offsetY - targetY) ** 2);
-      totalClicks++;
-      if (distance <= targetSize) {
-        successfulClicks++;
-        generateTarget(ctx);
-      } else {
-        missedClicks++;
-      }
-      accuracy = (successfulClicks / totalClicks) * 100 || 0;
-    }
-  };
-
-  const handleKeyDown = (event) => {
-    if (gameStarted && (event.key === 'Enter' || event.key === 'Space')) {
-      handleTargetClick({ offsetX: targetX, offsetY: targetY }); // Simulate click on target
-    }
-  };
-
-  const startTimer = () => {
+    
+    generateNewTarget();
+    
+    if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
-      if (timer > 0) {
-        timer--;
-      } else {
-        clearInterval(timerInterval);
-        endGame();
-      }
+      timer--;
+      if (timer <= 0) endGame();
     }, 1000);
   };
 
   const endGame = () => {
-    gameEnded = true;
+    clearInterval(timerInterval);
     gameStarted = false;
-    saveHighScores();
-    const ctx = canvas.getContext('2d');
-    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
     showStatsModal = true;
+    
+    // Save high score (Accuracy based)
+    if (totalClicks > 0) {
+      highScores = [...highScores, accuracy].sort((a, b) => b - a).slice(0, 5);
+      localStorage.setItem('aimTrainerHighScores', JSON.stringify(highScores));
+    }
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
-  const closeStatsModal = () => {
-    showStatsModal = false;
-  };
-
-  const applySettings = () => {
-    saveSettings();
-    startGame();
-  };
-
-  const toggleSettingsModal = () => {
-    showSettingsModal = !showSettingsModal;
+  const saveSettings = () => {
+    localStorage.setItem('aimTrainerSettings', JSON.stringify({ size: targetSize, length: roundLength }));
+    showSettingsModal = false;
   };
 </script>
 
-<head>
-  <title>Aim Trainer!</title>
-  <meta name="description" content="Test your aiming skills in this fast-paced game. Click the targets as quickly and accurately as possible before time runs out. Challenge your friends to beat your high score!">
-  <meta name="keywords" content="aim trainer, aiming game, reflex game, online game, accuracy game, target practice, reaction speed, challenge game">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-
 <Layout>
-  <main class="content-wrapper" aria-labelledby="game-title">
-    <h1 class="game-title" id="game-title">Aim Trainer</h1>
-    <section class="game-container" aria-label="Aim trainer game">
-      <p class="game-description">Click the red targets as fast as you can before the timer runs out!</p>
-      <div class="game-controls" aria-label="Game controls">
+  <main class="content-wrapper">
+    <h1 class="game-title">Aim Trainer</h1>
+    
+    <section class="game-container">
+      <div class="game-header">
+        <div class="timer-display" class:low-time={timer < 5}>
+          {timer}s
+        </div>
         {#if !gameStarted}
-          <button class="btn btn-settings" on:click={toggleSettingsModal} aria-label="Open settings">
-            <span class="icon">⚙️</span> Settings
+          <button class="btn btn-settings" on:click={() => (showSettingsModal = true)}>
+            ⚙️ Settings
           </button>
         {/if}
       </div>
-      <div class="play-area-container" style="max-width: {maxWidth}px; min-width: {minWidth}px; height: {playAreaHeight}px;">
+
+      <div class="play-area-container" style="height: {playAreaHeight}px; width: {playAreaWidth}px;">
+        <canvas
+          bind:this={canvas}
+          on:mousedown|preventDefault={handleInput}
+          on:touchstart|preventDefault={handleInput}
+          class="play-area"
+        ></canvas>
+
         {#if !gameStarted && !showStatsModal}
-          <div class="start-game-modal">
-            <button class="btn btn-start" on:click={startGame} disabled={isStarting} aria-label="Start game">Start Game</button>
+          <div class="overlay">
+            <button class="btn btn-start" on:click={startGame}>Start Training</button>
           </div>
         {/if}
-        <canvas
-          id="play-area"
-          class="play-area"
-          width={playAreaWidth}
-          height={playAreaHeight}
-          on:click={handleTargetClick}
-          on:keydown={handleKeyDown}
-          role="button"
-          tabindex="0"
-          aria-label="Target practice area"
-        ></canvas>
       </div>
-      <div class="game-stats" aria-live="polite">
-        <div class="stats-container">
-          <div class="current-stats" aria-labelledby="current-stats-title">
-            <h2 id="current-stats-title">Current Game</h2>
-            <p>Time Left: {timer}s</p>
-            <p>Successful Clicks: {successfulClicks}</p>
-            <p>Total Clicks: {totalClicks}</p>
-            <p>Accuracy: {accuracy.toFixed(2)}%</p>
-          </div>
-          <div class="high-scores" aria-labelledby="high-scores-title">
-            <h2 id="high-scores-title">Top 5 High Scores (Accuracy)</h2>
-            <ol>
-              {#each highScores as score, index}
-                <li>{index + 1}. {score.toFixed(2)}%</li>
-              {/each}
-            </ol>
-          </div>
+
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="label">Hits</span>
+          <span class="value">{successfulClicks}</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">Accuracy</span>
+          <span class="value">{accuracy.toFixed(1)}%</span>
         </div>
       </div>
-      {#if showStatsModal}
-        <div class="modal" role="dialog" aria-labelledby="stats-modal-title" aria-modal="true">
-          <div class="modal-content">
-            <h2 id="stats-modal-title"><span style="color: var(--accent-color, #ff4d4d);">Game Over</span></h2>
-            <p>Successful Clicks: {successfulClicks}</p>
-            <p>Total Clicks: {totalClicks}</p>
-            <p>Accuracy: {accuracy.toFixed(2)}%</p>
-            {#if highScores.length > 0}
-              <div class="high-scores" aria-labelledby="modal-high-scores-title">
-                <h3 id="modal-high-scores-title">Top 5 High Scores (Accuracy)</h3>
-                <ol>
-                  {#each highScores as score, index}
-                    <li>{index + 1}. {score.toFixed(2)}%</li>
-                  {/each}
-                </ol>
-              </div>
-            {/if}
-            <div class="modal-buttons">
-              <button class="btn btn-restart" on:click={startGame} aria-label="Play again">Play Again</button>
-              <button class="btn btn-close" on:click={closeStatsModal} aria-label="Close modal">Close</button>
-            </div>
-          </div>
-        </div>
-      {/if}
-      {#if showSettingsModal}
-        <div class="modal" role="dialog" aria-labelledby="settings-modal-title" aria-modal="true">
-          <div class="modal-content">
-            <h2 id="settings-modal-title">Game Settings</h2>
-            <div class="settings-form">
-              <label for="target-size">Target Size: {targetSize}px</label>
-              <input
-                type="range"
-                id="target-size"
-                min="10"
-                max="50"
-                bind:value={targetSize}
-                aria-label="Adjust target size"
-              />
-              <label for="round-length">Round Length: {roundLength}s</label>
-              <input
-                type="range"
-                id="round-length"
-                min="5"
-                max="60"
-                bind:value={roundLength}
-                aria-label="Adjust round length"
-              />
-            </div>
-            <div class="modal-buttons">
-              <button class="btn btn-apply" on:click={applySettings} aria-label="Apply settings and start game">Apply & Start</button>
-              <button class="btn btn-close" on:click={toggleSettingsModal} aria-label="Close settings">Cancel</button>
-            </div>
-          </div>
-        </div>
-      {/if}
     </section>
+
+    {#if showStatsModal}
+      <div class="modal-backdrop">
+        <div class="modal">
+          <h2>Round Complete!</h2>
+          <div class="final-stats">
+            <p>Hits: <strong>{successfulClicks}</strong></p>
+            <p>Accuracy: <strong>{accuracy.toFixed(2)}%</strong></p>
+          </div>
+          <div class="score-board">
+            <h3>Personal Best (Accuracy)</h3>
+            <ul>
+              {#each highScores as score, i}
+                <li><span>#{i + 1}</span> <span>{score.toFixed(1)}%</span></li>
+              {/each}
+            </ul>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-start" on:click={startGame}>Try Again</button>
+            <button class="btn btn-close" on:click={() => (showStatsModal = false)}>Close</button>
+          </div>
+        </div>
+      </div>
+    {/if}
+
+    {#if showSettingsModal}
+      <div class="modal-backdrop">
+        <div class="modal">
+          <h2>Game Settings</h2>
+          <div class="setting-group">
+            <label>Target Size: {targetSize}px</label>
+            <input type="range" min="10" max="60" bind:value={targetSize} />
+          </div>
+          <div class="setting-group">
+            <label>Duration: {roundLength}s</label>
+            <input type="range" min="5" max="60" bind:value={roundLength} />
+          </div>
+          <button class="btn btn-start" on:click={saveSettings}>Save Settings</button>
+        </div>
+      </div>
+    {/if}
   </main>
 </Layout>
 
 <style>
   :root {
-    --background-color: var(--theme-background, #1a1a1a);
-    --card-background: var(--theme-card, #2a2a2a);
-    --text-color: var(--theme-text, #ffffff);
-    --accent-color: #ff4d4d;
-    --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    --transition: all 0.3s ease;
+    --accent: #ff4d4d;
+    --bg: #1a1a1a;
+    --card: #2a2a2a;
+    --text: #ffffff;
   }
 
   .content-wrapper {
-    display: grid;
-    gap: 2rem;
-    max-width: 800px;
+    max-width: 900px;
     margin: 2rem auto;
     padding: 0 1rem;
+    font-family: 'Inter', sans-serif;
   }
 
   .game-title {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--text-color);
     text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--text);
   }
 
   .game-container {
-    display: grid;
-    gap: 1.5rem;
-    justify-items: center;
+    background: var(--card);
     padding: 1.5rem;
-    background: var(--card-background);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
   }
 
-  .game-description {
-    font-size: 1.2rem;
-    color: var(--text-color);
-    text-align: center;
+  .game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
   }
 
-  .game-controls {
-    display: flex;
-    gap: 1rem;
+  .timer-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: #333;
+    padding: 0.5rem 1.5rem;
+    border-radius: 10px;
+    color: var(--text);
+  }
+
+  .low-time {
+    color: var(--accent);
+    animation: pulse 1s infinite;
   }
 
   .play-area-container {
     position: relative;
+    background: #111;
+    border-radius: 12px;
+    border: 2px solid #444;
+    overflow: hidden;
+    margin: 0 auto;
   }
 
   .play-area {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    border: 2px solid var(--accent-color);
-    cursor: pointer;
-    transition: box-shadow 0.3s ease;
+    display: block;
+    cursor: crosshair;
   }
 
-  .play-area:focus-visible {
-    outline: 2px solid var(--text-color);
-    outline-offset: 2px;
-  }
-
-  .start-game-modal {
+  .overlay {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-item .label {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+  }
+
+  .stat-item .value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text);
   }
 
   .btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 500;
+    padding: 0.8rem 1.8rem;
     border: none;
     border-radius: 8px;
+    font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    transition: transform 0.1s, opacity 0.2s;
   }
 
-  .btn-start,
-  .btn-restart,
-  .btn-apply {
-    background: var(--accent-color);
-    color: var(--text-color);
-  }
+  .btn-start { background: var(--accent); color: white; }
+  .btn-settings { background: #444; color: white; }
+  .btn-close { background: #666; color: white; margin-top: 1rem; }
 
-  .btn-settings,
-  .btn-close {
-    background: var(--text-color);
-    color: var(--card-background);
-  }
+  .btn:active { transform: scale(0.95); }
 
-  .btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-  }
-
-  .btn:focus {
-    outline: 2px solid var(--text-color);
-    outline-offset: 2px;
-  }
-
-  .btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .btn-settings {
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-  }
-
-  .game-stats {
-    width: 100%;
-    max-width: 600px;
-  }
-
-  .stats-container {
-    display: flex;
-    gap: 2rem;
-    justify-content: space-between;
-  }
-
-  .current-stats,
-  .high-scores {
-    flex: 1;
-    color: var(--text-color);
-  }
-
-  .current-stats h2,
-  .high-scores h2 {
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
-  .current-stats p,
-  .high-scores li {
-    font-size: 1rem;
-    margin: 0.5rem 0;
-  }
-
-  .high-scores ol {
-    list-style: none;
-    padding: 0;
+    z-index: 100;
   }
 
   .modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 9999;
-  }
-
-  .modal-content {
-    background-color: var(--card-background);
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    color: var(--text-color);
-    max-width: 400px;
+    background: var(--card);
+    padding: 2.5rem;
+    border-radius: 20px;
     width: 90%;
+    max-width: 450px;
+    text-align: center;
   }
 
-  .modal-content h2 {
-    font-size: 1.75rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+  .score-board {
+    margin: 1.5rem 0;
+    background: #222;
+    padding: 1rem;
+    border-radius: 10px;
   }
 
-  .modal-content h3 {
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
+  .score-board ul { list-style: none; padding: 0; margin: 0.5rem 0; }
+  .score-board li { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 0.3rem 0;
+    border-bottom: 1px solid #333;
   }
 
-  .modal-content p {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-  }
-
-  .settings-form {
-    display: grid;
-    gap: 1rem;
+  .setting-group {
     margin-bottom: 1.5rem;
+    text-align: left;
   }
 
-  .settings-form label {
-    font-size: 1rem;
-    font-weight: 500;
-  }
+  .setting-group label { display: block; margin-bottom: 0.5rem; }
+  input[type="range"] { width: 100%; accent-color: var(--accent); }
 
-  .settings-form input[type="range"] {
-    width: 100%;
-    accent-color: var(--accent-color);
-  }
-
-  .modal-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-  }
-
-  @media (max-width: 600px) {
-    .content-wrapper {
-      margin: 1rem;
-    }
-
-    .game-title {
-      font-size: 1.5rem;
-    }
-
-    .game-container {
-      padding: 1rem;
-    }
-
-    .play-area-container {
-      min-width: 250px;
-      height: 200px;
-    }
-
-    .stats-container {
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .game-description {
-      font-size: 1rem;
-    }
-
-    .btn {
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
-    }
-
-    .modal-content {
-      padding: 15px;
-    }
-
-    .modal-content h2 {
-      font-size: 1.5rem;
-    }
-
-    .modal-content h3 {
-      font-size: 1rem;
-    }
-
-    .modal-content p {
-      font-size: 1rem;
-    }
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
   }
 </style>

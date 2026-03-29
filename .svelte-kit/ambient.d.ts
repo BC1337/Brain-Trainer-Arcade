@@ -80,6 +80,7 @@ declare module '$env/static/private' {
 	export const TERM: string;
 	export const npm_config_cache: string;
 	export const GNOME_DESKTOP_SESSION_ID: string;
+	export const FC_FONTATIONS: string;
 	export const npm_config_node_gyp: string;
 	export const PATH: string;
 	export const SESSION_MANAGER: string;
@@ -107,7 +108,6 @@ declare module '$env/static/private' {
 	export const npm_lifecycle_script: string;
 	export const SSH_AUTH_SOCK: string;
 	export const GSETTINGS_SCHEMA_DIR: string;
-	export const ORIGINAL_XDG_CURRENT_DESKTOP: string;
 	export const SHELL: string;
 	export const npm_package_version: string;
 	export const npm_lifecycle_event: string;
@@ -217,6 +217,7 @@ declare module '$env/dynamic/private' {
 		TERM: string;
 		npm_config_cache: string;
 		GNOME_DESKTOP_SESSION_ID: string;
+		FC_FONTATIONS: string;
 		npm_config_node_gyp: string;
 		PATH: string;
 		SESSION_MANAGER: string;
@@ -244,7 +245,6 @@ declare module '$env/dynamic/private' {
 		npm_lifecycle_script: string;
 		SSH_AUTH_SOCK: string;
 		GSETTINGS_SCHEMA_DIR: string;
-		ORIGINAL_XDG_CURRENT_DESKTOP: string;
 		SHELL: string;
 		npm_package_version: string;
 		npm_lifecycle_event: string;
