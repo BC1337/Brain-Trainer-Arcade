@@ -26,6 +26,8 @@
  * ```
  */
 declare module '$env/static/private' {
+	export const DATABASE_URL: string;
+	export const JWT_SECRET: string;
 	export const LESSOPEN: string;
 	export const USER: string;
 	export const npm_config_user_agent: string;
@@ -163,6 +165,8 @@ declare module '$env/static/public' {
  */
 declare module '$env/dynamic/private' {
 	export const env: {
+		DATABASE_URL: string;
+		JWT_SECRET: string;
 		LESSOPEN: string;
 		USER: string;
 		npm_config_user_agent: string;

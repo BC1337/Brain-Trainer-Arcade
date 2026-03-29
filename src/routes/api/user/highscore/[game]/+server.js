@@ -1,84 +1,100 @@
-// src/routes/api/user/highscore/[game]/+server.js
 import { json } from '@sveltejs/kit';
-import { verifyJWT } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
+import jwt from 'jsonwebtoken';
+import { env } from '$env/dynamic/private';
+
+const JWT_SECRET = env.JWT_SECRET;
 
 export async function POST({ request, params }) {
-  const { game } = params;
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.split(' ')[1];
-
-  if (!token) {
-    return json({ error: 'Missing token' }, { status: 401 });
-  }
-
-  const user = await verifyJWT(token);
-  if (!user) {
-    return json({ error: 'Invalid or expired token' }, { status: 401 });
-  }
-
-  const body = await request.json();
-  const { score, rounds, timestamp } = body;
-
-  if (!score || !timestamp || rounds === undefined) {
-    return json({ error: 'Invalid score data' }, { status: 400 });
-  }
-
   try {
-    await prisma.highscore.upsert({
+    const { game } = params;
+    const { rounds } = await request.json();
+    const authHeader = request.headers.get('Authorization');
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userId = parseInt(decoded.userId);
+
+    // 1. Fetch the current personal best for this game
+    const existing = await prisma.highscore.findUnique({
       where: {
         userId_game: {
-          userId: user.userId,
+          userId: userId,
           game: game
         }
-      },
-      update: {
-        score,
-        rounds,
-        createdAt: new Date()
-      },
-      create: {
-        userId: user.userId,
-        game,
-        score,
-        rounds
       }
     });
 
-    return json({ success: true });
+    let highscore;
+
+    if (!existing) {
+      // First time playing: Create a new record
+      highscore = await prisma.highscore.create({
+        data: { userId, game, rounds }
+      });
+    } else if (rounds > existing.rounds) {
+      // Beat old score: Update record
+      highscore = await prisma.highscore.update({
+        where: {
+          userId_game: { userId, game }
+        },
+        data: { 
+          rounds: rounds,
+          createdAt: new Date() 
+        }
+      });
+    } else {
+      // Lower score: Don't overwrite the personal best
+      highscore = existing;
+    }
+
+    return json({ message: 'Score processed', highscore });
+
   } catch (err) {
-    console.error('❌ Failed to save highscore:', err);
-    return json({ error: 'Server error saving highscore' }, { status: 500 });
+    console.error('💥 User Highscore POST Crash:', err.message);
+    return json({ error: 'Failed to save score' }, { status: 500 });
   }
 }
 
 export async function GET({ request, params }) {
-  const { game } = params;
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.split(' ')[1];
-
-  if (!token) {
-    return json({ error: 'Missing token' }, { status: 401 });
-  }
-
-  const user = await verifyJWT(token);
-  if (!user) {
-    return json({ error: 'Invalid or expired token' }, { status: 401 });
-  }
-
   try {
-    const userHighscore = await prisma.highscore.findUnique({
+    const { game } = params;
+    const authHeader = request.headers.get('Authorization');
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userId = parseInt(decoded.userId);
+    
+    // Get user's personal best
+    const highscore = await prisma.highscore.findUnique({
       where: {
         userId_game: {
-          userId: user.userId,
-          game
+          userId: userId,
+          game: game
         }
       }
     });
 
-    return json({ highscore: userHighscore || null });
+    // Get the global average across ALL players for this game
+    const globalStats = await prisma.highscore.aggregate({
+      where: { game: game },
+      _avg: { rounds: true }
+    });
+
+    return json({ 
+      highscore: highscore || { rounds: 0 },
+      globalAvg: Math.round(globalStats._avg.rounds || 0)
+    });
   } catch (err) {
-    console.error('❌ Failed to fetch user highscore:', err);
-    return json({ error: 'Server error fetching highscore' }, { status: 500 });
+    console.error('💥 User Highscore GET Crash:', err.message);
+    return json({ error: 'Failed to fetch score' }, { status: 500 });
   }
 }

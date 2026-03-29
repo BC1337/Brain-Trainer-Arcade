@@ -10,20 +10,20 @@ datasource db {
 model User {
   id         Int         @id @default(autoincrement())
   email      String      @unique
-  username   String
+  username   String      @unique
   password   String
   createdAt  DateTime    @default(now())
-  highscores Highscore[] // 🔗 One-to-many relation with highscores
+  highscores Highscore[] 
 }
 
 model Highscore {
   id        Int      @id @default(autoincrement())
-  game      String
-  rounds    Int
-  score     Int      // Add this line to store the score
+  game      String   // e.g., "chimp", "aim", "verbal"
+  rounds    Int      // This is our primary score metric
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 
-  @@unique([userId, game]) // 🔒 Prevent duplicate game entries per user
+  // This ensures a user only has ONE highscore per game
+  @@unique([userId, game]) 
 }
