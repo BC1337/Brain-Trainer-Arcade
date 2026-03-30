@@ -308,7 +308,7 @@ const words = [ "aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "
   <div class="word-game-container">
     <div class="header">
       <h1 style="color: {h1Color}">Word Game</h1>
-      <button class="refresh-btn" on:click={startGame} title="Restart Game">↻</button>
+      <button class="refresh-btn" on:click={startGame}>New Game</button>
     </div>
 
     <a class="how-to-play" href="/word-game/how-to-play">How to Play</a>
@@ -358,239 +358,164 @@ const words = [ "aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "
 </Layout>
 
 <style>
-.word-game-container {
-  max-width: 420px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Header */
-.word-game-container .header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* Refresh button */
-.word-game-container .refresh-btn {
-  background: #6aaa64;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.2s ease;
-}
-.word-game-container .refresh-btn:hover {
-  transform: rotate(20deg) scale(1.1);
-  box-shadow: 0 0 8px #6aaa64;
-}
-
-/* Heading */
-.word-game-container h1 {
-  text-align: center;
-  margin: 0;
-}
-
-/* How to play link */
-.word-game-container .how-to-play {
-  display: block;
-  text-align: center;
-  margin: 0.5rem 0 1rem;
-  color: var(--color-theme-1, #0af);
-}
-
-/* Grid for game letters */
-.word-game-container .grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.word-game-container .row {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.3rem;
-}
-
-/* Game letters */
-.word-game-container .letter {
-  width: 60px;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  border-radius: 10px;
-  color: black; /* letters always black */
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(6px);
-  background: #f5f5f5; /* pre-submission neutral off-white */
-}
-
-/* Typed letters BEFORE submission - slightly darker grey */
-.word-game-container .letter.typed {
-  background: #ededed;
-  text-shadow:
-    0 1px 1px rgba(0,0,0,0.4),
-    0 2px 2px rgba(0,0,0,0.2);
-}
-
-/* Status colors AFTER submission - KEEP ORIGINALS */
-.word-game-container .letter.exact {
-  background: rgba(106, 170, 100, 0.85);
-  color: white;
-}
-
-.word-game-container .letter.close {
-  background: rgba(201, 180, 88, 0.85);
-  color: white;
-}
-
-.word-game-container .letter.missing {
-  background: rgba(120, 124, 126, 0.85);
-  color: white;
-  opacity: 0.8;
-}
-
-/* Keyboard */
-.word-game-container .keyboard {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.word-game-container .keyboard .row {
-  display: flex;
-  justify-content: center;
-  gap: 0.2rem;
-}
-
-/* Keyboard buttons default (light mode) */
-.word-game-container .keyboard button {
-  width: 40px;
-  height: 50px;
-  border: none;
-  border-radius: 6px;
-  background: #ccc;
-  color: #000;
-  font-weight: bold;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-}
-
-.word-game-container .keyboard button:hover {
-  transform: scale(1.05);
-  background: #bbb;
-}
-
-/* Keyboard buttons dark mode */
-.word-game-container .keyboard button.dark {
-  background: #333;
-  color: white;
-}
-
-/* Status colors on keyboard */
-.word-game-container .keyboard button.exact {
-  background: #6aaa64;
-  color: white;
-}
-
-.word-game-container .keyboard button.close {
-  background: #c9b458;
-  color: white;
-}
-
-.word-game-container .keyboard button.missing {
-  background: #787c7e;
-  color: white;
-  opacity: 0.8;
-}
-
-/* Last row spacing */
-.word-game-container .keyboard .row.last-row {
-  gap: 1rem;
-  justify-content: center;
-}
-
-/* Enter and Back buttons */
-.word-game-container .keyboard button[data-key="enter"],
-.word-game-container .keyboard button[data-key="backspace"] {
-  width: 80px;
-  background: #0a74da;
-  color: white;
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.word-game-container .keyboard button[data-key="enter"]:hover,
-.word-game-container .keyboard button[data-key="backspace"]:hover {
-  background: #095bb5;
-  transform: scale(1.05);
-}
-
-/* Modal backdrop */
-.word-game-container .modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 50;
-}
-
-/* Modal content */
-.word-game-container .modal {
-  background: var(--color-bg-1, #111);
-  color: var(--color-text, white);
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 300px;
-}
-
-.word-game-container .modal button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  background: #6aaa64;
-  color: white;
-}
-
-/* Responsive adjustments */
-@media screen and (max-width: 480px) {
-  .word-game-container .letter {
-    width: 45px;
-    height: 45px;
-    font-size: 1.5rem;
+  /* 1. MAIN CONTAINER & ALIGNMENT */
+  .word-game-container {
+    max-width: 400px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
-  .word-game-container .keyboard button {
-    width: 35px;
-    height: 45px;
-    font-size: 0.9rem;
-  }
-  .word-game-container .keyboard button[data-key="enter"],
-  .word-game-container .keyboard button[data-key="backspace"] {
-    width: 70px;
-  }
-}
 
+  /* 2. THE SACRED HEADER - 25PX SHIFT LOCKED */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 330px; 
+    margin-bottom: 0.75rem;
+    position: relative;
+    padding: 10px 0;
+  }
+
+  .header h1 {
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin: 0;
+    color: #f59e0b; /* Amber */
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    transform: translateX(25px); /* THE 25PX SHIFT */
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  /* THE NEW GAME BUTTON - CLEAN & THEMED */
+  .refresh-btn {
+    background: #f59e0b; /* Solid Amber */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    /* Physical depth effect */
+    box-shadow: 0 3px 0 #b45309; 
+    transition: all 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .refresh-btn:hover {
+    background: #fbbf24;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0 #b45309;
+  }
+
+  .refresh-btn:active {
+    transform: translateY(2px);
+    box-shadow: none; /* Button "sinks" when pressed */
+  }
+
+  /* HOW TO PLAY LINK */
+  .how-to-play {
+    display: block;
+    margin-bottom: 1.5rem;
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  /* 3. THE GRID - UNTOUCHED */
+  .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .letter {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    border-radius: 8px;
+    text-transform: uppercase;
+    border: 2px solid #e2e8f0;
+    background: #ffffff;
+    color: #1e293b;
+    transition: transform 0.1s ease;
+  }
+
+  .letter.typed {
+    border-color: #94a3b8;
+    transform: scale(1.05);
+  }
+
+  /* Status Colors */
+  .letter.exact { background: #10b981 !important; border-color: #10b981; color: white; }
+  .letter.close { background: #f59e0b !important; border-color: #f59e0b; color: white; }
+  .letter.missing { background: #94a3b8 !important; border-color: #94a3b8; color: white; opacity: 0.6; }
+
+  /* 4. KEYBOARD - UNTOUCHED */
+  .keyboard {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    max-width: 400px;
+    padding-bottom: 1rem;
+  }
+
+  .keyboard .row {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+  }
+
+  .keyboard button {
+    flex: 1;
+    height: 52px;
+    max-width: 38px;
+    border: none;
+    border-radius: 6px;
+    background: #e2e8f0;
+    color: #475569;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .keyboard button.exact { background: #10b981; color: white; }
+  .keyboard button.close { background: #f59e0b; color: white; }
+  .keyboard button.missing { background: #64748b; color: white; opacity: 0.4; }
+
+  .keyboard button[data-key="enter"],
+  .keyboard button[data-key="backspace"] {
+    max-width: 75px;
+    background: #cbd5e1;
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
 </style>
