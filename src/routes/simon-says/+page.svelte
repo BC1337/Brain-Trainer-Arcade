@@ -23,7 +23,6 @@
     let wrongSound;
 
     onMount(() => {
-        // Initialize Audio only on the client to avoid SSR errors
         if (typeof window !== 'undefined') {
             correctSounds = Array.from({ length: maxSoundIndex }, (_, i) => {
                 const audio = new Audio(`/GameSounds/game${i + 1}.mp3`);
@@ -32,18 +31,17 @@
             });
             wrongSound = new Audio('/GameSounds/buzzer.mp3');
             wrongSound.preload = 'auto';
-            updateVolumes();
+            updateVolumes(isMuted, volumeLevel);
         }
     });
 
-    // Reactive statement to handle volume changes
     $: if (correctSounds.length > 0) {
         updateVolumes(isMuted, volumeLevel);
     }
 
     function updateVolumes(muted, vol) {
         const activeVol = muted ? 0 : vol;
-        correctSounds.forEach(s => s.volume = activeVol);
+        correctSounds.forEach(s => { if(s) s.volume = activeVol; });
         if (wrongSound) wrongSound.volume = activeVol;
     }
 
@@ -58,7 +56,7 @@
             try {
                 await sound.play();
             } catch (e) {
-                // Browsers block auto-play until user interacts
+                console.warn("Audio play blocked by browser.");
             }
         }
     };
@@ -73,13 +71,26 @@
     const startGame = async () => {
         if (isStarting) return;
         isStarting = true;
+
+        // 1. PRIME AUDIO: Necessary for mobile/Safari production
+        if (correctSounds[0]) {
+            correctSounds[0].play().then(() => {
+                correctSounds[0].pause();
+                correctSounds[0].currentTime = 0;
+            }).catch(() => {});
+        }
+
+        // 2. CLEAR OVERLAY IMMEDIATELY
+        showStartButton = false;
+        showModal = false;
         isActive = false;
         round = 0;
         sequence = [];
         userSequence = [];
-        showStartButton = false;
-        showModal = false;
-        await wait(500);
+
+        // 3. PHYSICAL DELAY: Give Svelte time to drop the .overlay from the DOM
+        await wait(400);
+        
         await nextRound();
         isStarting = false;
     };
@@ -88,19 +99,24 @@
         isActive = false; 
         round++;
         userSequence = [];
-        sequence = [...sequence, Math.floor(Math.random() * (gridSize * gridSize))];
+        
+        // Add new step
+        const nextStep = Math.floor(Math.random() * (gridSize * gridSize));
+        sequence = [...sequence, nextStep];
         
         await wait(600);
         
+        // Play the full sequence
         for (let i = 0; i < sequence.length; i++) {
             await animateBox(sequence[i], i);
-            await wait(100); 
+            await wait(150); 
         }
         
         isActive = true;
     };
 
     const handleBoxClick = async (index) => {
+        // Prevent clicking if game is showing sequence or if a box is currently animating
         if (!isActive || activeBoxIndex !== null) return;
 
         const expectedIndex = sequence[userSequence.length];
@@ -120,7 +136,7 @@
 
     const endGame = () => {
         isActive = false;
-        showStartButton = true;
+        showStartButton = true; // This triggers the glass overlay
         showModal = true;
         if (!isMuted && wrongSound) {
             wrongSound.currentTime = 0;
@@ -165,7 +181,7 @@
                         class="box"
                         class:active={activeBoxIndex === i}
                         on:click={() => handleBoxClick(i)}
-                        disabled={!isActive && activeBoxIndex !== i}
+                        disabled={!isActive}
                         type="button"
                     ></button>
                 {/each}
@@ -174,7 +190,7 @@
             {#if showStartButton}
                 <div class="overlay">
                     <button class="start-btn" on:click={startGame} disabled={isStarting}>
-                        {round === 0 ? 'Start Training' : 'Try Again'}
+                        {isStarting ? 'INITIALIZING...' : (round === 0 ? 'Start Training' : 'Try Again')}
                     </button>
                 </div>
             {/if}
@@ -196,7 +212,7 @@
     .title {
         font-size: 2.5rem;
         font-weight: 900;
-        color: #f59e0b; /* Amber */
+        color: #f59e0b; 
         text-align: center;
         margin-bottom: 0.25rem;
         letter-spacing: -1px;
@@ -253,6 +269,7 @@
         transition: background 0.2s, transform 0.1s;
     }
 
+    /* Important: box remains clickable when not active if it's the one currently being shown */
     .box:hover:not(:disabled) { background: #94a3b8; }
     
     .box.active {
@@ -286,8 +303,9 @@
         transition: transform 0.1s;
     }
 
-    .start-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    .start-btn:active { transform: translateY(2px); box-shadow: none; }
+    .start-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
+    .start-btn:active:not(:disabled) { transform: translateY(2px); box-shadow: none; }
+    .start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
     @media (max-width: 500px) {
         .title { font-size: 2rem; }
