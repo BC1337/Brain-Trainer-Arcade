@@ -24,33 +24,37 @@
   onMount(async () => {
     const token = localStorage.getItem('token');
     const storedUsername = localStorage.getItem('username');
-    
-    // Refresh 'now' every 5s to naturally expire the "Recent" glow
     const interval = setInterval(() => now = Date.now(), 5000);
 
     if (token && !isTokenExpired(token)) {
       isLoggedIn = true;
       username = (storedUsername || 'PLAYER').toUpperCase();
-      await Promise.all(games.map(async (game) => {
-        await Promise.all([
-          loadGlobalHighscore(game.key),
-          loadUserScore(game.key)
-        ]);
-      }));
+      
+      // Ensure all data is fetched BEFORE hiding the loader
+      try {
+        await Promise.all(games.map(async (game) => {
+          return Promise.all([
+            loadGlobalHighscore(game.key),
+            loadUserScore(game.key)
+          ]);
+        }));
+      } catch (err) {
+        console.error("Dashboard Init Error:", err);
+      }
     } else {
       isLoggedIn = false;
       username = 'GUEST_001';
+      let localScores = {};
       games.forEach(game => {
         const localData = localStorage.getItem(`guest_${game.key}_score`);
         if (localData) {
-          const parsed = JSON.parse(localData);
-          userScores[game.key] = { ...parsed, rank: '—' };
+          localScores[game.key] = { ...JSON.parse(localData), rank: '—' };
         }
       });
-      userScores = { ...userScores };
+      userScores = localScores;
     }
     
-    isLoading = false;
+    isLoading = false; 
     return () => clearInterval(interval);
   });
 
@@ -59,8 +63,10 @@
       const res = await fetch(`/api/highscore/${gameKey}`);
       if (res.ok) {
         const data = await res.json();
-        if (data.highscore) globalHighscores[gameKey] = data.highscore;
-        globalHighscores = { ...globalHighscores };
+        globalHighscores = { 
+          ...globalHighscores, 
+          [gameKey]: data.highscore || { rounds: 0, user: { username: 'N/A' } } 
+        };
       }
     } catch (err) { console.error(err); }
   }
@@ -74,14 +80,12 @@
       if (res.ok) {
         const data = await res.json();
         if (data.highscore) {
-          userScores[gameKey] = {
+          const scoreUpdate = {
             ...data.highscore,
-            // Grab the rank from the updated Prisma API
             rank: data.rank || '—',
-            // Use real DB timestamp for the glow check
             timestamp: data.highscore.updated_at ? new Date(data.highscore.updated_at).getTime() : null
           };
-          userScores = { ...userScores }; 
+          userScores = { ...userScores, [gameKey]: scoreUpdate };
         }
       }
     } catch (err) { console.error(err); }
@@ -90,7 +94,7 @@
   const isRecent = (timestamp) => {
     if (!timestamp) return false;
     const diff = now - timestamp;
-    return diff > 0 && diff < 60000; // 60 second window
+    return diff > 0 && diff < 60000;
   };
 </script>
 
@@ -268,6 +272,8 @@
   }
 
   .recent-tag { position: absolute; top: -8px; right: 15px; background: var(--accent-orange); color: black; font-size: 0.55rem; font-weight: 900; padding: 3px 8px; border-radius: 4px; z-index: 10; }
+
+  .loading-gate { color: var(--accent-orange); font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; text-align: center; margin-top: 4rem; }
 
   .title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
   .title-row h3 { margin: 0; font-size: 1.4rem; color: #fff; font-weight: 800; }
