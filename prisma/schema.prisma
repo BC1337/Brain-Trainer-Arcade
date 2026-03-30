@@ -18,12 +18,15 @@ model User {
 
 model Highscore {
   id        Int      @id @default(autoincrement())
-  game      String   // e.g., "chimp", "aim", "verbal"
-  rounds    Int      // This is our primary score metric
+  game      String   // e.g., "chimp-test", "aim-trainer", "verbal"
+  rounds    Int      // Universal: "Level" for Chimp, "Rating" for Aim
+  hits      Int?     // Optional: Only for Aim Trainer
+  accuracy  Float?   // Optional: Only for Aim Trainer
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
+  updatedAt DateTime @updatedAt @default(now())
   createdAt DateTime @default(now())
 
-  // This ensures a user only has ONE highscore per game
+  // Ensures one record per user per game for easy upserting
   @@unique([userId, game]) 
 }

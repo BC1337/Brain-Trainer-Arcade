@@ -13,7 +13,8 @@
   const logout = () => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token');
-      token = null;
+      // Force a reload or redirect to clear state across the app
+      window.location.href = '/';
     }
   };
 </script>
@@ -24,20 +25,25 @@
       <ThemeToggle />
     </div>
     <a href="/" class="nav-brand">
-      <p>Brain Trainer</p>
+      <span class="orange">Brain</span> <span class="green">Trainer</span>
     </a>
   </div>
 
   <ul class="nav-items">
     <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
     <li class="nav-item"><a href="/games" class="nav-link">Games</a></li>
+    
+    <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
 
     {#if token}
-      <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
-      <li class="nav-item"><a href="/" class="nav-link" on:click={logout}>Logout</a></li>
+      <li class="nav-item">
+        <a href="/" class="nav-link logout-text" on:click|preventDefault={logout}>Logout</a>
+      </li>
     {:else}
       <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
-      <li class="nav-item"><a href="/signup" class="nav-link">Sign Up</a></li>
+      <li class="nav-item">
+        <a href="/signup" class="nav-link signup-highlight">Sign Up</a>
+      </li>
     {/if}
   </ul>
 </div>
@@ -48,70 +54,85 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    background-color: #222;
-    padding: 1rem;
+    background-color: #0a0a0c; /* Matching your dashboard dark theme */
+    padding: 1rem 2rem;
     color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid #26262b;
     width: 100%;
     box-sizing: border-box;
-  }
-
-  .navbar:hover {
-    background-color: #333;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
   }
 
   .left-section {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
     gap: 1rem;
-  }
-
-  .theme-toggle-wrapper {
-    margin-right: 20px;
   }
 
   .nav-brand {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 900;
     text-decoration: none;
     color: white;
+    letter-spacing: -1px;
   }
+
+  .orange { color: #FF8C00; }
+  .green { color: #16a34a; }
 
   .nav-items {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    align-items: center;
+    gap: 1.5rem;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .nav-item {
-    /* spacing handled by gap */
-  }
-
   .nav-link {
     text-decoration: none;
-    color: white;
-    transition: color 0.3s ease;
+    color: #94a3b8;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
     white-space: nowrap;
   }
 
   .nav-link:hover {
-    color: #ff7f50;
+    color: #FF8C00;
   }
 
-  @media (max-width: 500px) {
-    .navbar {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
+  .signup-highlight {
+    background: #16a34a;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
 
+  .signup-highlight:hover {
+    background: #18b653;
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  .logout-text {
+    color: #ef4444;
+  }
+
+  @media (max-width: 600px) {
+    .navbar {
+      padding: 1rem;
+    }
     .nav-items {
-      justify-content: flex-start;
+      gap: 0.8rem;
+    }
+    .nav-link {
+      font-size: 0.75rem;
     }
   }
 </style>
