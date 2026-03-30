@@ -1,312 +1,198 @@
-<!-- src/lib/VerbalMemoryTrainer.svelte -->
 <script>
     import { onMount } from 'svelte';
     import Layout from '../../layouts/Layout.svelte';
     import Modal from '../../lib/components/Modal.svelte';
     import wordSets from './wordSets.js';
 
-    let currentWordSet = {};
+    let currentWordSet = { words: [] };
     let lives = 3;
     let correctGuesses = 0;
     let randomWord = '';
     let wordStatus = {};
-    let wordColor = 'var(--primary-color)';
-    let previousColor = '';
     let showModal = false;
+    let feedbackClass = ''; 
 
     const selectRandomWordSet = () => {
         currentWordSet = wordSets[Math.floor(Math.random() * wordSets.length)];
     };
 
     const generateRandomWord = () => {
+        if (!currentWordSet.words.length) return;
         randomWord = currentWordSet.words[Math.floor(Math.random() * currentWordSet.words.length)];
-        wordColor = getRandomColor();
+    };
+
+    const triggerFeedback = (isCorrect) => {
+        feedbackClass = isCorrect ? 'flash-correct' : 'flash-wrong';
+        setTimeout(() => (feedbackClass = ''), 400);
     };
 
     const handleClickSeen = () => {
-        if (wordStatus[randomWord] === 'seen') {
-            correctGuesses++;
-        } else {
-            lives--;
-        }
-        if (lives === 0) {
-            showModal = true;
-        } else {
-            wordStatus[randomWord] = 'seen';
-            generateRandomWord();
-        }
+        const isCorrect = wordStatus[randomWord] === 'seen';
+        triggerFeedback(isCorrect);
+        if (isCorrect) { correctGuesses++; } else { lives--; }
+        handleTurnEnd();
     };
 
     const handleClickNew = () => {
-        if (wordStatus[randomWord] !== 'seen') {
-            correctGuesses++;
-        } else {
-            lives--;
-        }
-        if (lives === 0) {
+        const isCorrect = wordStatus[randomWord] !== 'seen';
+        triggerFeedback(isCorrect);
+        if (isCorrect) { correctGuesses++; } else { lives--; }
+        handleTurnEnd();
+    };
+
+    const handleTurnEnd = () => {
+        if (lives <= 0) {
             showModal = true;
         } else {
             wordStatus[randomWord] = 'seen';
             generateRandomWord();
         }
-    };
-
-    const getRandomColor = () => {
-        const colors = [
-            'var(--accent-pink)',
-            'var(--accent-orange)',
-            'var(--accent-purple)',
-            'var(--accent-green)',
-            'var(--accent-blue)',
-            'var(--accent-yellow)',
-        ];
-        const index = colors.indexOf(previousColor);
-        if (index !== -1) {
-            colors.splice(index, 1);
-        }
-        const newColor = colors[Math.floor(Math.random() * colors.length)];
-        previousColor = newColor;
-        return newColor;
     };
 
     onMount(() => {
         selectRandomWordSet();
-        generateRandomWord();
-        currentWordSet.words.forEach(word => {
-            wordStatus[word] = 'new';
-        });
+        if (currentWordSet.words.length) {
+            currentWordSet.words.forEach(word => { wordStatus[word] = 'new'; });
+            generateRandomWord();
+        }
     });
 </script>
 
-<head>
-    <title>Verbal Memory Trainer - Boost Your Recall</title>
-    <meta name="description" content="Sharpen your verbal memory with this engaging trainer. Test your recall with words and track your progress." />
-    <meta name="keywords" content="verbal memory, memory game, word recall, cognitive training, brain exercise" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
-
 <Layout>
-    <main class="content-wrapper" aria-labelledby="game-title">
-        <h1 class="game-title" id="game-title">Verbal Memory Trainer</h1>
-        <section class="description" aria-labelledby="how-to-play">
-            <h2 id="how-to-play">How to Play</h2>
-            <p>Test your memory by identifying whether each word is new or previously seen.</p>
-        </section>
-
-        <section class="game-container" aria-label="Word guessing game">
-            <div class="memory-container">
-                <div class="card">
-                    <h3 class="random-word" style="color: {wordColor};" aria-live="polite">{randomWord}</h3>
-                    <div class="button-container">
-                        <button
-                            on:click={handleClickSeen}
-                            class="btn btn-seen"
-                            aria-label="Mark word as seen"
-                        >
-                            Seen
-                        </button>
-                        <button
-                            on:click={handleClickNew}
-                            class="btn btn-new"
-                            aria-label="Mark word as new"
-                        >
-                            New
-                        </button>
-                    </div>
-                    <div class="stats">
-                        <p class="lives" aria-label="Remaining lives">Lives: {lives}</p>
-                        <p class="correct-guesses" aria-label="Correct guesses">Score: {correctGuesses}</p>
-                    </div>
+    <main class="game-wrapper">
+        <header class="game-header">
+            <h1 class="title">Verbal Memory</h1>
+            <p class="description">Identify if you've seen the word before.</p>
+            
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="label">Lives</span>
+                    <span class="value lives-val" class:low={lives === 1}>{lives}</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="label">Score</span>
+                    <span class="value score-val">{correctGuesses}</span>
                 </div>
             </div>
-            {#if showModal}
-                <Modal correctGuesses={correctGuesses} onClose={() => (showModal = false)} />
-            {/if}
+        </header>
+
+        <section class="game-stage {feedbackClass}">
+            <div class="word-container">
+                <h2 class="display-word">{randomWord}</h2>
+            </div>
+
+            <div class="action-area">
+                <button on:click={handleClickSeen} class="btn btn-seen">Seen</button>
+                <button on:click={handleClickNew} class="btn btn-new">New</button>
+            </div>
         </section>
+        
+        {#if showModal}
+            <Modal {correctGuesses} onClose={() => (showModal = false)} />
+        {/if}
     </main>
 </Layout>
 
 <style>
-    :root {
-        --background-color: var(--theme-background, #1a1a1a);
-        --card-background: var(--theme-card, #2a2a2a);
-        --text-color: var(--theme-text, #ffffff);
-        --primary-color: #ff4d4d; /* Match AimTrainer's red accent */
-        --accent-pink: #ff0066;
-        --accent-orange: #ff6600;
-        --accent-purple: #cc33ff;
-        --accent-green: #33cc33;
-        --accent-blue: #0099cc;
-        --accent-yellow: #ffcc00;
-        --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        --transition: all 0.3s ease;
-    }
-
-    .content-wrapper {
-        display: grid;
-        gap: 2rem;
-        max-width: 1000px; /* Match AimTrainer */
-        margin: 2rem auto;
+    .game-wrapper {
+        max-width: 650px; /* Tightened up to keep everything in view */
+        margin: 1.5rem auto;
         padding: 0 1rem;
+        font-family: system-ui, -apple-system, sans-serif;
     }
 
-    .game-title {
-        font-size: 2rem;
-        font-weight: 600;
-        color: var(--text-color);
+    /* HEADER COLORS: Using Orange/Amber for dark-mode and light-mode pop */
+    .title {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #f59e0b; /* Amber/Orange - Pops on black OR white */
         text-align: center;
+        margin-bottom: 0.25rem;
+        letter-spacing: -1px;
     }
 
     .description {
-        text-align: center;
-        padding: 1.5rem;
-        background: var(--card-background);
-        border-radius: 12px;
-        box-shadow: var(--shadow);
-    }
-
-    .description h2 {
-        font-size: 1.75rem;
-        color: var(--primary-color);
-        margin-bottom: 0.5rem;
-    }
-
-    .description p {
         font-size: 1rem;
-        color: var(--text-color);
-        opacity: 0.9;
+        font-weight: 600;
+        color: #64748b; /* Medium Slate */
+        text-align: center;
+        margin-bottom: 2rem;
     }
 
-    .game-container {
+    /* STATS BAR: Solid background ensures the text is ALWAYS white and readable */
+    .stats-bar {
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 60vh;
-    }
-
-    .memory-container {
-        width: 100%;
-        max-width: 600px; /* Cap for long words */
-        min-width: 300px;
-    }
-
-    .card {
-        background: var(--card-background);
+        background: #1e293b; /* Deep Slate */
+        padding: 0.75rem 2rem;
         border-radius: 16px;
-        box-shadow: var(--shadow);
-        padding: 2rem;
-        display: grid;
-        gap: 1.5rem;
+        gap: 2.5rem;
+        width: fit-content;
+        margin: 0 auto 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .stat { text-align: center; }
+    .stat .label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px; }
+    .stat .value { font-size: 1.8rem; font-weight: 900; display: block; color: #ffffff; }
+    
+    .lives-val.low { color: #ef4444; } /* Red for danger */
+    .stat-divider { width: 2px; height: 35px; background: #334155; }
+
+    /* GAME STAGE: Slate-100 background ensures black text is always readable */
+    .game-stage {
+        background: #f8fafc; /* Very light slate card */
+        border: 3px solid #cbd5e1;
+        border-radius: 28px;
+        padding: 3rem 1.5rem;
         text-align: center;
-        transition: var(--transition);
-        width: 100%;
+        transition: all 0.2s ease;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
 
-    .random-word {
-        font-size: 2rem;
-        font-weight: 600;
-        transition: opacity 0.5s ease;
-        animation: fadeIn 0.5s ease-in;
-        word-break: break-word; /* Wrap long words */
-        overflow-wrap: anywhere; /* Ensure wrapping */
-        line-height: 1.2;
-        margin: 0 auto;
-        max-width: 100%; /* Prevent overflow */
+    .display-word {
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: #0f172a; /* Near-black Slate - Ultimate readability */
+        margin: 0 0 2.5rem;
+        letter-spacing: -1.5px;
     }
 
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .button-container {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-    }
+    .action-area { display: flex; gap: 1rem; justify-content: center; }
 
     .btn {
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-        font-weight: 500;
-        border: none;
-        border-radius: 8px;
+        padding: 1rem 3rem;
+        font-size: 1.25rem;
+        font-weight: 800;
+        border-radius: 12px;
         cursor: pointer;
-        transition: var(--transition);
+        border: none;
+        color: white;
+        transition: transform 0.1s, filter 0.2s;
     }
 
-    .btn-seen {
-        background: var(--accent-pink);
-        color: var(--text-color);
-    }
+    .btn-seen { background: #3b82f6; } /* Royal Blue */
+    .btn-new { background: #10b981; }  /* Emerald Green */
 
-    .btn-new {
-        background: var(--accent-green);
-        color: var(--text-color);
-    }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .btn:active { transform: scale(0.95); }
 
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow);
-    }
+    /* FEEDBACK: Background tints for visual confirmation */
+    .flash-correct { background: #dcfce7 !important; border-color: #10b981 !important; }
+    .flash-wrong { background: #fee2e2 !important; border-color: #ef4444 !important; animation: shake 0.4s; }
 
-    .btn:focus {
-        outline: 2px solid var(--primary-color);
-        outline-offset: 2px;
-    }
-
-    .stats {
-        display: flex;
-        justify-content: space-between;
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: var(--text-color);
-    }
-
-    .lives,
-    .correct-guesses {
-        margin: 0;
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-8px); }
+        75% { transform: translateX(8px); }
     }
 
     @media (max-width: 600px) {
-        .content-wrapper {
-            margin: 1rem;
-        }
-
-        .game-title {
-            font-size: 1.5rem;
-        }
-
-        .card {
-            padding: 1.5rem;
-            max-width: 90vw; /* Adjust for mobile */
-        }
-
-        .random-word {
-            font-size: 1.5rem; /* Smaller font for long words on mobile */
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-
-        .description {
-            padding: 1rem;
-        }
-
-        .description h2 {
-            font-size: 1.5rem;
-        }
-
-        .description p {
-            font-size: 0.9rem;
-        }
+        .title { font-size: 2rem; }
+        .display-word { font-size: 2.5rem; }
+        .action-area { flex-direction: column; width: 100%; max-width: 280px; margin: 0 auto; }
+        .btn { padding: 0.8rem; width: 100%; }
     }
 </style>

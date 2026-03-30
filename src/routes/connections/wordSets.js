@@ -1,4 +1,4 @@
-  export const groupSets = [
+  export const rawGroupSets = [
 
   // Puzzle #1 (June 12, 2023)
   [
@@ -154,13 +154,6 @@
     { title: 'BLUE: KINDS OF WOOD', words: ['BIRCH', 'CEDAR', 'MAHOGANY', 'TEAK'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ BRANCH', words: ['EXECUTIVE', 'JUDICIAL', 'LEGISLATIVE', 'OLIVE'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #23 (July 4, 2023)
-  [
-    { title: 'YELLOW: PATRIOTIC SYMBOLS', words: ['EAGLE', 'FLAG', 'LIBERTY', 'STAR'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FIREWORKS TERMS', words: ['BURST', 'FUSE', 'SPARKLER', 'VOLLEY'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: AMERICAN HISTORICAL FIGURES', words: ['FRANKLIN', 'HAMILTON', 'JEFFERSON', 'LINCOLN'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ DAY', words: ['GROUNDHOG', 'INDEPENDENCE', 'LABOR', 'VALENTINE'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #24 (July 5, 2023)
   [
     { title: 'YELLOW: KINDS OF FRUIT', words: ['APPLE', 'BANANA', 'ORANGE', 'PEAR'], color: 'yellow', difficulty: 0 },
@@ -196,13 +189,7 @@
     { title: 'BLUE: CAR BRANDS', words: ['FORD', 'HONDA', 'TESLA', 'TOYOTA'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ CAR', words: ['CABLE', 'CLOWN', 'PATROL', 'RACE'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #29 (July 10, 2023)
-  [
-    { title: 'YELLOW: KINDS OF CHEESE', words: ['CHEDDAR', 'GOUDA', 'PARMESAN', 'SWISS'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: THINGS ON A PIZZA', words: ['OLIVE', 'PEPPER', 'SAUCE', 'SAUSAGE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: ITALIAN CITIES', words: ['FLORENCE', 'MILAN', 'ROME', 'VENICE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ BALL', words: ['CHEESE', 'CRYSTAL', 'MEAT', 'WRECKING'], color: 'purple', difficulty: 3 }
-  ],
+
   // Puzzle #30 (July 11, 2023)
   [
     { title: 'YELLOW: TYPES OF FLOWERS', words: ['DAISY', 'LILY', 'ROSE', 'TULIP'], color: 'yellow', difficulty: 0 },
@@ -217,26 +204,13 @@
     { title: 'BLUE: THINGS THAT ARE SWEET', words: ['HONEY', 'SUGAR', 'SYRUP', 'TAFFY'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ BAR', words: ['CANDY', 'CEREAL', 'GOLD', 'SALAD'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #32 (July 13, 2023)
-  [
-    { title: 'YELLOW: KINDS OF SHOES', words: ['BOOT', 'LOAFER', 'PUMP', 'SNEAKER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PARTS OF A SHOE', words: ['HEEL', 'LACE', 'SOLE', 'TONGUE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: DESIGNER BRANDS', words: ['GUCCI', 'NIKE', 'PRADA', 'VERSACE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ HEEL', words: ['ACHILLES', 'KITTEN', 'STILETTO', 'WEDGE'], color: 'purple', difficulty: 3 }
-  ],
+
   // Puzzle #33 (July 14, 2023)
   [
     { title: 'YELLOW: KINDS OF WEATHER', words: ['CLOUDY', 'RAINY', 'SUNNY', 'WINDY'], color: 'yellow', difficulty: 0 },
     { title: 'GREEN: WEATHER PHENOMENA', words: ['FOG', 'HAIL', 'SLEET', 'SNOW'], color: 'green', difficulty: 1 },
     { title: 'BLUE: WEATHER INSTRUMENTS', words: ['ANEMOMETER', 'BAROMETER', 'HYGROMETER', 'THERMOMETER'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ STORM', words: ['BRAIN', 'DUST', 'FIRE', 'SNOW'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #34 (July 15, 2023)
-  [
-    { title: 'YELLOW: KINDS OF DOGS', words: ['BEAGLE', 'BOXER', 'POODLE', 'TERRIER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: DOG COMMANDS', words: ['FETCH', 'HEEL', 'SIT', 'STAY'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: DOG SHOW CATEGORIES', words: ['AGILITY', 'BREED', 'OBEDIENCE', 'TRACKING'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ DOG', words: ['CORN', 'HOT', 'HUSH', 'SLED'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #35 (July 16, 2023)
   [
@@ -258,13 +232,6 @@
     { title: 'GREEN: THINGS MADE OF FABRIC', words: ['BLANKET', 'CURTAIN', 'RUG', 'TOWEL'], color: 'green', difficulty: 1 },
     { title: 'BLUE: FASHION TERMS', words: ['HEM', 'PLEAT', 'SEAM', 'STITCH'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ THREAD', words: ['COMMON', 'GOLDEN', 'NEEDLE', 'SCREW'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #38 (July 19, 2023)
-  [
-    { title: 'YELLOW: KINDS OF MUSIC', words: ['BLUES', 'CLASSICAL', 'JAZZ', 'ROCK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: MUSICAL INSTRUMENTS', words: ['DRUM', 'FLUTE', 'GUITAR', 'PIANO'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: MUSIC FESTIVALS', words: ['BONNAROO', 'COACHELLA', 'GLASTONBURY', 'LOLLAPALOOZA'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ BAND', words: ['COVER', 'GARAGE', 'MARCHING', 'RUBBER'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #39 (July 20, 2023)
   [
@@ -330,13 +297,6 @@
     { title: 'BLUE: CLASSIC BOARD GAMES', words: ['CHESS', 'CLUE', 'MONOPOLY', 'SCRABBLE'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ GAME', words: ['BLAME', 'NAME', 'NUMBERS', 'WAITING'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #48 (July 29, 2023)
-  [
-    { title: 'YELLOW: KINDS OF PASTA', words: ['FUSILLI', 'PENNE', 'RIGATONI', 'SPAGHETTI'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PASTA SAUCES', words: ['ALFREDO', 'MARINARA', 'PESTO', 'VODKA'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: ITALIAN DISHES', words: ['LASAGNA', 'PIZZA', 'RAVIOLI', 'RISOTTO'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ NOODLE', words: ['GLASS', 'RICE', 'SOBA', 'UDON'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #49 (July 30, 2023)
   [
     { title: 'YELLOW: KINDS OF FLOWERS', words: ['DAFFODIL', 'ORCHID', 'ROSE', 'TULIP'], color: 'yellow', difficulty: 0 },
@@ -350,13 +310,6 @@
     { title: 'GREEN: ANIMAL HABITATS', words: ['DEN', 'NEST', 'POND', 'REEF'], color: 'green', difficulty: 1 },
     { title: 'BLUE: ZOO ATTRACTIONS', words: ['AQUARIUM', 'AVIARY', 'SAVANNA', 'TERRARIUM'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ PARK', words: ['AMUSEMENT', 'JURASSIC', 'NATIONAL', 'WATER'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #51 (August 1, 2023)
-  [
-    { title: 'YELLOW: KINDS OF CLOTHES', words: ['JACKET', 'PANTS', 'SHIRT', 'SHOES'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: CLOTHING ACCESSORIES', words: ['BELT', 'HAT', 'SCARF', 'TIE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: FASHION BRANDS', words: ['CHANEL', 'GUCCI', 'PRADA', 'VERSACE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ STYLE', words: ['BOHO', 'GRUNGE', 'PREPPY', 'PUNK'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #52 (August 2, 2023)
   [
@@ -385,13 +338,6 @@
     { title: 'GREEN: PARTS OF A SONG', words: ['BRIDGE', 'CHORUS', 'INTRO', 'VERSE'], color: 'green', difficulty: 1 },
     { title: 'BLUE: MUSIC GENRES', words: ['BLUES', 'COUNTRY', 'HIP-HOP', 'ROCK'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ NOTE', words: ['COVER', 'FOOT', 'HIGH', 'LOVE'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #56 (August 6, 2023)
-  [
-    { title: 'YELLOW: KINDS OF PETS', words: ['CAT', 'DOG', 'FISH', 'HAMSTER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PET SUPPLIES', words: ['BOWL', 'COLLAR', 'LEASH', 'TOY'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: FAMOUS PETS IN MOVIES', words: ['BEETHOVEN', 'LASSIE', 'TOTO', 'WILBUR'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TAIL', words: ['COCKTAIL', 'PONY', 'PIG', 'WHALE'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #57 (August 7, 2023)
   [
@@ -442,13 +388,6 @@
     { title: 'BLUE: MOVIE AWARDS', words: ['CANNES', 'EMMY', 'OSCAR', 'TONY'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ FILM', words: ['ART', 'CULT', 'SILENT', 'SHORT'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #64 (August 14, 2023)
-  [
-    { title: 'YELLOW: KINDS OF DRINKS', words: ['BEER', 'SODA', 'TEA', 'WINE'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: DRINK CONTAINERS', words: ['BOTTLE', 'GLASS', 'MUG', 'STEIN'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: BEER TYPES', words: ['ALE', 'LAGER', 'PILSNER', 'STOUT'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ BREW', words: ['CRAFT', 'HOME', 'ROOT', 'WITCHES'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #65 (August 15, 2023)
   [
     { title: 'YELLOW: KINDS OF TREES', words: ['CEDAR', 'ELM', 'MAPLE', 'PINE'], color: 'yellow', difficulty: 0 },
@@ -469,20 +408,6 @@
     { title: 'GREEN: VEGETABLE DISHES', words: ['COLesLAW', 'SALAD', 'SOUP', 'STEW'], color: 'green', difficulty: 1 },
     { title: 'BLUE: ROOT VEGETABLES', words: ['PARSNIP', 'POTATO', 'RADISH', 'TURNIP'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ ROOT', words: ['BITTER', 'GINGER', 'SQUARE', 'TAP'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #68 (August 18, 2023)
-  [
-    { title: 'YELLOW: KINDS OF FURNITURE', words: ['CHAIR', 'DESK', 'SOFA', 'TABLE'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FURNITURE PARTS', words: ['ARM', 'BACK', 'LEG', 'SEAT'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF CHAIRS', words: ['LOUNGE', 'RECLINER', 'ROCKER', 'THRONE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TABLE', words: ['COFFEE', 'PERIODIC', 'ROUND', 'WATER'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #69 (August 19, 2023)
-  [
-    { title: 'YELLOW: KINDS OF SPORTS', words: ['CRICKET', 'RUGBY', 'SOCCER', 'VOLLEYBALL'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: SPORTS TERMS', words: ['FOUL', 'GOAL', 'PENALTY', 'SCORE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: SPORTS EQUIPMENT', words: ['BALL', 'NET', 'RACKET', 'SHUTTLECOCK'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ KICK', words: ['CORNER', 'FREE', 'PENALTY', 'SCORPION'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #70 (August 20, 2023)
   [
@@ -512,13 +437,6 @@
     { title: 'BLUE: WEATHER PHENOMENA', words: ['BLIZZARD', 'CYCLONE', 'HURRICANE', 'TORNADO'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ STORM', words: ['BRAIN', 'DUST', 'FIRE', 'SNOW'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #74 (August 24, 2023)
-  [
-    { title: 'YELLOW: KINDS OF DOGS', words: ['BULLDOG', 'LABRADOR', 'POODLE', 'TERRIER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: DOG COMMANDS', words: ['FETCH', 'SIT', 'STAY', 'ROLL'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: DOG SHOW TERMS', words: ['BREED', 'GAIT', 'HANDLER', 'JUDGE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ DOG', words: ['CORN', 'HOT', 'HUSH', 'SLED'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #75 (August 25, 2023)
   [
     { title: 'YELLOW: KINDS OF DRINKS', words: ['COFFEE', 'JUICE', 'SODA', 'TEA'], color: 'yellow', difficulty: 0 },
@@ -540,26 +458,12 @@
     { title: 'BLUE: TYPES OF WEAVES', words: ['PLAIN', 'SATIN', 'TWILL', 'VELVET'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ THREAD', words: ['COMMON', 'GOLDEN', 'NEEDLE', 'SCREW'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #78 (August 28, 2023)
-  [
-    { title: 'YELLOW: KINDS OF MUSIC', words: ['BLUES', 'JAZZ', 'POP', 'ROCK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: MUSICAL INSTRUMENTS', words: ['DRUM', 'GUITAR', 'PIANO', 'TRUMPET'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: MUSIC AWARDS', words: ['GRAMMY', 'JUNO', 'MTV', 'TONY'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ SONG', words: ['FOLK', 'LOVE', 'SWAN', 'THEME'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #79 (August 29, 2023)
   [
     { title: 'YELLOW: KINDS OF FRUIT', words: ['APPLE', 'BANANA', 'MANGO', 'PEACH'], color: 'yellow', difficulty: 0 },
     { title: 'GREEN: FRUIT-BASED DISHES', words: ['JAM', 'PIE', 'SALAD', 'SMOOTHIE'], color: 'green', difficulty: 1 },
     { title: 'BLUE: TROPICAL FRUITS', words: ['COCONUT', 'GUAVA', 'PAPAYA', 'PINEAPPLE'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ PEEL', words: ['BANANA', 'CITRUS', 'ORANGE', 'POTATO'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #80 (August 30, 2023)
-  [
-    { title: 'YELLOW: KINDS OF BOATS', words: ['CANOE', 'KAYAK', 'SAILBOAT', 'YACHT'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: BOAT PARTS', words: ['DECK', 'HULL', 'MAST', 'RUDDER'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: NAUTICAL TERMS', words: ['AFT', 'BOW', 'PORT', 'STARBOARD'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ WAVE', words: ['HEAT', 'RADIO', 'SOUND', 'TIDAL'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #81 (August 31, 2023)
   [
@@ -589,13 +493,6 @@
     { title: 'BLUE: TYPES OF WEAVES', words: ['PLAIN', 'SATIN', 'TWILL', 'VELVET'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ THREAD', words: ['COMMON', 'GOLDEN', 'NEEDLE', 'SCREW'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #85 (September 4, 2023)
-  [
-    { title: 'YELLOW: KINDS OF MUSIC', words: ['BLUES', 'JAZZ', 'POP', 'ROCK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: MUSICAL INSTRUMENTS', words: ['DRUM', 'GUITAR', 'PIANO', 'VIOLIN'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: MUSIC FESTIVALS', words: ['BONNAROO', 'COACHELLA', 'GLASTONBURY', 'LOLLAPALOOZA'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ SONG', words: ['FOLK', 'LOVE', 'SWAN', 'THEME'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #86 (September 5, 2023)
   [
     { title: 'YELLOW: KINDS OF FRUIT', words: ['APPLE', 'BANANA', 'MANGO', 'PEACH'], color: 'yellow', difficulty: 0 },
@@ -617,20 +514,6 @@
     { title: 'BLUE: VEGETABLE DISHES', words: ['CASSEROLE', 'SALAD', 'SOUP', 'STIR-FRY'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ BEAN', words: ['GREEN', 'JELLY', 'KIDNEY', 'STRING'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #89 (September 8, 2023)
-  [
-    { title: 'YELLOW: KINDS OF PETS', words: ['CAT', 'DOG', 'FISH', 'HAMSTER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PET SUPPLIES', words: ['BOWL', 'COLLAR', 'LEASH', 'TOY'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: FAMOUS PETS IN MOVIES', words: ['BEETHOVEN', 'LASSIE', 'TOTO', 'WILBUR'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TAIL', words: ['COCKTAIL', 'PONY', 'PIG', 'WHALE'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #90 (September 9, 2023)
-  [
-    { title: 'YELLOW: KINDS OF BOOKS', words: ['FICTION', 'MEMOIR', 'POETRY', 'TEXTBOOK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PARTS OF A BOOK', words: ['COVER', 'INDEX', 'PAGE', 'SPINE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: LITERARY GENRES', words: ['FANTASY', 'MYSTERY', 'ROMANCE', 'SCI-FI'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ STORY', words: ['COVER', 'GHOST', 'LOVE', 'SHORT'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #91 (September 10, 2023)
   [
     { title: 'YELLOW: KINDS OF TREES', words: ['BIRCH', 'CEDAR', 'MAPLE', 'PINE'], color: 'yellow', difficulty: 0 },
@@ -651,13 +534,6 @@
     { title: 'GREEN: VEGETABLE DISHES', words: ['COLESLAW', 'SALAD', 'SOUP', 'STEW'], color: 'green', difficulty: 1 },
     { title: 'BLUE: ROOT VEGETABLES', words: ['PARSNIP', 'POTATO', 'RADISH', 'TURNIP'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ ROOT', words: ['BITTER', 'GINGER', 'SQUARE', 'TAP'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #94 (September 13, 2023)
-  [
-    { title: 'YELLOW: KINDS OF FURNITURE', words: ['CHAIR', 'DESK', 'SOFA', 'TABLE'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FURNITURE PARTS', words: ['ARM', 'BACK', 'LEG', 'SEAT'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF CHAIRS', words: ['LOUNGE', 'RECLINER', 'ROCKER', 'THRONE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TABLE', words: ['COFFEE', 'PERIODIC', 'ROUND', 'WATER'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #95 (September 14, 2023)
   [
@@ -701,13 +577,6 @@
     { title: 'BLUE: KINDS OF WHALES', words: ['BLUE', 'HUMPBACK', 'ORCA', 'SPERM'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: GREEN ___', words: ['BEAN', 'EYE', 'LIGHT', 'THUMB'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #101 (September 20, 2023)
-  [
-    { title: 'YELLOW: KINDS OF CHEESE', words: ['CHEDDAR', 'GOUDA', 'PARMESAN', 'SWISS'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: THINGS ON A PIZZA', words: ['MUSHROOM', 'PEPPER', 'SAUCE', 'SAUSAGE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: ITALIAN CITIES', words: ['FLORENCE', 'MILAN', 'ROME', 'VENICE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ BALL', words: ['CHEESE', 'CRYSTAL', 'MEAT', 'WRECKING'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #102 (September 21, 2023)
   [
     { title: 'YELLOW: KINDS OF FLOWERS', words: ['DAISY', 'LILY', 'ROSE', 'TULIP'], color: 'yellow', difficulty: 0 },
@@ -722,26 +591,12 @@
     { title: 'BLUE: THINGS THAT ARE SWEET', words: ['HONEY', 'SUGAR', 'SYRUP', 'TAFFY'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ BAR', words: ['CANDY', 'CEREAL', 'GOLD', 'SALAD'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #104 (September 23, 2023)
-  [
-    { title: 'YELLOW: KINDS OF SHOES', words: ['BOOT', 'LOAFER', 'PUMP', 'SNEAKER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: SHOE PARTS', words: ['HEEL', 'LACE', 'SOLE', 'TONGUE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: DESIGNER BRANDS', words: ['GUCCI', 'NIKE', 'PRADA', 'VERSACE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ HEEL', words: ['ACHILLES', 'KITTEN', 'STILETTO', 'WEDGE'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #105 (September 24, 2023)
   [
     { title: 'YELLOW: KINDS OF WEATHER', words: ['CLOUDY', 'RAINY', 'SUNNY', 'WINDY'], color: 'yellow', difficulty: 0 },
     { title: 'GREEN: WEATHER PHENOMENA', words: ['FOG', 'HAIL', 'SLEET', 'SNOW'], color: 'green', difficulty: 1 },
     { title: 'BLUE: WEATHER INSTRUMENTS', words: ['ANEMOMETER', 'BAROMETER', 'HYGROMETER', 'THERMOMETER'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ STORM', words: ['BRAIN', 'DUST', 'FIRE', 'SNOW'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #106 (September 25, 2023)
-  [
-    { title: 'YELLOW: KINDS OF DOGS', words: ['BEAGLE', 'BOXER', 'POODLE', 'TERRIER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: DOG COMMANDS', words: ['FETCH', 'HEEL', 'SIT', 'STAY'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: DOG SHOW CATEGORIES', words: ['AGILITY', 'BREED', 'OBEDIENCE', 'TRACKING'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ DOG', words: ['CORN', 'HOT', 'HUSH', 'SLED'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #107 (September 26, 2023)
   [
@@ -763,13 +618,6 @@
     { title: 'GREEN: THINGS MADE OF FABRIC', words: ['BLANKET', 'CURTAIN', 'RUG', 'TOWEL'], color: 'green', difficulty: 1 },
     { title: 'BLUE: FASHION TERMS', words: ['HEM', 'PLEAT', 'SEAM', 'STITCH'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ THREAD', words: ['COMMON', 'GOLDEN', 'NEEDLE', 'SCREW'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #110 (September 29, 2023)
-  [
-    { title: 'YELLOW: KINDS OF MUSIC', words: ['BLUES', 'CLASSICAL', 'JAZZ', 'ROCK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: MUSICAL INSTRUMENTS', words: ['DRUM', 'FLUTE', 'GUITAR', 'PIANO'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: MUSIC FESTIVALS', words: ['BONNAROO', 'COACHELLA', 'GLASTONBURY', 'LOLLAPALOOZA'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ BAND', words: ['COVER', 'GARAGE', 'MARCHING', 'RUBBER'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #111 (September 30, 2023)
   [
@@ -849,33 +697,12 @@
     { title: 'BLUE: TYPES OF PIES', words: ['APPLE', 'PECAN', 'PUMPKIN', 'KEY LIME'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ CREAM', words: ['ICE', 'SOUR', 'WHIPPED', 'COLD'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #122 (October 11, 2023)
-  [
-    { title: 'YELLOW: KINDS OF SPORTS', words: ['BASEBALL', 'BASKETBALL', 'HOCKEY', 'SOCCER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: SPORTS EQUIPMENT', words: ['BALL', 'BAT', 'PUCK', 'RACKET'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: SPORTS VENUES', words: ['ARENA', 'COURT', 'FIELD', 'RINK'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ BALL', words: ['CRYSTAL', 'DISCO', 'FOUL', 'WRECKING'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #123 (October 12, 2023)
   [
     { title: 'YELLOW: KINDS OF DRINKS', words: ['COFFEE', 'JUICE', 'SODA', 'TEA'], color: 'yellow', difficulty: 0 },
     { title: 'GREEN: DRINK CONTAINERS', words: ['CUP', 'GLASS', 'MUG', 'TUMBLER'], color: 'green', difficulty: 1 },
     { title: 'BLUE: TEA TYPES', words: ['BLACK', 'GREEN', 'HERBAL', 'OOLONG'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ LEAF', words: ['BAY', 'FIG', 'TEA', 'VINE'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #124 (October 13, 2023)
-  [
-    { title: 'YELLOW: KINDS OF FABRIC', words: ['COTTON', 'LINEN', 'SILK', 'WOOL'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: CLOTHING ITEMS', words: ['JACKET', 'PANTS', 'SHIRT', 'SWEATER'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: FASHION ACCESSORIES', words: ['BELT', 'HAT', 'SCARF', 'TIE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ STYLE', words: ['BOHO', 'GRUNGE', 'PREPPY', 'PUNK'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #125 (October 14, 2023)
-  [
-    { title: 'YELLOW: KINDS OF FRUIT', words: ['APPLE', 'BANANA', 'MANGO', 'PEACH'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FRUIT-BASED DISHES', words: ['JAM', 'PIE', 'SALAD', 'SMOOTHIE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TROPICAL FRUITS', words: ['COCONUT', 'GUAVA', 'PAPAYA', 'PINEAPPLE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ PEEL', words: ['BANANA', 'CITRUS', 'ORANGE', 'POTATO'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #126 (October 15, 2023)
   [
@@ -919,13 +746,6 @@
     { title: 'BLUE: BIRD-RELATED TERMS', words: ['FLOCK', 'MIGRATION', 'NEST', 'PLUMAGE'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ EAGLE', words: ['BALD', 'GOLDEN', 'LEGAL', 'SPREAD'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #132 (October 21, 2023)
-  [
-    { title: 'YELLOW: KINDS OF CHEESE', words: ['CHEDDAR', 'GOUDA', 'PARMESAN', 'SWISS'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: THINGS ON A PIZZA', words: ['MUSHROOM', 'PEPPER', 'SAUCE', 'SAUSAGE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: ITALIAN CITIES', words: ['FLORENCE', 'MILAN', 'ROME', 'VENICE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ BALL', words: ['CHEESE', 'CRYSTAL', 'MEAT', 'WRECKING'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #133 (October 22, 2023)
   [
     { title: 'YELLOW: KINDS OF FLOWERS', words: ['DAFFODIL', 'ORCHID', 'ROSE', 'TULIP'], color: 'yellow', difficulty: 0 },
@@ -939,13 +759,6 @@
     { title: 'GREEN: ANIMAL HABITATS', words: ['DEN', 'NEST', 'POND', 'REEF'], color: 'green', difficulty: 1 },
     { title: 'BLUE: ZOO ATTRACTIONS', words: ['AQUARIUM', 'AVIARY', 'SAVANNA', 'TERRARIUM'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ PARK', words: ['AMUSEMENT', 'JURASSIC', 'NATIONAL', 'WATER'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #135 (October 24, 2023)
-  [
-    { title: 'YELLOW: KINDS OF CLOTHES', words: ['JACKET', 'PANTS', 'SHIRT', 'SHOES'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: CLOTHING ACCESSORIES', words: ['BELT', 'HAT', 'SCARF', 'TIE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: FASHION BRANDS', words: ['CHANEL', 'GUCCI', 'PRADA', 'VERSACE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ STYLE', words: ['BOHO', 'GRUNGE', 'PREPPY', 'PUNK'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #136 (October 25, 2023)
   [
@@ -1017,40 +830,12 @@
     { title: 'BLUE: CLASSIC BOARD GAMES', words: ['CHESS', 'CLUE', 'MONOPOLY', 'SCRABBLE'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ GAME', words: ['BLAME', 'NAME', 'NUMBERS', 'WAITING'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #146 (November 4, 2023)
-  [
-    { title: 'YELLOW: KINDS OF PASTA', words: ['FUSILLI', 'PENNE', 'RIGATONI', 'SPAGHETTI'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PASTA SAUCES', words: ['ALFREDO', 'MARINARA', 'PESTO', 'VODKA'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: ITALIAN DISHES', words: ['LASAGNA', 'PIZZA', 'RAVIOLI', 'RISOTTO'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ NOODLE', words: ['GLASS', 'RICE', 'SOBA', 'UDON'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #147 (November 5, 2023)
   [
     { title: 'YELLOW: KINDS OF JEWELRY', words: ['BRACELET', 'EARRING', 'NECKLACE', 'RING'], color: 'yellow', difficulty: 0 },
     { title: 'GREEN: PRECIOUS STONES', words: ['DIAMOND', 'EMERALD', 'RUBY', 'SAPPHIRE'], color: 'green', difficulty: 1 },
     { title: 'BLUE: JEWELRY SETTINGS', words: ['BEZEL', 'PRONG', 'PAVE', 'TIFFANY'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ TONE', words: ['DIAL', 'EARTH', 'RING', 'TWO'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #148 (November 6, 2023)
-  [
-    { title: 'YELLOW: KINDS OF PETS', words: ['CAT', 'DOG', 'FISH', 'HAMSTER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PET SUPPLIES', words: ['BOWL', 'COLLAR', 'LEASH', 'TOY'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: FAMOUS PETS IN MOVIES', words: ['BEETHOVEN', 'LASSIE', 'TOTO', 'WILBUR'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TAIL', words: ['COCKTAIL', 'PONY', 'PIG', 'WHALE'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #149 (November 7, 2023)
-  [
-    { title: 'YELLOW: KINDS OF BOOKS', words: ['FICTION', 'MEMOIR', 'POETRY', 'TEXTBOOK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PARTS OF A BOOK', words: ['COVER', 'INDEX', 'PAGE', 'SPINE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: LITERARY GENRES', words: ['FANTASY', 'MYSTERY', 'ROMANCE', 'SCI-FI'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ STORY', words: ['COVER', 'GHOST', 'LOVE', 'SHORT'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #150 (November 8, 2023)
-  [
-    { title: 'YELLOW: KINDS OF TREES', words: ['BIRCH', 'CEDAR', 'MAPLE', 'PINE'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: TREE PARTS', words: ['BARK', 'BRANCH', 'LEAF', 'ROOT'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF FORESTS', words: ['DECIDUOUS', 'EVERGREEN', 'RAINFOREST', 'TAIGA'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ RIDGE', words: ['BLUE', 'OAK', 'PINE', 'ROCKY'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #151 (November 9, 2023)
   [
@@ -1065,13 +850,6 @@
     { title: 'GREEN: VEGETABLE DISHES', words: ['COLESLAW', 'SALAD', 'SOUP', 'STEW'], color: 'green', difficulty: 1 },
     { title: 'BLUE: ROOT VEGETABLES', words: ['PARSNIP', 'POTATO', 'RADISH', 'TURNIP'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ ROOT', words: ['BITTER', 'GINGER', 'SQUARE', 'TAP'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #153 (November 11, 2023)
-  [
-    { title: 'YELLOW: KINDS OF FURNITURE', words: ['CHAIR', 'DESK', 'SOFA', 'TABLE'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FURNITURE PARTS', words: ['ARM', 'BACK', 'LEG', 'SEAT'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF CHAIRS', words: ['LOUNGE', 'RECLINER', 'ROCKER', 'THRONE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TABLE', words: ['COFFEE', 'PERIODIC', 'ROUND', 'WATER'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #154 (November 12, 2023)
   [
@@ -1088,12 +866,6 @@
     { title: 'PURPLE: ___ CREAM', words: ['ICE', 'SOUR', 'WHIPPED', 'COLD'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #156 (November 14, 2023)
-  [
-    { title: 'YELLOW: KINDS OF MOVIES', words: ['COMEDY', 'DRAMA', 'HORROR', 'THRILLER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: MOVIE ELEMENTS', words: ['PLOT', 'SCENE', 'SCRIPT', 'SHOT'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: MOVIE AWARDS', words: ['CANNES', 'EMMY', 'OSCAR', 'TONY'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ FILM', words: ['ART', 'CULT', 'SILENT', 'SHORT'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #157 (November 15, 2023)
   [
     { title: 'YELLOW: KINDS OF DRINKS', words: ['BEER', 'SODA', 'TEA', 'WINE'], color: 'yellow', difficulty: 0 },
@@ -1150,20 +922,6 @@
     { title: 'BLUE: FAMOUS PETS IN MOVIES', words: ['BEETHOVEN', 'LASSIE', 'TOTO', 'WILBUR'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ TAIL', words: ['COCKTAIL', 'PONY', 'PIG', 'WHALE'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #165 (November 23, 2023)
-  [
-    { title: 'YELLOW: THANKSGIVING FOODS', words: ['GRAVY', 'STUFFING', 'TURKEY', 'YAM'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: THANKSGIVING TABLE ITEMS', words: ['NAPKIN', 'PLATE', 'SILVERWARE', 'TABLECLOTH'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: THANKSGIVING DESSERTS', words: ['CRANBERRY', 'PECAN', 'PUMPKIN', 'SWEET POTATO'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ PIE', words: ['APPLE', 'CHERRY', 'MUD', 'SHEPHERD'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #166 (November 24, 2023)
-  [
-    { title: 'YELLOW: KINDS OF BOOKS', words: ['FICTION', 'MEMOIR', 'POETRY', 'TEXTBOOK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PARTS OF A BOOK', words: ['COVER', 'INDEX', 'PAGE', 'SPINE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: LITERARY GENRES', words: ['FANTASY', 'MYSTERY', 'ROMANCE', 'SCI-FI'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ STORY', words: ['COVER', 'GHOST', 'LOVE', 'SHORT'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #167 (November 25, 2023)
   [
     { title: 'YELLOW: KINDS OF TREES', words: ['BIRCH', 'CEDAR', 'MAPLE', 'PINE'], color: 'yellow', difficulty: 0 },
@@ -1185,26 +943,12 @@
     { title: 'BLUE: ROOT VEGETABLES', words: ['PARSNIP', 'POTATO', 'RADISH', 'TURNIP'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ ROOT', words: ['BITTER', 'GINGER', 'SQUARE', 'TAP'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #170 (November 28, 2023)
-  [
-    { title: 'YELLOW: KINDS OF FURNITURE', words: ['CHAIR', 'DESK', 'SOFA', 'TABLE'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FURNITURE PARTS', words: ['ARM', 'BACK', 'LEG', 'SEAT'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF CHAIRS', words: ['LOUNGE', 'RECLINER', 'ROCKER', 'THRONE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TABLE', words: ['COFFEE', 'PERIODIC', 'ROUND', 'WATER'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #171 (November 29, 2023)
   [
     { title: 'YELLOW: KINDS OF SPORTS', words: ['CRICKET', 'RUGBY', 'SOCCER', 'VOLLEYBALL'], color: 'yellow', difficulty: 0 },
     { title: 'GREEN: SPORTS TERMS', words: ['FOUL', 'GOAL', 'PENALTY', 'SCORE'], color: 'green', difficulty: 1 },
     { title: 'BLUE: SPORTS EQUIPMENT', words: ['BALL', 'NET', 'RACKET', 'SHUTTLECOCK'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ KICK', words: ['CORNER', 'FREE', 'PENALTY', 'SCORPION'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #172 (November 30, 2023)
-  [
-    { title: 'YELLOW: KINDS OF DESSERTS', words: ['CAKE', 'COOKIE', 'PIE', 'PUDDING'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: DESSERT INGREDIENTS', words: ['BUTTER', 'FLOUR', 'SUGAR', 'VANILLA'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF CAKES', words: ['CHEESECAKE', 'POUND', 'SPONGE', 'VELVET'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ CREAM', words: ['ICE', 'SOUR', 'WHIPPED', 'COLD'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #173 (December 1, 2023)
   [
@@ -1240,13 +984,6 @@
     { title: 'GREEN: THINGS ON A PIZZA', words: ['MUSHROOM', 'PEPPER', 'SAUCE', 'SAUSAGE'], color: 'green', difficulty: 1 },
     { title: 'BLUE: ITALIAN CITIES', words: ['FLORENCE', 'MILAN', 'ROME', 'VENICE'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ BALL', words: ['CHEESE', 'CRYSTAL', 'MEAT', 'WRECKING'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #178 (December 6, 2023)
-  [
-    { title: 'YELLOW: KINDS OF TRANSPORTATION', words: ['BIKE', 'BUS', 'CAR', 'TRAIN'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PARTS OF A VEHICLE', words: ['ENGINE', 'TIRE', 'WHEEL', 'WINDOW'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF TRAINS', words: ['BULLET', 'FREIGHT', 'METRO', 'STEAM'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ RIDE', words: ['FREE', 'JOY', 'ROAD', 'SHARE'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #179 (December 7, 2023)
   [
@@ -1291,20 +1028,6 @@
     { title: 'BLUE: TYPES OF WEAVES', words: ['PLAIN', 'SATIN', 'TWILL', 'VELVET'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ THREAD', words: ['COMMON', 'GOLDEN', 'NEEDLE', 'SCREW'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #185 (December 13, 2023)
-  [
-    { title: 'YELLOW: KINDS OF MUSIC', words: ['CAROL', 'JAZZ', 'POP', 'ROCK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: MUSICAL INSTRUMENTS', words: ['BELL', 'DRUM', 'HARP', 'PIANO'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: HOLIDAY SONGS', words: ['JINGLE BELLS', 'SILENT NIGHT', 'WHITE CHRISTMAS', 'WINTER WONDERLAND'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ SONG', words: ['FOLK', 'LOVE', 'SWAN', 'THEME'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #186 (December 14, 2023)
-  [
-    { title: 'YELLOW: KINDS OF FRUIT', words: ['APPLE', 'CRANBERRY', 'ORANGE', 'PEAR'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FRUIT-BASED DISHES', words: ['JAM', 'PIE', 'SAUCE', 'SMOOTHIE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TROPICAL FRUITS', words: ['COCONUT', 'GUAVA', 'PAPAYA', 'PINEAPPLE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ PEEL', words: ['BANANA', 'CITRUS', 'ORANGE', 'POTATO'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #187 (December 15, 2023)
   [
     { title: 'YELLOW: KINDS OF BOATS', words: ['CANOE', 'KAYAK', 'SAILBOAT', 'YACHT'], color: 'yellow', difficulty: 0 },
@@ -1319,20 +1042,6 @@
     { title: 'BLUE: VEGETABLE DISHES', words: ['CASSEROLE', 'SALAD', 'SOUP', 'STIR-FRY'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ BEAN', words: ['GREEN', 'JELLY', 'KIDNEY', 'STRING'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #189 (December 17, 2023)
-  [
-    { title: 'YELLOW: KINDS OF PETS', words: ['CAT', 'DOG', 'FISH', 'HAMSTER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PET SUPPLIES', words: ['BOWL', 'COLLAR', 'LEASH', 'TOY'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: FAMOUS PETS IN MOVIES', words: ['BEETHOVEN', 'LASSIE', 'TOTO', 'WILBUR'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TAIL', words: ['COCKTAIL', 'PONY', 'PIG', 'WHALE'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #190 (December 18, 2023)
-  [
-    { title: 'YELLOW: KINDS OF BOOKS', words: ['FICTION', 'MEMOIR', 'POETRY', 'TEXTBOOK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PARTS OF A BOOK', words: ['COVER', 'INDEX', 'PAGE', 'SPINE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: LITERARY GENRES', words: ['FANTASY', 'MYSTERY', 'ROMANCE', 'SCI-FI'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ STORY', words: ['COVER', 'GHOST', 'LOVE', 'SHORT'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #191 (December 19, 2023)
   [
     { title: 'YELLOW: KINDS OF TREES', words: ['BIRCH', 'CEDAR', 'MAPLE', 'PINE'], color: 'yellow', difficulty: 0 },
@@ -1340,26 +1049,12 @@
     { title: 'BLUE: TYPES OF FORESTS', words: ['DECIDUOUS', 'EVERGREEN', 'RAINFOREST', 'TAIGA'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ RIDGE', words: ['BLUE', 'OAK', 'PINE', 'ROCKY'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #192 (December 20, 2023)
-  [
-    { title: 'YELLOW: KINDS OF GAMES', words: ['CARD', 'DICE', 'PUZZLE', 'TRIVIA'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: GAME ACTIONS', words: ['DEAL', 'DRAW', 'PLAY', 'ROLL'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: CARD GAMES', words: ['BRIDGE', 'POKER', 'RUMMY', 'SOLITAIRE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ JACK', words: ['BLACK', 'CRACKER', 'LUMBER', 'UNION'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #193 (December 21, 2023)
   [
     { title: 'YELLOW: KINDS OF VEGETABLES', words: ['BEET', 'CARROT', 'KALE', 'ONION'], color: 'yellow', difficulty: 0 },
     { title: 'GREEN: VEGETABLE DISHES', words: ['COLESLAW', 'SALAD', 'SOUP', 'STEW'], color: 'green', difficulty: 1 },
     { title: 'BLUE: ROOT VEGETABLES', words: ['PARSNIP', 'POTATO', 'RADISH', 'TURNIP'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ ROOT', words: ['BITTER', 'GINGER', 'SQUARE', 'TAP'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #194 (December 22, 2023)
-  [
-    { title: 'YELLOW: KINDS OF FURNITURE', words: ['CHAIR', 'DESK', 'SOFA', 'TABLE'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FURNITURE PARTS', words: ['ARM', 'BACK', 'LEG', 'SEAT'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF CHAIRS', words: ['LOUNGE', 'RECLINER', 'ROCKER', 'THRONE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TABLE', words: ['COFFEE', 'PERIODIC', 'ROUND', 'WATER'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #195 (December 23, 2023)
   [
@@ -1452,20 +1147,6 @@
     { title: 'BLUE: MUSIC GENRES', words: ['BLUES', 'COUNTRY', 'HIP-HOP', 'ROCK'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ NOTE', words: ['COVER', 'FOOT', 'HIGH', 'LOVE'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #208 (January 5, 2024)
-  [
-    { title: 'YELLOW: KINDS OF PETS', words: ['CAT', 'DOG', 'FISH', 'HAMSTER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PET SUPPLIES', words: ['BOWL', 'COLLAR', 'LEASH', 'TOY'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: FAMOUS PETS IN MOVIES', words: ['BEETHOVEN', 'LASSIE', 'TOTO', 'WILBUR'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TAIL', words: ['COCKTAIL', 'PONY', 'PIG', 'WHALE'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #209 (January 6, 2024)
-  [
-    { title: 'YELLOW: KINDS OF BOOKS', words: ['FICTION', 'MEMOIR', 'POETRY', 'TEXTBOOK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PARTS OF A BOOK', words: ['COVER', 'INDEX', 'PAGE', 'SPINE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: LITERARY GENRES', words: ['FANTASY', 'MYSTERY', 'ROMANCE', 'SCI-FI'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ STORY', words: ['COVER', 'GHOST', 'LOVE', 'SHORT'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #210 (January 7, 2024)
   [
     { title: 'YELLOW: KINDS OF TREES', words: ['BIRCH', 'CEDAR', 'MAPLE', 'PINE'], color: 'yellow', difficulty: 0 },
@@ -1486,13 +1167,6 @@
     { title: 'GREEN: VEGETABLE DISHES', words: ['COLESLAW', 'SALAD', 'SOUP', 'STEW'], color: 'green', difficulty: 1 },
     { title: 'BLUE: ROOT VEGETABLES', words: ['PARSNIP', 'POTATO', 'RADISH', 'TURNIP'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ ROOT', words: ['BITTER', 'GINGER', 'SQUARE', 'TAP'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #213 (January 10, 2024)
-  [
-    { title: 'YELLOW: KINDS OF FURNITURE', words: ['CHAIR', 'DESK', 'SOFA', 'TABLE'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FURNITURE PARTS', words: ['ARM', 'BACK', 'LEG', 'SEAT'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF CHAIRS', words: ['LOUNGE', 'RECLINER', 'ROCKER', 'THRONE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TABLE', words: ['COFFEE', 'PERIODIC', 'ROUND', 'WATER'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #214 (January 11, 2024)
   [
@@ -1535,13 +1209,6 @@
     { title: 'GREEN: THINGS WITH LEAVES', words: ['BOOK', 'FAN', 'PALM', 'TABLE'], color: 'green', difficulty: 1 },
     { title: 'BLUE: KINDS OF WHALES', words: ['BLUE', 'HUMPBACK', 'ORCA', 'SPERM'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: GREEN ___', words: ['BEAN', 'EYE', 'LIGHT', 'THUMB'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #220 (January 17, 2024)
-  [
-    { title: 'YELLOW: KINDS OF CHEESE', words: ['CHEDDAR', 'GOUDA', 'PARMESAN', 'SWISS'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: THINGS ON A PIZZA', words: ['MUSHROOM', 'PEPPER', 'SAUCE', 'SAUSAGE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: ITALIAN CITIES', words: ['FLORENCE', 'MILAN', 'ROME', 'VENICE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ BALL', words: ['CHEESE', 'CRYSTAL', 'MEAT', 'WRECKING'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #221 (January 18, 2024)
   [
@@ -1599,13 +1266,6 @@
     { title: 'BLUE: FASHION ACCESSORIES', words: ['BELT', 'HAT', 'SCARF', 'TIE'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ STYLE', words: ['BOHO', 'GRUNGE', 'PREPPY', 'PUNK'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #229 (January 26, 2024)
-  [
-    { title: 'YELLOW: KINDS OF MUSIC', words: ['BLUES', 'JAZZ', 'POP', 'ROCK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: MUSICAL INSTRUMENTS', words: ['DRUM', 'GUITAR', 'PIANO', 'VIOLIN'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: MUSIC FESTIVALS', words: ['BONNAROO', 'COACHELLA', 'GLASTONBURY', 'LOLLAPALOOZA'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ SONG', words: ['FOLK', 'LOVE', 'SWAN', 'THEME'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #230 (January 27, 2024)
   [
     { title: 'YELLOW: KINDS OF FRUIT', words: ['APPLE', 'BANANA', 'MANGO', 'PEACH'], color: 'yellow', difficulty: 0 },
@@ -1627,20 +1287,6 @@
     { title: 'BLUE: VEGETABLE DISHES', words: ['CASSEROLE', 'SALAD', 'SOUP', 'STIR-FRY'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ BEAN', words: ['GREEN', 'JELLY', 'KIDNEY', 'STRING'], color: 'purple', difficulty: 3 }
   ],
-  // Puzzle #233 (January 30, 2024)
-  [
-    { title: 'YELLOW: KINDS OF PETS', words: ['CAT', 'DOG', 'FISH', 'HAMSTER'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PET SUPPLIES', words: ['BOWL', 'COLLAR', 'LEASH', 'TOY'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: FAMOUS PETS IN MOVIES', words: ['BEETHOVEN', 'LASSIE', 'TOTO', 'WILBUR'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TAIL', words: ['COCKTAIL', 'PONY', 'PIG', 'WHALE'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #234 (January 31, 2024)
-  [
-    { title: 'YELLOW: KINDS OF BOOKS', words: ['FICTION', 'MEMOIR', 'POETRY', 'TEXTBOOK'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: PARTS OF A BOOK', words: ['COVER', 'INDEX', 'PAGE', 'SPINE'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: LITERARY GENRES', words: ['FANTASY', 'MYSTERY', 'ROMANCE', 'SCI-FI'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ STORY', words: ['COVER', 'GHOST', 'LOVE', 'SHORT'], color: 'purple', difficulty: 3 }
-  ],
   // Puzzle #235 (February 1, 2024)
   [
     { title: 'YELLOW: KINDS OF TREES', words: ['BIRCH', 'CEDAR', 'MAPLE', 'PINE'], color: 'yellow', difficulty: 0 },
@@ -1661,13 +1307,6 @@
     { title: 'GREEN: VEGETABLE DISHES', words: ['COLESLAW', 'SALAD', 'SOUP', 'STEW'], color: 'green', difficulty: 1 },
     { title: 'BLUE: ROOT VEGETABLES', words: ['PARSNIP', 'POTATO', 'RADISH', 'TURNIP'], color: 'blue', difficulty: 2 },
     { title: 'PURPLE: ___ ROOT', words: ['BITTER', 'GINGER', 'SQUARE', 'TAP'], color: 'purple', difficulty: 3 }
-  ],
-  // Puzzle #238 (February 4, 2024)
-  [
-    { title: 'YELLOW: KINDS OF FURNITURE', words: ['CHAIR', 'DESK', 'SOFA', 'TABLE'], color: 'yellow', difficulty: 0 },
-    { title: 'GREEN: FURNITURE PARTS', words: ['ARM', 'BACK', 'LEG', 'SEAT'], color: 'green', difficulty: 1 },
-    { title: 'BLUE: TYPES OF CHAIRS', words: ['LOUNGE', 'RECLINER', 'ROCKER', 'THRONE'], color: 'blue', difficulty: 2 },
-    { title: 'PURPLE: ___ TABLE', words: ['COFFEE', 'PERIODIC', 'ROUND', 'WATER'], color: 'purple', difficulty: 3 }
   ],
   // Puzzle #239 (February 5, 2024)
   [
@@ -1769,3 +1408,20 @@
       { title: 'KITCHEN IDIOMS', words: ['PIECE OF CAKE', 'SPILL THE BEANS', 'STIR THE POT', 'TOO MANY COOKS'], color: 'purple', difficulty: 3 }
     ]
   ];
+
+  // This takes your "dirty" list and exports a "perfect" one
+export const groupSets = rawGroupSets.filter((set, index) => {
+  // 1. Flatten all 16 words into one list
+  const allWords = set.flatMap(g => 
+    g.words.map(w => w.trim().toUpperCase())
+  );
+
+  // 2. Check if there are exactly 16 unique words
+  const isUnique = new Set(allWords).size === 16;
+
+  if (!isUnique) {
+    // This shows up in your browser console so you know which one to fix later!
+  }
+
+  return isUnique;
+});
