@@ -14,6 +14,11 @@
           imageSrc: 'https://cdn.pixabay.com/photo/2017/06/06/19/39/scrabble-2378253_960_720.jpg'
       },
       {
+          gameName: 'Aim Trainer',
+          gameDescription: 'How about testing that hand eye coordination',
+          imageSrc: 'https://images.pexels.com/photos/416832/pexels-photo-416832.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+      },
+      {
           gameName: 'Connections',
           gameDescription: 'Play Connections: Group 16 words into 4 themed categories. A daily word puzzle inspired by The New York Times.',
           imageSrc: 'https://cdn.pixabay.com/photo/2020/04/22/09/38/circuits-5076887_960_720.png'
@@ -32,11 +37,6 @@
           gameName: 'Simon Says',
           gameDescription: 'Test your short term memory with this classic',
           imageSrc: '/simon-says.jpg'
-      },
-      {
-          gameName: 'Aim Trainer',
-          gameDescription: 'How about testing that hand eye coordination',
-          imageSrc: 'https://images.pexels.com/photos/416832/pexels-photo-416832.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
       },
       {
           gameName: 'Reaction Timer',
