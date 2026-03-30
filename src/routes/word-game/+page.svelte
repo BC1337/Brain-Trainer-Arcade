@@ -358,15 +358,16 @@ const words = [ "aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "
 </Layout>
 
 <style>
-  /* 1. MAIN CONTAINER & ALIGNMENT */
+  /* 1. MAIN CONTAINER - Optimized for total visibility */
   .word-game-container {
     max-width: 400px;
-    margin: 1rem auto;
+    margin: 0.5rem auto; /* Reduced margin */
     padding: 0 1rem;
     display: flex;
     flex-direction: column;
     align-items: center; 
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    height: auto; /* Remove vh constraints */
   }
 
   /* 2. THE SACRED HEADER - 25PX SHIFT LOCKED */
@@ -376,26 +377,26 @@ const words = [ "aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "
     justify-content: center;
     width: 100%;
     max-width: 330px; 
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem; /* Tighter spacing */
     position: relative;
-    padding: 10px 0;
+    padding: 5px 0;
   }
 
   .header h1 {
     font-size: 1.4rem;
     font-weight: 900;
     margin: 0;
-    color: #f59e0b; /* Amber */
+    color: #f59e0b;
     letter-spacing: -0.5px;
     text-transform: uppercase;
-    transform: translateX(25px); /* THE 25PX SHIFT */
+    transform: translateX(25px); 
     flex-grow: 1;
     text-align: center;
   }
 
-  /* THE NEW GAME BUTTON - CLEAN & THEMED */
+  /* REFRESH BUTTON - Preserved from last win */
   .refresh-btn {
-    background: #f59e0b; /* Solid Amber */
+    background: #f59e0b;
     color: white;
     border: none;
     border-radius: 10px;
@@ -404,27 +405,19 @@ const words = [ "aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "
     font-weight: 900;
     text-transform: uppercase;
     cursor: pointer;
-    /* Physical depth effect */
     box-shadow: 0 3px 0 #b45309; 
     transition: all 0.1s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .refresh-btn:hover {
-    background: #fbbf24;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 0 #b45309;
   }
 
   .refresh-btn:active {
     transform: translateY(2px);
-    box-shadow: none; /* Button "sinks" when pressed */
+    box-shadow: none;
   }
 
-  /* HOW TO PLAY LINK */
+  /* HOW TO PLAY - Tighter margin */
   .how-to-play {
     display: block;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem; /* Reduced from 1.5rem */
     background: #f1f5f9;
     color: #64748b;
     border: 1.5px solid #e2e8f0;
@@ -436,35 +429,34 @@ const words = [ "aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "
     text-transform: uppercase;
   }
 
-  /* 3. THE GRID - UNTOUCHED */
+  /* 3. THE GRID - Slightly smaller to fit screen */
   .grid {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-bottom: 1rem;
+    gap: 5px; /* Tighter gap */
+    margin-bottom: 0.75rem;
   }
 
   .row {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
+    gap: 5px;
     justify-content: center;
   }
 
   .letter {
-    width: 58px;
-    height: 58px;
+    width: 52px; /* SHRUNK from 58px */
+    height: 52px; /* SHRUNK from 58px */
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.8rem;
+    font-size: 1.6rem; /* Adjusted for size */
     font-weight: 800;
     border-radius: 8px;
     text-transform: uppercase;
     border: 2px solid #e2e8f0;
     background: #ffffff;
     color: #1e293b;
-    transition: transform 0.1s ease;
   }
 
   .letter.typed {
@@ -477,12 +469,12 @@ const words = [ "aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "
   .letter.close { background: #f59e0b !important; border-color: #f59e0b; color: white; }
   .letter.missing { background: #94a3b8 !important; border-color: #94a3b8; color: white; opacity: 0.6; }
 
-  /* 4. KEYBOARD - UNTOUCHED */
+  /* 4. KEYBOARD - Squeezed up */
   .keyboard {
-    margin-top: auto;
+    margin-top: 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
     width: 100%;
     max-width: 400px;
     padding-bottom: 1rem;
@@ -491,13 +483,13 @@ const words = [ "aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "
   .keyboard .row {
     display: flex;
     justify-content: center;
-    gap: 5px;
+    gap: 4px;
     width: 100%;
   }
 
   .keyboard button {
     flex: 1;
-    height: 52px;
+    height: 48px; /* Slightly shorter keys */
     max-width: 38px;
     border: none;
     border-radius: 6px;
@@ -513,9 +505,16 @@ const words = [ "aback", "abase", "abate", "abbey", "abbot", "abhor", "abide", "
 
   .keyboard button[data-key="enter"],
   .keyboard button[data-key="backspace"] {
-    max-width: 75px;
+    max-width: 65px; /* Slimmer specialized keys */
     background: #cbd5e1;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 800;
+  }
+
+  /* RESPONSIVE - Extra squeeze for tiny phones */
+  @media screen and (max-height: 650px) {
+    .letter { width: 45px; height: 45px; font-size: 1.3rem; }
+    .keyboard button { height: 42px; }
+    .header h1 { font-size: 1.1rem; }
   }
 </style>
