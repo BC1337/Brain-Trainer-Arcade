@@ -197,7 +197,7 @@
             <div class="sync-badge">
               <span class="dot"></span>
               {#if isLoggedIn}
-                {isSaving ? 'DATABASE_UPLINKING...' : 'DATABASE_UPLINK_SUCCESS'}
+                {isSaving ? 'DATABASE_UPATING...' : 'DATABASE_UPDATE_SUCCESS'}
               {:else}
                 DASHBOARD_DATA_UPDATED
               {/if}

@@ -5,13 +5,13 @@ import { env } from '$env/dynamic/private';
 
 const JWT_SECRET = env.JWT_SECRET;
 
+// --- POST: Save New Scores ---
 export async function POST({ request, params }) {
   try {
     const { game } = params;
     const body = await request.json();
     const { rounds } = body; 
     
-    // Extract new Aim Trainer metrics (if they exist)
     const hits = body.hits !== undefined ? parseInt(body.hits) : null;
     const accuracy = body.accuracy !== undefined ? parseFloat(body.accuracy) : null;
 
@@ -24,20 +24,18 @@ export async function POST({ request, params }) {
     const decoded = jwt.verify(token, JWT_SECRET);
     const userId = parseInt(decoded.userId);
 
-    // 1. Check existing score first to ensure we only update if the NEW score is better
     const existing = await prisma.highscore.findUnique({
       where: { userId_game: { userId, game } }
     });
 
     if (!existing || rounds > existing.rounds) {
-      // 2. Use upsert to create or update in one go
       const highscore = await prisma.highscore.upsert({
         where: { userId_game: { userId, game } },
         update: { 
           rounds, 
           ...(hits !== null && { hits }), 
           ...(accuracy !== null && { accuracy }),
-          createdAt: new Date() 
+          createdAt: new Date() // Updates the "updated_at" logic effectively
         },
         create: { 
           userId, 
@@ -58,6 +56,7 @@ export async function POST({ request, params }) {
   }
 }
 
+// --- GET: Fetch Personal Best + Global Rank ---
 export async function GET({ request, params }) {
   try {
     const { game } = params;
@@ -71,12 +70,28 @@ export async function GET({ request, params }) {
     const decoded = jwt.verify(token, JWT_SECRET);
     const userId = parseInt(decoded.userId);
     
-    // Get user's personal best (including new hits/accuracy columns)
+    // 1. Get user's personal best
     const highscore = await prisma.highscore.findUnique({
       where: { userId_game: { userId, game } }
     });
 
-    // Keep your global average logic
+    // 2. DYNAMIC RANK CALCULATION
+    let rank = null;
+    if (highscore && highscore.rounds > 0) {
+      // Count how many UNIQUE users have a score higher than yours
+      const countHigher = await prisma.highscore.count({
+        where: {
+          game: game,
+          rounds: {
+            gt: highscore.rounds // gt = Greater Than
+          }
+        }
+      });
+      // Rank is (People better than you) + 1
+      rank = countHigher + 1;
+    }
+
+    // 3. Global Stats
     const globalStats = await prisma.highscore.aggregate({
       where: { game: game },
       _avg: { rounds: true }
@@ -84,6 +99,7 @@ export async function GET({ request, params }) {
 
     return json({ 
       highscore: highscore || { rounds: 0, hits: 0, accuracy: 0 },
+      rank: rank, // Sending this to the dashboard
       globalAvg: Math.round(globalStats._avg.rounds || 0)
     });
   } catch (err) {
