@@ -4,71 +4,80 @@
   import { isTokenExpired } from "$lib/utils/auth.js";
 
   let username = 'GUEST_001';
-  let userScores = {}; 
+  let userScores = {};
   let globalHighscores = {};
   let isLoading = true;
   let isLoggedIn = false;
   let now = Date.now();
 
   const games = [
-    { key: 'chimp-test', name: 'Chimp Test', desc: 'Train memory and focus with sequences.' },
-    { key: 'aim-trainer', name: 'Aim Trainer', desc: 'Improve precision with target practice.' },
-    { key: 'reaction-timer', name: 'Reaction Time', desc: 'Test your speed and reaction time.' },
-    { key: 'memory-trainer', name: 'Memory Trainer', desc: 'Challenge your short-term memory skills.' },
-    { key: 'type-racer', name: 'Type Racer', desc: 'Boost your typing speed and accuracy.' },
-    { key: 'simon-says', name: 'Simon Says', desc: 'Classic pattern recognition challenge.' },
-    { key: 'connections', name: 'Connections', desc: 'Find groups of related words.' },
-    { key: 'word-game', name: 'Word Game', desc: 'Expand your vocabulary and recall.' }
+    { key: 'chimp-test',      name: 'Chimp Test',      desc: 'Train memory and focus with sequences.'      },
+    { key: 'aim-trainer',     name: 'Aim Trainer',      desc: 'Improve precision with target practice.'     },
+    { key: 'reaction-timer',  name: 'Reaction Time',    desc: 'Test your speed and reaction time.'          },
+    { key: 'memory-trainer',  name: 'Memory Trainer',   desc: 'Challenge your short-term memory skills.'    },
+    { key: 'type-racer',      name: 'Type Racer',       desc: 'Boost your typing speed and accuracy.'       },
+    { key: 'simon-says',      name: 'Simon Says',       desc: 'Classic pattern recognition challenge.'      },
+    { key: 'connections',     name: 'Connections',      desc: 'Find groups of related words.'               },
+    { key: 'word-game',       name: 'Word Game',        desc: 'Expand your vocabulary and recall.'          }
   ];
 
-  onMount(async () => {
-    const token = localStorage.getItem('token');
-    const storedUsername = localStorage.getItem('username');
+  onMount(() => {
     const interval = setInterval(() => now = Date.now(), 5000);
 
-    if (token && !isTokenExpired(token)) {
-      isLoggedIn = true;
-      username = (storedUsername || 'PLAYER').toUpperCase();
+    (async () => {
+      const token = localStorage.getItem('token');
+      const storedUsername = localStorage.getItem('username');
 
-      try {
-        const res = await fetch('/api/dashboard', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+      if (token && !isTokenExpired(token)) {
+        isLoggedIn = true;
+        username = (storedUsername || 'PLAYER').toUpperCase();
 
-        if (res.ok) {
-          const data = await res.json();
+        try {
+          const res = await fetch('/api/dashboard', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
 
-          const newUser = {};
-          for (const [key, score] of Object.entries(data.userScores)) {
-            newUser[key] = {
-              ...score,
-              timestamp: score.updated_at
-                ? new Date(score.updated_at).getTime()
-                : null
-            };
+          if (res.ok) {
+            const data = await res.json();
+
+            const newUser = {};
+            for (const [key, score] of Object.entries(data.userScores)) {
+              newUser[key] = {
+                ...score,
+                timestamp: score.updatedAt
+                  ? new Date(score.updatedAt).getTime()
+                  : null
+              };
+            }
+
+            globalHighscores = data.globalBests;
+            userScores = newUser;
           }
-
-          globalHighscores = data.globalBests;
-          userScores = newUser;
+        } catch (err) {
+          console.error('Dashboard fetch error:', err);
         }
-      } catch (err) {
-        console.error('Dashboard fetch error:', err);
+
+      } else {
+        isLoggedIn = false;
+        username = 'GUEST_001';
+
+        const localScores = {};
+        for (const game of games) {
+          const raw = localStorage.getItem(`guest_${game.key}_score`);
+          if (raw) {
+            try {
+              localScores[game.key] = { ...JSON.parse(raw), rank: '—' };
+            } catch {
+              // skip malformed local data
+            }
+          }
+        }
+        userScores = localScores;
       }
 
-    } else {
-      isLoggedIn = false;
-      username = 'GUEST_001';
-      const localScores = {};
-      games.forEach(game => {
-        const localData = localStorage.getItem(`guest_${game.key}_score`);
-        if (localData) {
-          localScores[game.key] = { ...JSON.parse(localData), rank: '—' };
-        }
-      });
-      userScores = localScores;
-    }
+      isLoading = false;
+    })();
 
-    isLoading = false;
     return () => clearInterval(interval);
   });
 
@@ -102,14 +111,18 @@
           {isLoggedIn ? 'NETWORK ONLINE' : 'LOCAL CACHE ACTIVE'}
         </div>
       </div>
-      
+
       {#if isLoading}
         <div class="loading-gate">INITIALIZING_DATA_STREAMS...</div>
       {:else}
         <div class="game-grid">
-          {#each games as game}
-            <div class="game-card" class:recent-pulse={isRecent(userScores[game.key]?.timestamp)}>
-              {#if isRecent(userScores[game.key]?.timestamp)}
+          {#each games as game (game.key)}
+            {@const score = userScores[game.key]}
+            {@const global = globalHighscores[game.key]}
+            {@const recent = isRecent(score?.timestamp)}
+
+            <div class="game-card" class:recent-pulse={recent}>
+              {#if recent}
                 <div class="recent-tag">RECENT_UPLINK</div>
               {/if}
 
@@ -120,12 +133,12 @@
                 </div>
                 <p class="game-desc">{game.desc}</p>
               </div>
-              
+
               <div class="score-container">
                 <div class="metric-top">
                   <div class="main-metric">
                     <span class="label">{game.key === 'aim-trainer' ? 'RATING' : 'BEST'}</span>
-                    <span class="value">{userScores[game.key]?.rounds ?? '0'}</span>
+                    <span class="value">{score?.rounds ?? '0'}</span>
                   </div>
 
                   <div class="comparison-grid">
@@ -134,20 +147,20 @@
                       {#if game.key === 'aim-trainer'}
                         <div class="mini-data">
                           <span class="mini-label">HITS</span>
-                          <span class="mini-val white-text">{userScores[game.key]?.hits || 0}</span>
+                          <span class="mini-val white-text">{score?.hits ?? 0}</span>
                         </div>
                         <div class="mini-data">
                           <span class="mini-label">ACC</span>
-                          <span class="mini-val green-text">{userScores[game.key]?.accuracy || 0}%</span>
+                          <span class="mini-val green-text">{score?.accuracy ?? 0}%</span>
                         </div>
                       {:else}
                         <div class="mini-data">
                           <span class="mini-label">SCORE</span>
-                          <span class="mini-val white-text">{userScores[game.key]?.rounds || 0}</span>
+                          <span class="mini-val white-text">{score?.rounds ?? 0}</span>
                         </div>
                         <div class="mini-data">
                           <span class="mini-label">STATUS</span>
-                          <span class="mini-val green-text">{userScores[game.key] ? 'STABLE' : 'IDLE'}</span>
+                          <span class="mini-val green-text">{score ? 'STABLE' : 'IDLE'}</span>
                         </div>
                       {/if}
                     </div>
@@ -159,17 +172,20 @@
                         <span class="col-title highlight-gold">NETWORK</span>
                         <div class="mini-data">
                           <span class="mini-label">GLOBAL</span>
-                          <span class="mini-val gold-text">{globalHighscores[game.key]?.rounds || '—'}</span>
+                          <span class="mini-val gold-text">{global?.rounds ?? '—'}</span>
                         </div>
                         <div class="mini-data">
                           <span class="mini-label">RANK</span>
-                          <span class="mini-val" class:gold-text={userScores[game.key]?.rank === 1}>
-                            {userScores[game.key]?.rank ? `#${userScores[game.key].rank}` : '#—'}
+                          <span class="mini-val" class:gold-text={score?.rank === 1}>
+                            {score?.rank ? `#${score.rank}` : '#—'}
                           </span>
                         </div>
                       {:else}
                         <div class="locked-state">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="3"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="3">
+                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                          </svg>
                           <span class="lock-label">LOCKED</span>
                         </div>
                       {/if}
@@ -181,18 +197,20 @@
                   <span class="wr-label">GLOBAL BEST:</span>
                   {#if isLoggedIn}
                     <span class="wr-value gold-text">
-                      {globalHighscores[game.key]?.rounds || '—'}
-                      <span class="wr-user">@{globalHighscores[game.key]?.user?.username || 'ANON'}</span>
+                      {global?.rounds ?? '—'}
+                      <span class="wr-user">@{global?.user?.username ?? 'ANON'}</span>
                     </span>
                   {:else}
                     <a href="/login" class="wr-locked-link">LOGIN TO COMPETE</a>
                   {/if}
                 </div>
               </div>
-              
+
               <a href="/{game.key}" class="play-action">
                 <span>ENTER SIMULATION</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m9 18 6-6-6-6"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
               </a>
             </div>
           {/each}
@@ -232,28 +250,27 @@
   .status-pill.offline-alert { color: var(--accent-orange); border-color: var(--accent-orange); }
 
   .game-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-  
-  .game-card { 
-    background: var(--card-bg); border: 1px solid var(--border-color); 
-    border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; 
-    min-height: 520px; transition: 0.2s; position: relative;
+
+  .game-card {
+    background: var(--card-bg); border: 1px solid var(--border-color);
+    border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column;
+    min-height: 520px; transition: border-color 0.2s, box-shadow 0.2s; position: relative;
   }
   .game-card:hover { border-color: var(--accent-orange); }
 
-  .recent-pulse { 
-    border-color: var(--accent-orange); 
-    box-shadow: 0 0 25px rgba(255, 140, 0, 0.2); 
-    animation: pulse-border 2s infinite ease-in-out; 
+  .recent-pulse {
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 25px rgba(255, 140, 0, 0.2);
+    animation: pulse-border 2s infinite ease-in-out;
   }
-  
+
   @keyframes pulse-border {
-    0% { border-color: var(--border-color); box-shadow: 0 0 0px rgba(255, 140, 0, 0); }
-    50% { border-color: var(--accent-orange); box-shadow: 0 0 30px rgba(255, 140, 0, 0.25); }
+    0%   { border-color: var(--border-color); box-shadow: 0 0 0px rgba(255, 140, 0, 0); }
+    50%  { border-color: var(--accent-orange); box-shadow: 0 0 30px rgba(255, 140, 0, 0.25); }
     100% { border-color: var(--border-color); box-shadow: 0 0 0px rgba(255, 140, 0, 0); }
   }
 
   .recent-tag { position: absolute; top: -8px; right: 15px; background: var(--accent-orange); color: black; font-size: 0.55rem; font-weight: 900; padding: 3px 8px; border-radius: 4px; z-index: 10; }
-
   .loading-gate { color: var(--accent-orange); font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; text-align: center; margin-top: 4rem; }
 
   .title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
@@ -264,8 +281,8 @@
 
   .game-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; margin-bottom: 1.2rem; min-height: 40px; }
 
-  .score-container { 
-    background: var(--panel-bg); padding: 1.2rem; border-radius: 12px; 
+  .score-container {
+    background: var(--panel-bg); padding: 1.2rem; border-radius: 12px;
     margin-bottom: 1.2rem; border: 1px solid #161618;
     flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;
   }
@@ -279,11 +296,11 @@
   .col-title { font-size: 0.55rem; font-weight: 900; letter-spacing: 1px; border-bottom: 1px solid #1a1a1c; padding-bottom: 4px; margin-bottom: 4px; text-align: center; }
   .highlight-orange { color: var(--accent-orange); }
   .highlight-gold { color: #fbbf24; }
-  
+
   .mini-data { display: flex; justify-content: space-between; align-items: center; padding: 0 4px; }
   .mini-label { font-size: 0.55rem; color: var(--text-muted); font-weight: 800; }
   .mini-val { font-size: 0.8rem; font-weight: 900; }
-  
+
   .vr-line { width: 1px; background: #1a1a1c; margin: 0 10px; }
 
   .locked-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; opacity: 0.2; }
@@ -295,11 +312,11 @@
   .wr-user { font-size: 0.6rem; color: var(--text-muted); margin-left: 4px; }
   .wr-locked-link { font-size: 0.65rem; color: var(--accent-orange); text-decoration: none; font-weight: 900; }
 
-  .play-action { 
-    display: flex; justify-content: center; align-items: center; gap: 8px; 
-    background: var(--accent-green); color: white !important; text-decoration: none; 
-    padding: 1rem; border-radius: 12px; font-weight: 900; 
-    border-bottom: 4px solid #15803d; transition: 0.1s; font-size: 0.9rem;
+  .play-action {
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    background: var(--accent-green); color: white !important; text-decoration: none;
+    padding: 1rem; border-radius: 12px; font-weight: 900;
+    border-bottom: 4px solid #15803d; transition: transform 0.1s, border-bottom-width 0.1s; font-size: 0.9rem;
   }
   .play-action:active { transform: translateY(2px); border-bottom-width: 2px; }
 
