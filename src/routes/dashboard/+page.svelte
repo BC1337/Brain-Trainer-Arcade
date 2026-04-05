@@ -29,22 +29,36 @@
     if (token && !isTokenExpired(token)) {
       isLoggedIn = true;
       username = (storedUsername || 'PLAYER').toUpperCase();
-      
-      // Ensure all data is fetched BEFORE hiding the loader
+
       try {
-        await Promise.all(games.map(async (game) => {
-          return Promise.all([
-            loadGlobalHighscore(game.key),
-            loadUserScore(game.key)
-          ]);
-        }));
+        const res = await fetch('/api/dashboard', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+
+          const newUser = {};
+          for (const [key, score] of Object.entries(data.userScores)) {
+            newUser[key] = {
+              ...score,
+              timestamp: score.updated_at
+                ? new Date(score.updated_at).getTime()
+                : null
+            };
+          }
+
+          globalHighscores = data.globalBests;
+          userScores = newUser;
+        }
       } catch (err) {
-        console.error("Dashboard Init Error:", err);
+        console.error('Dashboard fetch error:', err);
       }
+
     } else {
       isLoggedIn = false;
       username = 'GUEST_001';
-      let localScores = {};
+      const localScores = {};
       games.forEach(game => {
         const localData = localStorage.getItem(`guest_${game.key}_score`);
         if (localData) {
@@ -53,43 +67,10 @@
       });
       userScores = localScores;
     }
-    
-    isLoading = false; 
+
+    isLoading = false;
     return () => clearInterval(interval);
   });
-
-  async function loadGlobalHighscore(gameKey) {
-    try {
-      const res = await fetch(`/api/highscore/${gameKey}`);
-      if (res.ok) {
-        const data = await res.json();
-        globalHighscores = { 
-          ...globalHighscores, 
-          [gameKey]: data.highscore || { rounds: 0, user: { username: 'N/A' } } 
-        };
-      }
-    } catch (err) { console.error(err); }
-  }
-
-  async function loadUserScore(gameKey) {
-    try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`/api/user/highscore/${gameKey}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.highscore) {
-          const scoreUpdate = {
-            ...data.highscore,
-            rank: data.rank || '—',
-            timestamp: data.highscore.updated_at ? new Date(data.highscore.updated_at).getTime() : null
-          };
-          userScores = { ...userScores, [gameKey]: scoreUpdate };
-        }
-      }
-    } catch (err) { console.error(err); }
-  }
 
   const isRecent = (timestamp) => {
     if (!timestamp) return false;
