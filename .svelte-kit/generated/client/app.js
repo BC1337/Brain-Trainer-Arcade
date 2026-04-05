@@ -24,19 +24,19 @@ export const server_loads = [];
 
 export const dictionary = {
 		"/": [3],
-		"/aim-trainer": [14],
-		"/chimp-test": [12],
-		"/connections": [4],
-		"/dashboard": [8],
-		"/games": [6],
+		"/aim-trainer": [4],
+		"/chimp-test": [5],
+		"/connections": [6],
+		"/dashboard": [7],
+		"/games": [8],
 		"/login": [9],
-		"/memory-trainer": [5],
-		"/reaction-timer": [15],
-		"/signup": [13],
-		"/simon-says": [7],
-		"/type-racer": [16],
-		"/word-game": [~10,[2]],
-		"/word-game/how-to-play": [11,[2]]
+		"/memory-trainer": [10],
+		"/reaction-timer": [11],
+		"/signup": [12],
+		"/simon-says": [13],
+		"/type-racer": [14],
+		"/word-game": [~15,[2]],
+		"/word-game/how-to-play": [16,[2]]
 	};
 
 export const hooks = {
@@ -47,9 +47,10 @@ export const hooks = {
 };
 
 export const decoders = Object.fromEntries(Object.entries(hooks.transport).map(([k, v]) => [k, v.decode]));
+export const encoders = Object.fromEntries(Object.entries(hooks.transport).map(([k, v]) => [k, v.encode]));
 
 export const hash = false;
 
 export const decode = (type, value) => decoders[type](value);
 
-export { default as root } from '../root.svelte';
+export { default as root } from '../root.js';
